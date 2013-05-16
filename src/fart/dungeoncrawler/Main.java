@@ -12,7 +12,7 @@ public class Main
 		JFrame frame = new JFrame();
 		frame.setTitle("Dungeon Crawler");
 		
-		MainPanel mainpanel = new MainPanel();
+		Game mainpanel = new Game();
 		mainpanel.setPreferredSize(new Dimension(480,480));
 		frame.add(mainpanel);
 		
@@ -23,17 +23,21 @@ public class Main
 		frame.setResizable(false);
 		
 		frame.setVisible(true);
+		
+		mainpanel.startGameLoop();
 	}
 	
 	public static void main(String[] args)
 	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				@SuppressWarnings("unused")
-				Main dc = new Main();
-			}
-		});
+		//SwingUtilities.invokeLater(new Runnable()
+		//{
+		//	public void run()
+		//	{
+		//		@SuppressWarnings("unused")
+		//		Main dc = new Main();
+		//	}
+		//});
+		
+		new Main();
 	}
 }
