@@ -35,7 +35,7 @@ public class Game extends JPanel implements Runnable
 	private void initGame()
 	{
 		map = new Tilemap();
-		CollisionDetector.map = map.room1;
+		CollisionDetector.map = map.rooms[0];
 		
 		player = new Player(new Point(1, 1));
 		
@@ -74,17 +74,6 @@ public class Game extends JPanel implements Runnable
 				frameSleep = 2l;
 			//frameSleep = 14l;
 			frameLast = frameAct;
-			
-			/*if(controller.isDownPressed())
-				player.move(Heading.Down);
-			else if(controller.isUpPressed())
-				player.move(Heading.Up);
-			else if(controller.isLeftPressed())
-				player.move(Heading.Left);
-			else if(controller.isRightPressed())
-				player.move(Heading.Right);
-			else
-				player.stopMovement();*/
 			
 			if(controller.isDownPressed())
 				player.move(Heading.Down);

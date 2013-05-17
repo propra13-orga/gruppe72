@@ -11,8 +11,8 @@ import javax.imageio.ImageIO;
 public class Tilemap implements IDrawable {
 	public static final int TILE_SIZE = 32;
 	
-	public int room1[][];
-	private BufferedImage wall, grass;
+	public int rooms[][][];
+	private BufferedImage wall, grass, goal, tp;
 	
 	
 	public Tilemap() {
@@ -20,39 +20,75 @@ public class Tilemap implements IDrawable {
 	}
 	
 	private void init() {
-		room1 = new int[15][15];
+		rooms = new int[3][15][15];
 		
-		// 0 = space; 1 = wall
-		// create a room with outside walls only
-		for(int i=0; i<15; i++)
-		{
-			for(int j=0; j<15; j++)
-			{
-				if((i==0)||(i==14)||(j==0)||(j==14))
-					room1[i][j] = 1;
-				else
-					room1[i][j] = 0;
-			}
-		}
-		
-		// output room1 in console (for checking)
-		System.out.println("room1:");
-		for(int j=0; j<15; j++)
-		{
-			for(int i=0; i<15; i++)
-				System.out.print(room1[i][j]);
-			System.out.println();
-		}
+		int tmproom0[][] =
+			{	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,1,1,0,0,0,1,1,0,0,0,1},
+				{1,0,0,0,1,1,0,1,0,1,1,0,0,0,1},
+				{1,0,0,0,0,0,0,1,0,0,0,0,0,0,1},
+				{1,0,0,0,0,1,1,1,1,1,0,0,0,0,1},
+				{1,0,0,0,0,0,0,1,0,0,0,0,0,0,1},
+				{1,0,0,0,1,1,0,1,0,1,1,1,1,1,1},
+				{1,0,0,0,1,1,0,0,0,1,1,1,1,1,1},
+				{1,0,0,0,0,0,0,0,0,1,1,1,1,1,1},
+				{1,0,0,0,0,0,0,0,0,1,1,1,1,1,1},
+				{1,0,0,0,0,0,0,0,0,1,1,1,1,1,1},
+				{1,1,1,1,1,2,1,1,1,1,1,1,1,1,1}
+			};
+		int tmproom1[][] =
+			{	{1,1,1,1,1,2,1,1,1,1,1,1,1,1,1},
+				{1,0,0,0,0,0,0,0,0,0,1,1,0,0,1},
+				{1,0,0,1,1,1,1,1,0,0,1,1,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,1,1,0,0,2},
+				{1,0,0,0,0,0,0,0,0,0,1,1,0,0,1},
+				{1,1,1,1,0,0,0,1,1,1,1,1,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,1,1,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,1,1,0,0,1},
+				{1,0,0,1,1,1,1,1,1,1,1,1,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,1,1,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,1,1,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,1,1,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+			};
+		int tmproom2[][] =
+			{	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+				{1,0,0,0,0,0,1,1,0,0,0,0,0,0,1},
+				{1,0,0,0,0,0,1,1,0,1,1,0,0,0,1},
+				{2,0,0,1,1,0,0,0,0,1,1,0,0,0,1},
+				{1,0,0,1,1,0,0,1,1,0,0,0,0,0,1},
+				{1,0,0,0,0,0,0,1,1,0,1,1,0,0,1},
+				{1,0,0,0,1,1,0,0,0,0,1,1,1,1,1},
+				{1,1,1,0,1,1,1,1,0,0,0,0,1,1,1},
+				{1,1,1,0,0,0,1,1,0,1,1,0,0,0,1},
+				{1,0,0,0,0,0,0,0,0,1,1,0,0,0,1},
+				{1,0,0,0,1,1,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,1,1,1,1,0,0,0,1,1,0,1},
+				{1,0,0,0,0,0,1,1,0,0,0,1,1,0,1},
+				{1,0,0,0,0,0,0,0,0,0,0,0,0,3,1},
+				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+			};
+		rooms[0] = tmproom0;
+		rooms[1] = tmproom1;
+		rooms[2] = tmproom2;
 		
 		// Load images (put into its own class later)
 		try
 		{
 			wall = ImageIO.read(new File("res/wall.png"));
 			grass = ImageIO.read(new File("res/grass.png"));
+			goal = ImageIO.read(new File("res/goal.png"));
+			tp = ImageIO.read(new File("res/tp.png"));
 		}
 		catch (IOException e)
 		{
-			System.out.println("Couldn't load images");
+			System.err.println("Couldn't load images");
+			System.exit(1);
 		}
 	}
 
@@ -67,10 +103,14 @@ public class Tilemap implements IDrawable {
 		for(int j=0; j<15; j++)
 			for(int i=0; i<15; i++)
 			{
-				if(room1[i][j] == 1)
-					graphics.drawImage(wall, null, i*32, j*32);
-				else
-					graphics.drawImage(grass, null, i*32, j*32);
+				if(rooms[0][i][j] == 0)
+					graphics.drawImage(grass, null, i*TILE_SIZE, j*TILE_SIZE);
+				else if(rooms[0][i][j] == 1)
+					graphics.drawImage(wall, null, i*TILE_SIZE, j*TILE_SIZE);
+				else if(rooms[0][i][j] == 2)
+					graphics.drawImage(tp, null, i*TILE_SIZE, j*TILE_SIZE);
+				else if(rooms[0][i][j] == 3)
+					graphics.drawImage(goal, null, i*TILE_SIZE, j*TILE_SIZE);
 			}
 	}
 
