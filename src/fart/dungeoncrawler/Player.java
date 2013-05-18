@@ -67,7 +67,7 @@ public class Player extends GameObject implements IUpdateable {
 			
 			curAnim = idleAnim.get(heading);
 		} catch (IOException e) {
-			System.err.print("Could'nt load Players texture!");
+			System.err.print("Couldn't load Players texture!");
 			System.exit(1);
 		}
 	}
@@ -120,7 +120,7 @@ public class Player extends GameObject implements IUpdateable {
 		collisionRect.x += velocity.x;
 		collisionRect.y += velocity.y;
 		
-		if(CollisionDetector.isColliding(collisionRect)) {
+		if(CollisionDetector.isColliding(collisionRect) != 0) {
 			collisionRect.x -= velocity.x;
 			collisionRect.y -= velocity.y;
 			stopMovement();

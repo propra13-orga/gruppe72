@@ -3,6 +3,8 @@ package fart.dungeoncrawler;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.JPanel;
 
@@ -20,6 +22,7 @@ public class Game extends JPanel implements Runnable
 	private boolean isRunning = true;
 	
 	private Player player;
+	private ArrayList<Trap> traps;
 	private Tilemap map;
 	
 	private Controller controller;
@@ -37,7 +40,13 @@ public class Game extends JPanel implements Runnable
 		map = new Tilemap();
 		CollisionDetector.map = map.rooms[0];
 		
-		player = new Player(new Point(1, 1));
+		player = new Player(new Point(1, 13));
+		traps = new ArrayList<Trap>();
+		
+		for(int i=0; i<15; i++)
+			for(int j=0; j<15; j++)
+				if((map.rooms[0][i][j]&16) != 0)
+					traps.add(new Trap(new Point(i,j)));
 		
 		controller = new Controller();
 		this.addKeyListener(controller);
@@ -59,6 +68,13 @@ public class Game extends JPanel implements Runnable
 		
 		map.draw(g2d);
 		player.draw(g2d);
+		
+		Iterator<Trap> it = traps.iterator();
+		while(it.hasNext())
+		{
+			Trap tmp = it.next();
+			tmp.draw(g2d);
+		}
 	}
 	 
 	public void run()
