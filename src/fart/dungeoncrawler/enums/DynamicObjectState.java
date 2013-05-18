@@ -1,5 +1,5 @@
 package fart.dungeoncrawler.enums;
 
 public enum DynamicObjectState {
-	Idle, Walking
+	Idle, Walking, Terminated
 }

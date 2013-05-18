@@ -2,5 +2,6 @@ package fart.dungeoncrawler;
 
 public interface ITriggerable
 {
-	public void trigger();
+	//public Rectangle getTriggerArea();
+	public void trigger(GameObject trigger);
 }

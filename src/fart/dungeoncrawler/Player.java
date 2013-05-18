@@ -25,9 +25,12 @@ public class Player extends GameObject implements IUpdateable {
 	private Point velocity;
 	private Rectangle collisionRect;
 	
-	public Player(Point tilePosition) {
+	private Collision colDetector;
+	
+	public Player(Point tilePosition, Collision colDetector) {
 		super();
 		
+		this.colDetector = colDetector;
 		this.tilePosition = tilePosition;
 		this.screenPosition = new Point(tilePosition.x * Tilemap.TILE_SIZE, tilePosition.y * Tilemap.TILE_SIZE);
 		this.collisionRect = new Rectangle(screenPosition.x, screenPosition.y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
@@ -35,6 +38,7 @@ public class Player extends GameObject implements IUpdateable {
 		this.state = DynamicObjectState.Idle;
 		this.velocity = new Point(0, 0);
 
+		//Setup Animations
 		try {
 			BufferedImage wl, wr, wu, wd;
 			wl = ImageIO.read(new File("res/plWleft.png"));
@@ -77,7 +81,21 @@ public class Player extends GameObject implements IUpdateable {
 		return curAnim.getTexture();
 	}
 	
+	@Override
+	public Rectangle getCollisionRect() {
+		return collisionRect;
+	}
+	
+	@Override
+	public void terminate() {
+		System.out.println("Player ist dead!");
+		state = DynamicObjectState.Terminated;
+	}
+	
+	//Players can only move in one direction at a time
 	public void move(Heading direction) {
+		if(state == DynamicObjectState.Terminated)
+			return;
 		if(state == DynamicObjectState.Walking)
 		{
 			if(heading == direction)
@@ -117,10 +135,13 @@ public class Player extends GameObject implements IUpdateable {
 
 	@Override
 	public void update(float elapsed) {
+		if(state == DynamicObjectState.Terminated)
+			return;
+		
 		collisionRect.x += velocity.x;
 		collisionRect.y += velocity.y;
 		
-		if(CollisionDetector.isColliding(collisionRect) != 0) {
+		if(colDetector.isColliding(this)) {
 			collisionRect.x -= velocity.x;
 			collisionRect.y -= velocity.y;
 			stopMovement();

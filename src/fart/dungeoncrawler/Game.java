@@ -26,6 +26,7 @@ public class Game extends JPanel implements Runnable
 	private Tilemap map;
 	
 	private Controller controller;
+	private Collision colDetector;
 	
 	public Game()
 	{
@@ -38,19 +39,21 @@ public class Game extends JPanel implements Runnable
 	private void initGame()
 	{
 		map = new Tilemap();
-		CollisionDetector.map = map.rooms[0];
+		colDetector = new Collision(map);
 		
-		player = new Player(new Point(1, 13));
+		player = new Player(new Point(1, 13), colDetector);
 		traps = new ArrayList<Trap>();
+		
+		int[][] mapArray = map.getActRoom();
 		
 		for(int i=0; i<15; i++)
 			for(int j=0; j<15; j++)
-				if((map.rooms[0][i][j]&16) != 0)
+				if((mapArray[i][j]&16) != 0)
 					traps.add(new Trap(new Point(i,j)));
 		
 		controller = new Controller();
-		this.addKeyListener(controller);
 		frameLast = System.currentTimeMillis();
+		this.addKeyListener(controller);
 	}
 	
 	public void startGameLoop() {
@@ -68,6 +71,9 @@ public class Game extends JPanel implements Runnable
 		
 		map.draw(g2d);
 		player.draw(g2d);
+		
+		for(int i = 0; i < traps.size(); i++)
+			traps.get(i).draw(g2d);
 		
 		Iterator<Trap> it = traps.iterator();
 		while(it.hasNext())
@@ -88,7 +94,7 @@ public class Game extends JPanel implements Runnable
 			frameSleep = (frameTime - frameDelta);
 			if(frameSleep < 2)
 				frameSleep = 2l;
-			//frameSleep = 14l;
+
 			frameLast = frameAct;
 			
 			if(controller.isDownPressed())
