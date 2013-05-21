@@ -34,7 +34,10 @@ public class Portal extends GameObject implements ITriggerable {
 		if(texture == null) {
 			try {
 				texture = ImageIO.read(new File("res/tp.png"));
-			} catch(IOException | IllegalArgumentException e) {
+			} catch(IOException e) {
+				System.err.println("Couldnt load image.");
+				e.printStackTrace();
+			} catch(IllegalArgumentException e) {
 				System.err.println("Couldnt load image.");
 				e.printStackTrace();
 			}

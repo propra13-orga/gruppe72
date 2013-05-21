@@ -132,8 +132,10 @@ public class Game extends JPanel implements Runnable
 			
 			try {
 				Thread.sleep(frameSleep);
-			//} catch (IllegalArgumentException | InterruptedException e) {
-			// Java 7
+			} catch (IllegalArgumentException e) {
+				System.err.print("Exception in GameLoop:\n");
+				e.printStackTrace();
+				System.exit(1);
 			} catch (InterruptedException e) {
 				System.err.print("Exception in GameLoop:\n");
 				e.printStackTrace();
