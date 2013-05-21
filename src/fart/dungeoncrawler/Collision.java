@@ -25,13 +25,15 @@ public class Collision {
 			for(int j=0; j<15; j++){
 				if((map[i][j]&2) != 0) {
 					staticObjects.add(new Rectangle(i * Tilemap.TILE_SIZE, j * Tilemap.TILE_SIZE, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE));
-				}
-				else if((map[i][j]&16) != 0)
-				{
+				} else if((map[i][j]&16) != 0) {
 					triggers.add(tilemap.getTrap(new Point(i, j)));
+				} else if((map[i][j]&4) != 0) {
+					triggers.add(tilemap.getPortal(new Point(i, j)));
 				}
 			}
 		}
+		
+		map = tilemap.getActRoom();
 	}
 	
 	public boolean isColliding(GameObject collider) {

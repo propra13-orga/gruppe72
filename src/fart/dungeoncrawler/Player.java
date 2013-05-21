@@ -92,6 +92,28 @@ public class Player extends GameObject implements IUpdateable {
 		state = DynamicObjectState.Terminated;
 	}
 	
+	public Point getTilePosition() {
+		return tilePosition;
+	}
+	
+	public Point getScreenPosition() {
+		return screenPosition;
+	}
+	
+	public void setTilePosition(Point position) {
+		tilePosition = position;
+		screenPosition = new Point(position.x * Tilemap.TILE_SIZE, position.y * Tilemap.TILE_SIZE);
+		collisionRect.x = screenPosition.x;
+		collisionRect.y = screenPosition.y;
+	}
+	
+	public void setScreenPosition(Point position) {
+		screenPosition = position;
+		tilePosition = new Point(position.x / Tilemap.TILE_SIZE, position.y / Tilemap.TILE_SIZE);
+		collisionRect.x = screenPosition.x;
+		collisionRect.y = screenPosition.y;
+	}
+	
 	//Players can only move in one direction at a time
 	public void move(Heading direction) {
 		if(state == DynamicObjectState.Terminated)

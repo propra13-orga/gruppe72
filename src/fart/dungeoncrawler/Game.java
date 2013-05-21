@@ -23,6 +23,7 @@ public class Game extends JPanel implements Runnable
 	
 	private Player player;
 	private ArrayList<Trap> traps;
+	private ArrayList<Portal> portals;
 	private Tilemap map;
 	
 	private Controller controller;
@@ -38,22 +39,36 @@ public class Game extends JPanel implements Runnable
 	
 	private void initGame()
 	{
-		map = new Tilemap();
+		map = new Tilemap(this);
 		colDetector = new Collision(map);
 		
 		player = new Player(new Point(1, 13), colDetector);
 		traps = new ArrayList<Trap>();
+		portals = new ArrayList<Portal>();
 		
 		int[][] mapArray = map.getActRoom();
 		
 		for(int i=0; i<15; i++)
-			for(int j=0; j<15; j++)
-				if((mapArray[i][j]&16) != 0)
+			for(int j=0; j<15; j++) 
+				if((mapArray[i][j]&16) != 0) {
 					traps.add(new Trap(new Point(i,j)));
+				}
 		
 		controller = new Controller();
 		frameLast = System.currentTimeMillis();
 		this.addKeyListener(controller);
+	}
+	
+	public void changeMap(int room, Point playerPosition) {
+		map.changeRoom(room);
+		colDetector.changeMap(map);
+		traps.clear();
+		int[][] mapArray = map.getActRoom();
+		for(int i=0; i<15; i++)
+			for(int j=0; j<15; j++)
+				if((mapArray[i][j]&16) != 0)
+					traps.add(new Trap(new Point(i,j)));
+		player.setTilePosition(playerPosition);
 	}
 	
 	public void startGameLoop() {
@@ -61,6 +76,10 @@ public class Game extends JPanel implements Runnable
 		thread.run();
 		
 		run();
+	}
+	
+	public Player getPlayer() {
+		return player;
 	}
 	
 	public void paintComponent(Graphics g)

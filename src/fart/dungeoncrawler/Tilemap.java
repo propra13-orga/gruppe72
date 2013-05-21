@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -18,8 +19,11 @@ public class Tilemap implements IDrawable {
 	private int actRoom[][];
 	private final int ROOM_SIZE = 15;
 	private HashMap<Point, Trap> traps;
+	private HashMap<Point, Portal> actPortals;
+	private Game game;
 	
-	public Tilemap() {
+	public Tilemap(Game game) {
+		this.game = game;
 		init();
 		changeRoom(0);
 	}
@@ -97,6 +101,7 @@ public class Tilemap implements IDrawable {
 		}
 		
 		traps = new HashMap<Point, Trap>();
+		actPortals = new HashMap<Point, Portal>();
 	}
 	
 	public int[][] getActRoom() {
@@ -109,6 +114,7 @@ public class Tilemap implements IDrawable {
 		
 		actRoom = rooms[room];
 		traps.clear();
+		actPortals.clear();
 		
 		for(int j = 0; j < ROOM_SIZE; j++)
 			for(int i = 0; i < ROOM_SIZE; i++)
@@ -119,12 +125,32 @@ public class Tilemap implements IDrawable {
 				}
 			}
 		
+		switch(room) {
+		case 0:
+			actPortals.put(new Point(14, 5), new Portal(game, 1, new Point(14, 5), new Point(1, 5)));
+			break;
+		case 1:
+			actPortals.put(new Point(0, 5), new Portal(game, 0, new Point(0, 5), new Point(13, 5)));
+			actPortals.put(new Point(3,14), new Portal(game, 2, new Point(3,14), new Point(3,1)));
+			break;
+		case 2:
+			actPortals.put(new Point(3, 0), new Portal(game, 1, new Point(3, 0), new Point(3, 13)));
+			break;
+		}
+		
 		System.out.println("Finished loading map. Added " + traps.size() + " traps.");
 	}
 	
 	public Trap getTrap(Point position) {
 		if(traps.containsKey(position))
 			return traps.get(position);
+		
+		return null;
+	}
+	
+	public Portal getPortal(Point position) {
+		if(actPortals.containsKey(position))
+			return actPortals.get(position);
 		
 		return null;
 	}
