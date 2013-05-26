@@ -166,6 +166,8 @@ public class Player extends GameObject implements IUpdateable {
 			return;
 		}
 		
+		
+		controller.update();
 		if(controller.isDownPressed())
 			move(Heading.Down);
 		else if(controller.isUpPressed())
