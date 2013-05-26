@@ -86,6 +86,7 @@ public class Game extends JPanel implements Runnable
 
 			frameLast = frameAct;
 			
+			controller.update();
 			switch(state) {
 			case InMenu:
 				updateMenu(frameTime);
