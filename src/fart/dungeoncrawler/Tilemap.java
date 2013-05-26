@@ -5,8 +5,8 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -14,12 +14,13 @@ public class Tilemap implements IDrawable {
 	public static final int TILE_SIZE = 32;
 	
 	public int rooms[][][];
-	private BufferedImage wall, grass, goal, tp;
+	private BufferedImage wall, grass;
 	
 	private int actRoom[][];
 	private final int ROOM_SIZE = 15;
 	private HashMap<Point, Trap> traps;
 	private HashMap<Point, Portal> actPortals;
+	private HashMap<Point, Goal> goals;
 	private Game game;
 	
 	public Tilemap(Game game) {
@@ -91,8 +92,8 @@ public class Tilemap implements IDrawable {
 		{
 			wall = ImageIO.read(new File("res/wall.png"));
 			grass = ImageIO.read(new File("res/grass.png"));
-			goal = ImageIO.read(new File("res/goal.png"));
-			tp = ImageIO.read(new File("res/tp.png"));
+			//goal = ImageIO.read(new File("res/goal.png"));
+			//tp = ImageIO.read(new File("res/tp.png"));
 		}
 		catch (IOException e)
 		{
@@ -102,6 +103,7 @@ public class Tilemap implements IDrawable {
 		
 		traps = new HashMap<Point, Trap>();
 		actPortals = new HashMap<Point, Portal>();
+		goals = new HashMap<Point, Goal>();
 	}
 	
 	public int[][] getActRoom() {
@@ -115,6 +117,7 @@ public class Tilemap implements IDrawable {
 		actRoom = rooms[room];
 		traps.clear();
 		actPortals.clear();
+		goals.clear();
 		
 		for(int j = 0; j < ROOM_SIZE; j++)
 			for(int i = 0; i < ROOM_SIZE; i++)
@@ -135,6 +138,7 @@ public class Tilemap implements IDrawable {
 			break;
 		case 2:
 			actPortals.put(new Point(3, 0), new Portal(game, 1, new Point(3, 0), new Point(3, 13)));
+			goals.put(new Point(13, 13), new Goal(new Point(13, 13), game));
 			break;
 		}
 		
@@ -155,6 +159,13 @@ public class Tilemap implements IDrawable {
 		return null;
 	}
 	
+	public Goal getGoal(Point position) {
+		if(goals.containsKey(position))
+			return goals.get(position);
+		
+		return null;
+	}
+	
 	@Override
 	public void draw(Graphics2D graphics) {
 		for(int j=0; j<ROOM_SIZE; j++)
@@ -164,11 +175,18 @@ public class Tilemap implements IDrawable {
 					graphics.drawImage(grass, null, i*TILE_SIZE, j*TILE_SIZE);
 				else if((actRoom[i][j]&2) != 0)
 					graphics.drawImage(wall, null, i*TILE_SIZE, j*TILE_SIZE);
-				else if((actRoom[i][j]&4) != 0)
-					graphics.drawImage(tp, null, i*TILE_SIZE, j*TILE_SIZE);
-				else if((actRoom[i][j]&8) != 0)
-					graphics.drawImage(goal, null, i*TILE_SIZE, j*TILE_SIZE);
+				//else if((actRoom[i][j]&4) != 0)
+					//graphics.drawImage(tp, null, i*TILE_SIZE, j*TILE_SIZE);
+				//else if((actRoom[i][j]&8) != 0)
+					//graphics.drawImage(goal, null, i*TILE_SIZE, j*TILE_SIZE);
 			}
+		
+		for(Map.Entry<Point, Trap> entry : traps.entrySet())
+			entry.getValue().draw(graphics);
+		for(Map.Entry<Point, Portal> entry : actPortals.entrySet())
+			entry.getValue().draw(graphics);
+		for(Map.Entry<Point, Goal> entry : goals.entrySet())
+			entry.getValue().draw(graphics);
 	}
 
 }

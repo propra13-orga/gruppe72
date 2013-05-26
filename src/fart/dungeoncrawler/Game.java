@@ -3,12 +3,10 @@ package fart.dungeoncrawler;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.swing.JPanel;
 
-import fart.dungeoncrawler.enums.Heading;
+import fart.dungeoncrawler.enums.GameState;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable
@@ -22,12 +20,12 @@ public class Game extends JPanel implements Runnable
 	private boolean isRunning = true;
 	
 	private Player player;
-	private ArrayList<Trap> traps;
-	private ArrayList<Portal> portals;
 	private Tilemap map;
 	
 	private Controller controller;
 	private Collision colDetector;
+	
+	private GameState state;
 	
 	public Game()
 	{
@@ -39,35 +37,27 @@ public class Game extends JPanel implements Runnable
 	
 	private void initGame()
 	{
-		map = new Tilemap(this);
-		colDetector = new Collision(map);
-		
-		player = new Player(new Point(1, 13), colDetector);
-		traps = new ArrayList<Trap>();
-		portals = new ArrayList<Portal>();
-		
-		int[][] mapArray = map.getActRoom();
-		
-		for(int i=0; i<15; i++)
-			for(int j=0; j<15; j++) 
-				if((mapArray[i][j]&16) != 0) {
-					traps.add(new Trap(new Point(i,j)));
-				}
+		state = GameState.InGame;
 		
 		controller = new Controller();
 		frameLast = System.currentTimeMillis();
 		this.addKeyListener(controller);
+		
+		startNewGame();
+		changeMap(2, new Point(2, 3));
+	}
+	
+	public void startNewGame() {
+		map = new Tilemap(this);
+		colDetector = new Collision(map);
+		
+		player = new Player(new Point(1, 13), colDetector, controller, this);
 	}
 	
 	public void changeMap(int room, Point playerPosition) {
 		map.changeRoom(room);
 		colDetector.changeMap(map);
-		traps.clear();
-		int[][] mapArray = map.getActRoom();
-		for(int i=0; i<15; i++)
-			for(int j=0; j<15; j++)
-				if((mapArray[i][j]&16) != 0)
-					traps.add(new Trap(new Point(i,j)));
+
 		player.setTilePosition(playerPosition);
 	}
 	
@@ -82,26 +72,6 @@ public class Game extends JPanel implements Runnable
 		return player;
 	}
 	
-	public void paintComponent(Graphics g)
-	{
-		super.paintComponent(g);
-		
-		Graphics2D g2d = (Graphics2D)g;
-		
-		map.draw(g2d);
-		player.draw(g2d);
-		
-		for(int i = 0; i < traps.size(); i++)
-			traps.get(i).draw(g2d);
-		
-		Iterator<Trap> it = traps.iterator();
-		while(it.hasNext())
-		{
-			Trap tmp = it.next();
-			tmp.draw(g2d);
-		}
-	}
-	 
 	public void run()
 	{
 		long frameAct;
@@ -116,18 +86,15 @@ public class Game extends JPanel implements Runnable
 
 			frameLast = frameAct;
 			
-			if(controller.isDownPressed())
-				player.move(Heading.Down);
-			else if(controller.isUpPressed())
-				player.move(Heading.Up);
-			else if(controller.isLeftPressed())
-				player.move(Heading.Left);
-			else if(controller.isRightPressed())
-				player.move(Heading.Right);
-			else
-				player.stopMovement();
+			switch(state) {
+			case InMenu:
+				updateMenu(frameTime);
+				break;
+			case InGame:
+				updateGame(frameTime);
+				break;
+			}
 			
-			player.update((float)frameSleep);
 			repaint();
 			
 			try {
@@ -142,5 +109,36 @@ public class Game extends JPanel implements Runnable
 				System.exit(1);
 			}
 		}
+	}
+	
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		
+		Graphics2D g2d = (Graphics2D)g;
+		
+		switch(state) {
+		case InMenu:
+			drawMenu(g2d);
+			break;
+		case InGame:
+			drawGame(g2d);
+			break;
+		}
+	}
+	
+	private void updateMenu(float elapsed) {
+	}
+	
+	private void updateGame(float elapsed) {
+		player.update(elapsed);
+	}
+	
+	private void drawMenu(Graphics2D g2d) {
+	}
+	
+	private void drawGame(Graphics2D g2d) {
+		map.draw(g2d);
+		player.draw(g2d);
 	}
 }

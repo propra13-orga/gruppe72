@@ -37,7 +37,6 @@ public class Main
 		//		Main dc = new Main();
 		//	}
 		//});
-		
 		new Main();
 	}
 }

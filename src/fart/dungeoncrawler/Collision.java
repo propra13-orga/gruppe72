@@ -29,6 +29,8 @@ public class Collision {
 					triggers.add(tilemap.getTrap(new Point(i, j)));
 				} else if((map[i][j]&4) != 0) {
 					triggers.add(tilemap.getPortal(new Point(i, j)));
+				} else if((map[i][j]&8) != 0) {
+					triggers.add(tilemap.getGoal(new Point(i, j)));
 				}
 			}
 		}

@@ -26,8 +26,10 @@ public class Player extends GameObject implements IUpdateable {
 	private Rectangle collisionRect;
 	
 	private Collision colDetector;
+	private Controller controller;
+	private Game game;
 	
-	public Player(Point tilePosition, Collision colDetector) {
+	public Player(Point tilePosition, Collision colDetector, Controller controller, Game game) {
 		super();
 		
 		this.colDetector = colDetector;
@@ -37,6 +39,8 @@ public class Player extends GameObject implements IUpdateable {
 		this.heading = Heading.Down;
 		this.state = DynamicObjectState.Idle;
 		this.velocity = new Point(0, 0);
+		this.controller = controller;
+		this.game = game;
 
 		//Setup Animations
 		try {
@@ -115,7 +119,7 @@ public class Player extends GameObject implements IUpdateable {
 	}
 	
 	//Players can only move in one direction at a time
-	public void move(Heading direction) {
+	private void move(Heading direction) {
 		if(state == DynamicObjectState.Terminated)
 			return;
 		if(state == DynamicObjectState.Walking)
@@ -148,7 +152,7 @@ public class Player extends GameObject implements IUpdateable {
 		}
 	}
 	
-	public void stopMovement() {
+	private void stopMovement() {
 		this.velocity.x = 0;
 		this.velocity.y = 0;
 		this.curAnim = idleAnim.get(heading);
@@ -157,8 +161,21 @@ public class Player extends GameObject implements IUpdateable {
 
 	@Override
 	public void update(float elapsed) {
-		if(state == DynamicObjectState.Terminated)
+		if(state == DynamicObjectState.Terminated) {
+			game.startNewGame();
 			return;
+		}
+		
+		if(controller.isDownPressed())
+			move(Heading.Down);
+		else if(controller.isUpPressed())
+			move(Heading.Up);
+		else if(controller.isLeftPressed())
+			move(Heading.Left);
+		else if(controller.isRightPressed())
+			move(Heading.Right);
+		else
+			stopMovement();
 		
 		collisionRect.x += velocity.x;
 		collisionRect.y += velocity.y;

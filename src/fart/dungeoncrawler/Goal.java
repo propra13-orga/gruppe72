@@ -9,43 +9,35 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Trap extends GameObject implements ITriggerable
-{
-	//private Point tilePosition;
-	private Rectangle triggerArea;
+public class Goal extends GameObject implements ITriggerable {
 	private BufferedImage texture;
+	private Rectangle triggerArea;
+	private Game game;
 	
-	public Trap(Point tilePosition)
-	{
+	public Goal(Point tilePosition, Game game) {
 		super();
+		this.game = game;
+		
+		try {
+			texture = ImageIO.read(new File("res/goal.png"));
+		} catch (IOException e) {
+			System.err.println("Couldn't load images.");
+		} catch (IllegalArgumentException e) {
+			System.err.println("Couldn't load images.");
+		}
 		
 		this.screenPosition = new Point(tilePosition.x * Tilemap.TILE_SIZE, tilePosition.y * Tilemap.TILE_SIZE);
 		this.triggerArea = new Rectangle(screenPosition, new Dimension(Tilemap.TILE_SIZE, Tilemap.TILE_SIZE));
 	}
-	
+
 	@Override
-	public void trigger(GameObject trigger)
-	{
-		trigger.terminate();
-		//System.out.println("GAME OVER");
-		// To Do: Go into Main Menu
+	public void trigger(GameObject trigger) {
+		System.out.println("Player reached the goal!");
+		//Go Back to Menu//
 	}
 
 	@Override
-	protected BufferedImage getTexture()
-	{
-		//BufferedImage trapimage = null;
-		if(texture == null) {
-		
-			try
-			{
-				texture = ImageIO.read(new File("res/trap.png"));
-			} catch (IOException e)
-			{
-				System.err.println("Couldn't load trap image");
-				System.exit(1);
-			}
-		}
+	protected BufferedImage getTexture() {
 		return texture;
 	}
 
