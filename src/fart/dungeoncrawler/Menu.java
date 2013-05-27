@@ -53,7 +53,7 @@ public class Menu implements IDrawable, IUpdateable{
 		
 		if(controller.justPressed(KeyEvent.VK_ENTER)) {
 			if(cursorPosition == 0) {
-				game.startGame();
+				game.startGame(true);
 			} else if(cursorPosition == 1){
 				System.exit(0);
 			}

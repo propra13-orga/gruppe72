@@ -54,8 +54,9 @@ public class Game extends JPanel implements Runnable
 		//changeMap(2, new Point(2, 3));
 	}
 	
-	public void startGame() {
-		if(!isGameStarted) {
+	public void startGame(boolean newGame) {
+		//if(!isGameStarted) {
+		if(newGame) {
 			map = new Tilemap(this);
 			colDetector = new Collision(map);
 			
@@ -67,15 +68,20 @@ public class Game extends JPanel implements Runnable
 		}
 	}
 	
+	public void playerDead() {
+		isGameStarted = false;
+		pauseResumeGame();
+	}
+	
 	public void playerWins() {
 		isGameStarted = false;
 		state = GameState.InMenu;
 	}
 	
 	public void pauseResumeGame() {
-		if(state == GameState.InMenu && isGameStarted)
-			state = GameState.InGame;
-		else
+		if(state == GameState.InMenu) {
+			startGame(false);
+		} else
 			state = GameState.InMenu;
 	}
 	

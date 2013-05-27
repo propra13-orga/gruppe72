@@ -94,6 +94,7 @@ public class Player extends GameObject implements IUpdateable {
 	public void terminate() {
 		System.out.println("Player ist dead!");
 		state = DynamicObjectState.Terminated;
+		game.playerDead();
 	}
 	
 	public Point getTilePosition() {
@@ -162,7 +163,7 @@ public class Player extends GameObject implements IUpdateable {
 	@Override
 	public void update(float elapsed) {
 		if(state == DynamicObjectState.Terminated) {
-			game.startGame();
+			game.startGame(true);
 			return;
 		}
 		
