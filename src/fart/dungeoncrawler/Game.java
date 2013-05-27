@@ -26,6 +26,7 @@ public class Game extends JPanel implements Runnable
 	private Collision colDetector;
 	
 	private GameState state;
+	private Menu menu;
 	
 	public Game()
 	{
@@ -37,14 +38,16 @@ public class Game extends JPanel implements Runnable
 	
 	private void initGame()
 	{
-		state = GameState.InGame;
+		state = GameState.InMenu;
 		
 		controller = new Controller();
 		frameLast = System.currentTimeMillis();
 		this.addKeyListener(controller);
 		
+		menu = new Menu(this, controller);
+		
 		startNewGame();
-		changeMap(2, new Point(2, 3));
+		//changeMap(2, new Point(2, 3));
 	}
 	
 	public void startNewGame() {
@@ -52,6 +55,7 @@ public class Game extends JPanel implements Runnable
 		colDetector = new Collision(map);
 		
 		player = new Player(new Point(1, 13), colDetector, controller, this);
+		state = GameState.InGame;
 	}
 	
 	public void changeMap(int room, Point playerPosition) {
@@ -86,7 +90,6 @@ public class Game extends JPanel implements Runnable
 
 			frameLast = frameAct;
 			
-			controller.update();
 			switch(state) {
 			case InMenu:
 				updateMenu(frameTime);
@@ -129,6 +132,7 @@ public class Game extends JPanel implements Runnable
 	}
 	
 	private void updateMenu(float elapsed) {
+		menu.update(elapsed);
 	}
 	
 	private void updateGame(float elapsed) {
@@ -136,6 +140,7 @@ public class Game extends JPanel implements Runnable
 	}
 	
 	private void drawMenu(Graphics2D g2d) {
+		menu.draw(g2d);
 	}
 	
 	private void drawGame(Graphics2D g2d) {
