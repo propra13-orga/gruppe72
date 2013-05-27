@@ -3,6 +3,7 @@ package fart.dungeoncrawler;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JPanel;
 
@@ -27,6 +28,7 @@ public class Game extends JPanel implements Runnable
 	
 	private GameState state;
 	private Menu menu;
+	private boolean isGameStarted;
 	
 	public Game()
 	{
@@ -46,16 +48,35 @@ public class Game extends JPanel implements Runnable
 		
 		menu = new Menu(this, controller);
 		
-		startNewGame();
+		isGameStarted = false;
+		
+		//startNewGame();
 		//changeMap(2, new Point(2, 3));
 	}
 	
-	public void startNewGame() {
-		map = new Tilemap(this);
-		colDetector = new Collision(map);
-		
-		player = new Player(new Point(1, 13), colDetector, controller, this);
-		state = GameState.InGame;
+	public void startGame() {
+		if(!isGameStarted) {
+			map = new Tilemap(this);
+			colDetector = new Collision(map);
+			
+			player = new Player(new Point(1, 13), colDetector, controller, this);
+			state = GameState.InGame;
+			isGameStarted = true;
+		} else {
+			state = GameState.InGame;
+		}
+	}
+	
+	public void playerWins() {
+		isGameStarted = false;
+		state = GameState.InMenu;
+	}
+	
+	public void pauseResumeGame() {
+		if(state == GameState.InMenu && isGameStarted)
+			state = GameState.InGame;
+		else
+			state = GameState.InMenu;
 	}
 	
 	public void changeMap(int room, Point playerPosition) {
@@ -89,6 +110,9 @@ public class Game extends JPanel implements Runnable
 				frameSleep = 2l;
 
 			frameLast = frameAct;
+			controller.update();
+			if(controller.justPressed(KeyEvent.VK_ESCAPE))
+				pauseResumeGame();
 			
 			switch(state) {
 			case InMenu:

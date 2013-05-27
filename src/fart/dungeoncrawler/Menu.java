@@ -2,6 +2,7 @@ package fart.dungeoncrawler;
 
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -40,9 +41,9 @@ public class Menu implements IDrawable, IUpdateable{
 	
 	@Override
 	public void update(float elapsed) {
-		if(controller.isDownPressed())
+		if(controller.justPressed(KeyEvent.VK_DOWN))
 			cursorPosition += 1;
-		if(controller.isUpPressed())
+		if(controller.justPressed(KeyEvent.VK_UP))
 			cursorPosition -= 1;
 		
 		if(cursorPosition < 0)
@@ -50,11 +51,11 @@ public class Menu implements IDrawable, IUpdateable{
 		else if(cursorPosition > optionCount)
 			cursorPosition = 0;
 		
-		if(controller.isReturnPressed()) {
+		if(controller.justPressed(KeyEvent.VK_ENTER)) {
 			if(cursorPosition == 0) {
-				//hier muss ein neues spiel gestartet werden
+				game.startGame();
 			} else if(cursorPosition == 1){
-				//hier muss beendet werden
+				System.exit(0);
 			}
 		}
 	}

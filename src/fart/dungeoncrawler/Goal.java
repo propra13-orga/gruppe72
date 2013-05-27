@@ -33,7 +33,7 @@ public class Goal extends GameObject implements ITriggerable {
 	@Override
 	public void trigger(GameObject trigger) {
 		System.out.println("Player reached the goal!");
-		//Go Back to Menu//
+		game.playerWins();
 	}
 
 	@Override

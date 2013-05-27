@@ -162,7 +162,7 @@ public class Player extends GameObject implements IUpdateable {
 	@Override
 	public void update(float elapsed) {
 		if(state == DynamicObjectState.Terminated) {
-			game.startNewGame();
+			game.startGame();
 			return;
 		}
 		
