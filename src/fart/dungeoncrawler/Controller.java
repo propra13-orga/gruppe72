@@ -2,12 +2,15 @@ package fart.dungeoncrawler;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Controller implements KeyListener
 {
 	private boolean lastFrame[] = new boolean[525];
 	private boolean thisFrame[] = new boolean[525];
-	private boolean changes[]   = new boolean[525];
+	
+	private HashMap<Integer, Boolean> tmp = new HashMap<Integer, Boolean>();
 	
 	public boolean isPressed(int key)
 	{
@@ -33,30 +36,23 @@ public class Controller implements KeyListener
 	
 	public void update()
 	{
-		for(int i=0; i<thisFrame.length; i++)
-		{
-			lastFrame[i] = thisFrame[i];
-			
-			if(changes[i])
-			{
-				thisFrame[i] = !thisFrame[i];
-				changes[i] = false;
-			}
-		}
+		lastFrame = thisFrame.clone();
+		for(Map.Entry<Integer, Boolean> entry : tmp.entrySet())
+			thisFrame[entry.getKey()] = entry.getValue();
+		
+		tmp.clear();
 	}
 	
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
-		if(e.getKeyCode() < changes.length)
-			changes[e.getKeyCode()] = !changes[e.getKeyCode()];
+		tmp.put(e.getKeyCode(), true);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
-		if(e.getKeyCode() < changes.length)
-			changes[e.getKeyCode()] = !changes[e.getKeyCode()];
+		tmp.put(e.getKeyCode(), false);
 	}
 
 	@Override
