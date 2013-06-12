@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import MathUtils.Vector2;
+import Utils.Vector2;
 
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.Heading;

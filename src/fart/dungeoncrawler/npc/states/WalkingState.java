@@ -2,10 +2,11 @@ package fart.dungeoncrawler.npc.states;
 
 import java.util.Random;
 
-import MathUtils.Vector2;
+import Utils.Vector2;
 
 import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.enums.DynamicObjectState;
+import fart.dungeoncrawler.npc.BaseEnemy;
 import fart.dungeoncrawler.npc.BaseNPC;
 
 public class WalkingState extends NPCState {
@@ -16,7 +17,7 @@ public class WalkingState extends NPCState {
 	private long lastMovement;
 	
 	//In this state, the object walks straight in one direction
-	public WalkingState(EnemyStateMachine machine, BaseNPC owner) {
+	public WalkingState(EnemyStateMachine machine, BaseEnemy owner) {
 		super(machine, owner);
 		
 		lastMovement = System.currentTimeMillis();
@@ -63,6 +64,7 @@ public class WalkingState extends NPCState {
 	public void update(float elapsed) {
 		distanceToTravel--;
 		owner.setVelocity(direction);
+		//owner.setHeading();
 		
 		if(distanceToTravel <= 0) {
 			machine.setState(DynamicObjectState.Idle);

@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import MathUtils.Vector2;
+import Utils.Vector2;
 
 public class Trap extends GameObject implements ITriggerable
 {

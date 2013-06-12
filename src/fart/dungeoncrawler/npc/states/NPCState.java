@@ -1,13 +1,14 @@
 package fart.dungeoncrawler.npc.states;
 
 import fart.dungeoncrawler.enums.DynamicObjectState;
+import fart.dungeoncrawler.npc.BaseEnemy;
 import fart.dungeoncrawler.npc.BaseNPC;
 
 public abstract class NPCState {
 	protected EnemyStateMachine machine;
-	protected BaseNPC owner;
+	protected BaseEnemy owner;
 	
-	public NPCState(EnemyStateMachine machine, BaseNPC owner) {
+	public NPCState(EnemyStateMachine machine, BaseEnemy owner) {
 		this.machine = machine;
 		this.owner = owner;
 	}

@@ -4,7 +4,7 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import MathUtils.Vector2;
+import Utils.Vector2;
 
 import fart.dungeoncrawler.enums.Heading;
 

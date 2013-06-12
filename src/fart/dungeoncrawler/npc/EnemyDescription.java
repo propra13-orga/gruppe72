@@ -2,7 +2,8 @@ package fart.dungeoncrawler.npc;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import MathUtils.Vector2;
+
+import Utils.Vector2;
 import fart.dungeoncrawler.Health;
 import fart.dungeoncrawler.enums.Heading;
 

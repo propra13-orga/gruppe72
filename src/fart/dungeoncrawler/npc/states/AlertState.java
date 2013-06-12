@@ -1,9 +1,10 @@
 package fart.dungeoncrawler.npc.states;
 
-import MathUtils.Vector2;
+import Utils.Vector2;
 
 import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.enums.DynamicObjectState;
+import fart.dungeoncrawler.npc.BaseEnemy;
 import fart.dungeoncrawler.npc.BaseNPC;
 
 public class AlertState extends NPCState {
@@ -14,7 +15,7 @@ public class AlertState extends NPCState {
 	
 	//In this state the player is in the aggrorange of this object. 
 	//Object heads to the player to attack
-	public AlertState(EnemyStateMachine machine, BaseNPC owner) {
+	public AlertState(EnemyStateMachine machine, BaseEnemy owner) {
 		super(machine, owner);
 	}
 	

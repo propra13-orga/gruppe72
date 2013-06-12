@@ -9,7 +9,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import MathUtils.Vector2;
+import Utils.Vector2;
 
 public class Tilemap implements IDrawable {
 	public static final int TILE_SIZE = 32;

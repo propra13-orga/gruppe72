@@ -2,20 +2,23 @@ package fart.dungeoncrawler.npc;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import MathUtils.Vector2;
+
+import Utils.Vector2;
 import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.Health;
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.enums.DynamicObjectState;
+import fart.dungeoncrawler.enums.Heading;
 import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 import fart.dungeoncrawler.npc.states.NPCState;
 
 public class BaseNPC extends GameObject implements IUpdateable {
 	protected Rectangle collisionRect;
 	protected DynamicObjectState curState;
-	protected Vector2 velocity;
+	private Vector2 velocity;
 	protected EnemyStateMachine machine;
 	protected Health health;
+	protected Heading heading;
 	
 	public BaseNPC(NPCDescription desc) {
 		this.screenPosition = desc.getPosition();
@@ -35,10 +38,19 @@ public class BaseNPC extends GameObject implements IUpdateable {
 		return screenPosition;
 	}
 	
-	public void setVelocity(Vector2 velocity) {
-		this.velocity = velocity;
+	public Vector2 getVelocity() {
+		return velocity;
 	}
 	
+	public void setVelocity(Vector2 velocity) {
+		if(velocity.equals(this.velocity))
+			return;
+		
+		this.velocity = velocity;
+		//setHeading();
+	}
+	
+
 	public void addVelocity(Vector2 velocity) {
 		this.velocity.x += velocity.x;
 		this.velocity.y += velocity.y;

@@ -3,7 +3,7 @@ package fart.dungeoncrawler.npc.states;
 import java.util.HashMap;
 import java.util.Random;
 
-import MathUtils.Vector2;
+import Utils.Vector2;
 
 import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.IUpdateable;
@@ -107,6 +107,7 @@ public class EnemyStateMachine implements IUpdateable {
 		curState.activate();
 		
 		owner.setState(state);
+		owner.setCurrentAnimation(state);
 	}
 	
 	public DynamicObjectState getState() {

@@ -1,11 +1,12 @@
 package fart.dungeoncrawler.npc.states;
 
 import fart.dungeoncrawler.enums.DynamicObjectState;
+import fart.dungeoncrawler.npc.BaseEnemy;
 import fart.dungeoncrawler.npc.BaseNPC;
 
 public class AttackingState extends NPCState {
 
-	public AttackingState(EnemyStateMachine machine, BaseNPC owner) {
+	public AttackingState(EnemyStateMachine machine, BaseEnemy owner) {
 		super(machine, owner);
 	}
 	

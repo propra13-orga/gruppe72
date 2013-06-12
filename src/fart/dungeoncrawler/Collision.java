@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import fart.dungeoncrawler.npc.BaseEnemy;
 
-import MathUtils.Vector2;
+import Utils.Vector2;
 
 public class Collision {
 	private ArrayList<Rectangle> staticObjects;

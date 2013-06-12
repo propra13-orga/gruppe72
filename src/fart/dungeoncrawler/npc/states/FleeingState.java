@@ -1,8 +1,9 @@
 package fart.dungeoncrawler.npc.states;
 
-import MathUtils.Vector2;
+import Utils.Vector2;
 import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.enums.DynamicObjectState;
+import fart.dungeoncrawler.npc.BaseEnemy;
 import fart.dungeoncrawler.npc.BaseNPC;
 
 public class FleeingState extends NPCState {
@@ -10,7 +11,7 @@ public class FleeingState extends NPCState {
 	private static final float SPEED = 0.75f;
 	private GameObject threat;
 	
-	public FleeingState(EnemyStateMachine machine, BaseNPC owner) {
+	public FleeingState(EnemyStateMachine machine, BaseEnemy owner) {
 		super(machine, owner);
 	}
 	

@@ -1,13 +1,14 @@
 package fart.dungeoncrawler.npc.states;
 
-import MathUtils.Vector2;
+import Utils.Vector2;
 import fart.dungeoncrawler.enums.DynamicObjectState;
+import fart.dungeoncrawler.npc.BaseEnemy;
 import fart.dungeoncrawler.npc.BaseNPC;
 
 public class TerminatedState extends NPCState {
 	private static final DynamicObjectState DO_STATE = DynamicObjectState.Terminated;
 	
-	public TerminatedState(EnemyStateMachine machine, BaseNPC owner) {
+	public TerminatedState(EnemyStateMachine machine, BaseEnemy owner) {
 		super(machine, owner);
 	}
 

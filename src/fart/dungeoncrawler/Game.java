@@ -11,7 +11,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import MathUtils.Vector2;
+import Utils.Vector2;
 
 import fart.dungeoncrawler.enums.GameState;
 import fart.dungeoncrawler.enums.Heading;

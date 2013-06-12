@@ -1,8 +1,9 @@
 package fart.dungeoncrawler.npc.states;
 
-import MathUtils.Vector2;
+import Utils.Vector2;
 import fart.dungeoncrawler.Health;
 import fart.dungeoncrawler.enums.DynamicObjectState;
+import fart.dungeoncrawler.npc.BaseEnemy;
 import fart.dungeoncrawler.npc.BaseNPC;
 
 public class HitState extends NPCState {
@@ -11,7 +12,7 @@ public class HitState extends NPCState {
 
 	//If an enemy is hit, it switches to hitState. While hit, enemy is invulnerable
 	//Rebound not yet implemented.
-	public HitState(EnemyStateMachine machine, BaseNPC owner) {
+	public HitState(EnemyStateMachine machine, BaseEnemy owner) {
 		super(machine, owner);
 		reboundVelocity = new Vector2();
 	}
