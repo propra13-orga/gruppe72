@@ -1,13 +1,23 @@
 package fart.dungeoncrawler;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import MathUtils.Vector2;
+
 import fart.dungeoncrawler.enums.GameState;
+import fart.dungeoncrawler.enums.Heading;
+import fart.dungeoncrawler.npc.EnemyDescription;
+import fart.dungeoncrawler.npc.MeleeEnemy;
+import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable
@@ -29,6 +39,9 @@ public class Game extends JPanel implements Runnable
 	private GameState state;
 	private Menu menu;
 	private boolean isGameStarted;
+	
+	//DEBUG
+	private MeleeEnemy e;
 	
 	public Game()
 	{
@@ -60,9 +73,25 @@ public class Game extends JPanel implements Runnable
 			map = new Tilemap(this);
 			colDetector = new Collision(map);
 			
-			player = new Player(new Point(1, 13), colDetector, controller, this);
+			player = new Player(new Vector2(1, 13), colDetector, controller, this);
+			colDetector.addDynamicObject(player);
 			state = GameState.InGame;
 			isGameStarted = true;
+			
+			//DEBUG
+			BufferedImage bi;
+			try {
+				bi = ImageIO.read(new File("res/player.png"));
+				EnemyDescription ed = new EnemyDescription(new Vector2(90, 160), new Dimension(32, 32), false, bi, Heading.Down, 4 * Tilemap.TILE_SIZE, new Health(100, 10));
+				e = new MeleeEnemy(ed, colDetector);
+				EnemyStateMachine machine = new EnemyStateMachine(e, player);
+				e.setMachine(machine);
+				colDetector.addDynamicObject(e);
+			} catch(IOException e) {
+				System.err.println("Couldn't load image!");
+				System.exit(1);
+			}
+			
 		} else {
 			state = GameState.InGame;
 		}
@@ -85,7 +114,7 @@ public class Game extends JPanel implements Runnable
 			state = GameState.InMenu;
 	}
 	
-	public void changeMap(int room, Point playerPosition) {
+	public void changeMap(int room, Vector2 playerPosition) {
 		map.changeRoom(room);
 		colDetector.changeMap(map);
 
@@ -167,6 +196,7 @@ public class Game extends JPanel implements Runnable
 	
 	private void updateGame(float elapsed) {
 		player.update(elapsed);
+		e.update(elapsed);
 	}
 	
 	private void drawMenu(Graphics2D g2d) {
@@ -176,5 +206,6 @@ public class Game extends JPanel implements Runnable
 	private void drawGame(Graphics2D g2d) {
 		map.draw(g2d);
 		player.draw(g2d);
+		e.draw(g2d);
 	}
 }

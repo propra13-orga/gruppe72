@@ -1,6 +1,5 @@
 package fart.dungeoncrawler;
 
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,20 +7,22 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import MathUtils.Vector2;
+
 public class Portal extends GameObject implements ITriggerable {
 
 	private int mapNumberTo;
-	private Point pointTo;
+	private Vector2 pointTo;
 	private Game game;
 	private BufferedImage texture;
 	private Rectangle collisionRect;
 	
-	public Portal(Game game, int mapTo, Point tilePositionFrom, Point tilePositionTo) {
+	public Portal(Game game, int mapTo, Vector2 tilePositionFrom, Vector2 tilePositionTo) {
 		this.game = game;
 		mapNumberTo = mapTo;
 		pointTo = tilePositionTo;
-		screenPosition = new Point(tilePositionFrom.x * Tilemap.TILE_SIZE, tilePositionFrom.y * Tilemap.TILE_SIZE);
-		collisionRect = new Rectangle(screenPosition.x + Tilemap.TILE_SIZE / 4, screenPosition.y + Tilemap.TILE_SIZE / 4, Tilemap.TILE_SIZE / 2, Tilemap.TILE_SIZE / 2);
+		screenPosition = new Vector2(tilePositionFrom.x * Tilemap.TILE_SIZE, tilePositionFrom.y * Tilemap.TILE_SIZE);
+		collisionRect = new Rectangle((int)screenPosition.x + Tilemap.TILE_SIZE / 4, (int)screenPosition.y + Tilemap.TILE_SIZE / 4, Tilemap.TILE_SIZE / 2, Tilemap.TILE_SIZE / 2);
 	}
 	
 	@Override
