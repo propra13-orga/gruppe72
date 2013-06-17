@@ -1,6 +1,9 @@
 package fart.dungeoncrawler;
 
+<<<<<<< HEAD
 import java.awt.Graphics2D;
+=======
+>>>>>>> b3cd3656f30620f0ff0189e25a27780a0d6ca3a3
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -33,8 +36,11 @@ public class Player extends GameObject implements IUpdateable {
 	private Game game;
 	
 	private boolean supressEnemyCollision = false;
+<<<<<<< HEAD
 	private Health health;
 	public StatusBar statusbar;
+=======
+>>>>>>> b3cd3656f30620f0ff0189e25a27780a0d6ca3a3
 	
 	public Player(Vector2 tilePosition, Collision colDetector, Controller controller, Game game) {
 		super();
@@ -91,10 +97,13 @@ public class Player extends GameObject implements IUpdateable {
 		//DEBUG
 		System.out.println("Hold SHIFT to avoid player collision.");
 		//
+<<<<<<< HEAD
 	}
 	
 	public Health getHealth() {
 		return health;
+=======
+>>>>>>> b3cd3656f30620f0ff0189e25a27780a0d6ca3a3
 	}
 
 	@Override
@@ -224,11 +233,14 @@ public class Player extends GameObject implements IUpdateable {
 		if(!supressEnemyCollision) {
 			
 		}
+<<<<<<< HEAD
 	}
 	
 	@Override
 	public void draw(Graphics2D graphics) {
 		graphics.drawImage(getTexture(), (int)screenPosition.x, (int)screenPosition.y, null);
 		statusbar.draw(graphics);
+=======
+>>>>>>> b3cd3656f30620f0ff0189e25a27780a0d6ca3a3
 	}
 }

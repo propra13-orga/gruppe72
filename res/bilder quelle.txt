@@ -1,0 +1,17 @@
+http://opengameart.org/         -     Hauptquelle
+
+http://opengameart.org/content/loot
+http://opengameart.org/content/potions-0
+http://opengameart.org/content/antifareas-rpg-sprite-set-1-enlarged-w-transparent-background
+http://opengameart.org/content/weapons-icons
+http://opengameart.org/content/rpg-gui-contstruction-kit-vmoon
+http://opengameart.org/content/flare-item-variation-60x60-only
+http://opengameart.org/content/weapon-icons
+http://opengameart.org/content/16x16-rpg-items
+http://opengameart.org/content/fantasy-icon-pack-by-ravenmore
+http://opengameart.org/content/roguelike-tiles-large-collection
+http://opengameart.org/content/health-and-mana-bars
+http://opengameart.org/content/weapon-icons-32x32px-painterly
+http://opengameart.org/content/armor-icons-32x32-px-painterly
+http://opengameart.org/content/fantasy-icon-pack-by-ravenmore-20
+http://opengameart.org/content/bricks-tilable

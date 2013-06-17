@@ -1,7 +1,5 @@
 package fart.dungeoncrawler;
 
-import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,18 +7,20 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import Utils.Vector2;
+
 public class Trap extends GameObject implements ITriggerable
 {
 	//private Point tilePosition;
 	private Rectangle triggerArea;
 	private BufferedImage texture;
 	
-	public Trap(Point tilePosition)
+	public Trap(Vector2 tilePosition)
 	{
 		super();
 		
-		this.screenPosition = new Point(tilePosition.x * Tilemap.TILE_SIZE, tilePosition.y * Tilemap.TILE_SIZE);
-		this.triggerArea = new Rectangle(screenPosition, new Dimension(Tilemap.TILE_SIZE, Tilemap.TILE_SIZE));
+		this.screenPosition = new Vector2(tilePosition.x * Tilemap.TILE_SIZE, tilePosition.y * Tilemap.TILE_SIZE);
+		this.triggerArea = new Rectangle((int)screenPosition.x, (int)screenPosition.y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
 	}
 	
 	@Override
