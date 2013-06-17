@@ -1,7 +1,8 @@
 package fart.dungeoncrawler;
 
-import java.awt.Point;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,11 +10,13 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import Utils.Vector2;
+
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.Heading;
 
 public class Player extends GameObject implements IUpdateable {
-	private Point tilePosition;
+	private Vector2 tilePosition;
 	
 	private HashMap<Heading, Animation> walkAnim;
 	private HashMap<Heading, Animation> idleAnim;
@@ -22,25 +25,31 @@ public class Player extends GameObject implements IUpdateable {
 	private DynamicObjectState state;
 	private Animation curAnim;
 	
-	private Point velocity;
+	private Vector2 velocity;
 	private Rectangle collisionRect;
 	
 	private Collision colDetector;
 	private Controller controller;
 	private Game game;
 	
-	public Player(Point tilePosition, Collision colDetector, Controller controller, Game game) {
+	private boolean supressEnemyCollision = false;
+	private Health health;
+	public StatusBar statusbar;
+	
+	public Player(Vector2 tilePosition, Collision colDetector, Controller controller, Game game) {
 		super();
 		
 		this.colDetector = colDetector;
 		this.tilePosition = tilePosition;
-		this.screenPosition = new Point(tilePosition.x * Tilemap.TILE_SIZE, tilePosition.y * Tilemap.TILE_SIZE);
-		this.collisionRect = new Rectangle(screenPosition.x, screenPosition.y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
+		this.screenPosition = new Vector2(tilePosition.x * Tilemap.TILE_SIZE, tilePosition.y * Tilemap.TILE_SIZE);
+		this.collisionRect = new Rectangle((int)screenPosition.x, (int)screenPosition.y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
 		this.heading = Heading.Down;
 		this.state = DynamicObjectState.Idle;
-		this.velocity = new Point(0, 0);
+		this.velocity = new Vector2(0, 0);
 		this.controller = controller;
 		this.game = game;
+		health = new Health(100, 10);
+		statusbar = new StatusBar(this);
 
 		//Setup Animations
 		try {
@@ -78,6 +87,14 @@ public class Player extends GameObject implements IUpdateable {
 			System.err.print("Couldn't load Players texture!");
 			System.exit(1);
 		}
+		
+		//DEBUG
+		System.out.println("Hold SHIFT to avoid player collision.");
+		//
+	}
+	
+	public Health getHealth() {
+		return health;
 	}
 
 	@Override
@@ -94,28 +111,29 @@ public class Player extends GameObject implements IUpdateable {
 	public void terminate() {
 		System.out.println("Player ist dead!");
 		state = DynamicObjectState.Terminated;
+		game.playerDead();
 	}
 	
-	public Point getTilePosition() {
+	public Vector2 getTilePosition() {
 		return tilePosition;
 	}
 	
-	public Point getScreenPosition() {
+	public Vector2 getScreenPosition() {
 		return screenPosition;
 	}
 	
-	public void setTilePosition(Point position) {
+	public void setTilePosition(Vector2 position) {
 		tilePosition = position;
-		screenPosition = new Point(position.x * Tilemap.TILE_SIZE, position.y * Tilemap.TILE_SIZE);
-		collisionRect.x = screenPosition.x;
-		collisionRect.y = screenPosition.y;
+		screenPosition = new Vector2(position.x * Tilemap.TILE_SIZE, position.y * Tilemap.TILE_SIZE);
+		collisionRect.x = (int)screenPosition.x;
+		collisionRect.y = (int)screenPosition.y;
 	}
 	
-	public void setScreenPosition(Point position) {
+	public void setScreenPosition(Vector2 position) {
 		screenPosition = position;
-		tilePosition = new Point(position.x / Tilemap.TILE_SIZE, position.y / Tilemap.TILE_SIZE);
-		collisionRect.x = screenPosition.x;
-		collisionRect.y = screenPosition.y;
+		tilePosition = new Vector2(position.x / Tilemap.TILE_SIZE, position.y / Tilemap.TILE_SIZE);
+		collisionRect.x = (int)screenPosition.x;
+		collisionRect.y = (int)screenPosition.y;
 	}
 	
 	//Players can only move in one direction at a time
@@ -162,7 +180,7 @@ public class Player extends GameObject implements IUpdateable {
 	@Override
 	public void update(float elapsed) {
 		if(state == DynamicObjectState.Terminated) {
-			game.startNewGame();
+			game.startGame(true);
 			return;
 		}
 		
@@ -177,19 +195,40 @@ public class Player extends GameObject implements IUpdateable {
 		else
 			stopMovement();
 		
+		//DEBUG PURPOSE
+		if(controller.isPressed(KeyEvent.VK_SHIFT))
+			supressEnemyCollision = true;
+		else
+			supressEnemyCollision = false;
+		//-------------
+		
 		collisionRect.x += velocity.x;
 		collisionRect.y += velocity.y;
 		
-		if(colDetector.isColliding(this)) {
+		boolean collidingStatic = colDetector.isCollidingStatic(this);
+		boolean collidingDynamic = false;
+		if(!supressEnemyCollision)
+			collidingDynamic = colDetector.isCollidingDynamic(this);
+		
+		if(collidingStatic || collidingDynamic) {
 			collisionRect.x -= velocity.x;
 			collisionRect.y -= velocity.y;
 			stopMovement();
 		} else {
+			colDetector.checkTriggers(this);
 			screenPosition.x += velocity.x;
 			screenPosition.y += velocity.y;
 			curAnim.update(elapsed);
 		}
 		
-		
+		if(!supressEnemyCollision) {
+			
+		}
+	}
+	
+	@Override
+	public void draw(Graphics2D graphics) {
+		graphics.drawImage(getTexture(), (int)screenPosition.x, (int)screenPosition.y, null);
+		statusbar.draw(graphics);
 	}
 }

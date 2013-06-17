@@ -55,7 +55,7 @@ public class Game extends JPanel implements Runnable
 		colDetector = new Collision(map);
 		
 		player = new Player(new Point(1, 13), colDetector, controller, this);
-		state = GameState.InGame;
+		state = GameState.InMenu;
 	}
 	
 	public void changeMap(int room, Point playerPosition) {
