@@ -19,6 +19,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	protected int attackRange;
 	protected Collision collision;
 	protected HashMap<DynamicObjectState, HashMap<Heading, Animation>> animations;
+	protected EnemyDescription desc;
 	
 	public BaseEnemy(EnemyDescription desc, Collision collision) {
 		super(desc);
@@ -26,8 +27,13 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		this.aggroRange = desc.getAggroRange();
 		//this.attackRange = desc.getAttackRange();
 		this.health = desc.getHealth();
+		this.desc = desc;
 		
 		animations = new HashMap<DynamicObjectState, HashMap<Heading, Animation>>();
+	}
+	
+	public EnemyDescription getDescription() {
+		return desc;
 	}
 	
 	public void setHeading() {

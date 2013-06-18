@@ -1,6 +1,5 @@
 package fart.dungeoncrawler;
 
-<<<<<<< HEAD
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -9,41 +8,22 @@ import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.npc.BaseNPC;
 
 public class DynamicObjectManager {
-	private ArrayList<BaseNPC> dynamics = new ArrayList<BaseNPC>();
+	private ArrayList<BaseNPC> dynamics;
 	private Player player;
 	private int playerID;
 	
-	//spieler hinzufügen
-	public void addPlayer(Player player) {
-		this.player = player;
-		this.playerID = player.getID();
-	}
-	
-	//objekt hinzufügen
-=======
-import java.util.ArrayList;
-
-import fart.dungeoncrawler.npc.BaseNPC;
-
-public class DynamicObjectManager {
-	private ArrayList<BaseNPC> dynamics;
-	private Player player;
-	
 	public DynamicObjectManager(Player player) {
 		this.player = player;
+		this.playerID = player.getID();
 		
 		dynamics = new ArrayList<BaseNPC>();
 	}
 	
->>>>>>> b3cd3656f30620f0ff0189e25a27780a0d6ca3a3
 	public void addObject(BaseNPC npc) {
 		dynamics.add(npc);
 	}
 	
-<<<<<<< HEAD
 	//objekt entfernen
-=======
->>>>>>> b3cd3656f30620f0ff0189e25a27780a0d6ca3a3
 	public void removeObject(BaseNPC npc) {
 		int id = npc.getID();
 		for(int i = 0; i < dynamics.size(); i++) {
@@ -54,15 +34,11 @@ public class DynamicObjectManager {
 		}
 	}
 
-<<<<<<< HEAD
 	//alle objekte löschen
-=======
->>>>>>> b3cd3656f30620f0ff0189e25a27780a0d6ca3a3
 	public void clearObjects() {
 		dynamics.clear();
 	}
 	
-<<<<<<< HEAD
 	//spieler und objekte updaten
 	public void update(float elapsed) {
 		player.update(elapsed);
@@ -102,13 +78,9 @@ public class DynamicObjectManager {
 		}
 		
 		player.draw(g2d);
-=======
-	public void update(float elapsed) {
-		player.update(elapsed);
 	}
 	
 	public void draw() {
 		//??
->>>>>>> b3cd3656f30620f0ff0189e25a27780a0d6ca3a3
 	}
 }

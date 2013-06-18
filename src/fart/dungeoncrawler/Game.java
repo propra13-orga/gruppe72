@@ -67,14 +67,6 @@ public class Game extends JPanel implements Runnable
 		//changeMap(2, new Point(2, 3));
 	}
 	
-<<<<<<< HEAD
-	public void startNewGame() {
-		map = new Tilemap(this);
-		colDetector = new Collision(map);
-		
-		player = new Player(new Point(1, 13), colDetector, controller, this);
-		state = GameState.InMenu;
-=======
 	public void startGame(boolean newGame) {
 		//if(!isGameStarted) {
 		if(newGame) {
@@ -120,7 +112,6 @@ public class Game extends JPanel implements Runnable
 			startGame(false);
 		} else
 			state = GameState.InMenu;
->>>>>>> b3cd3656f30620f0ff0189e25a27780a0d6ca3a3
 	}
 	
 	public void changeMap(int room, Vector2 playerPosition) {

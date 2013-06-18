@@ -19,15 +19,21 @@ public class BaseNPC extends GameObject implements IUpdateable {
 	protected EnemyStateMachine machine;
 	protected Health health;
 	protected Heading heading;
+	protected NPCDescription desc;
 	
 	public BaseNPC(NPCDescription desc) {
 		this.screenPosition = desc.getPosition();
 		this.collisionRect = desc.getColRect();
 		this.curState = DynamicObjectState.Idle;
+		this.desc = desc;
 		
 		health = new Health(100);
 		
 		velocity = new Vector2();
+	}
+	
+	public void activateState(DynamicObjectState state) {
+		machine.setState(state);
 	}
 	
 	public void setMachine(EnemyStateMachine machine) {
@@ -88,5 +94,23 @@ public class BaseNPC extends GameObject implements IUpdateable {
 	@Override
 	public void update(float elapsed) {
 		screenPosition = screenPosition.add(velocity);
+	}
+
+	public Heading getHeading() {
+		return heading;
+	}
+
+	public NPCDescription getDescription() {
+		return desc;
+	}
+
+	public void setPosition(Vector2 position) {
+		screenPosition = position;
+		collisionRect.x = (int)position.x;
+		collisionRect.y = (int)position.y;
+	}
+
+	public void setHeading(Heading heading) {
+		this.heading = heading;
 	}
 }

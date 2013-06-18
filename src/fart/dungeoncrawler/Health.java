@@ -23,16 +23,18 @@ public class Health {
         invulnerable = invul;
     }
     
-    public int getCurrentHealth() {
+    public Health(Health health) {
+    	curHealth = health.curHealth;
+    	maxHealth = health.maxHealth;
+    	invulnerable = health.invulnerable;
+	}
+
+	public int getCurrentHealth() {
     	return curHealth;
     }
-<<<<<<< HEAD
-    
     public int getMaxHealth() {
     	return maxHealth;
     }
-=======
->>>>>>> b3cd3656f30620f0ff0189e25a27780a0d6ca3a3
    
     public void reduceHealth(int amount) {
     	if(invulnerable)
