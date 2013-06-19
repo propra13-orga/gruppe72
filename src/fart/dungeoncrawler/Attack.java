@@ -43,10 +43,10 @@ public class Attack {
 	 * @param list AttackRects for Heading.Left
 	 */
 	private void constructRectsFromList(HashMap<Integer, Rectangle> list) {
-		HashMap<Heading, HashMap<Integer, Rectangle>> result = new HashMap<>();
+		HashMap<Heading, HashMap<Integer, Rectangle>> result = new HashMap<Heading, HashMap<Integer, Rectangle>>();
 		result.put(Heading.Left, list);
 		
-		HashMap<Integer, Rectangle> right = new HashMap<>();
+		HashMap<Integer, Rectangle> right = new HashMap<Integer, Rectangle>();
 		for(Map.Entry<Integer, Rectangle> entry : list.entrySet()) {
 			int key = entry.getKey();
 			int rx = Tilemap.TILE_SIZE;
@@ -55,7 +55,7 @@ public class Attack {
 			int rh = entry.getValue().height;
 			right.put(key, new Rectangle(rx, ry, rw, rh));
 		}
-		HashMap<Integer, Rectangle> up = new HashMap<>();
+		HashMap<Integer, Rectangle> up = new HashMap<Integer, Rectangle>();
 		for(Map.Entry<Integer, Rectangle> entry : list.entrySet()) {
 			int key = entry.getKey();
 			int rx = 0;
@@ -64,7 +64,7 @@ public class Attack {
 			int rh = -ry;
 			up.put(key, new Rectangle(rx, ry, rw, rh));
 		}
-		HashMap<Integer, Rectangle> down = new HashMap<>();
+		HashMap<Integer, Rectangle> down = new HashMap<Integer, Rectangle>();
 		for(Map.Entry<Integer, Rectangle> entry : list.entrySet()) {
 			int key = entry.getKey();
 			int rx = 0;
