@@ -154,6 +154,7 @@ public class Player extends GameObject implements IUpdateable {
 		//
 	}
 	
+
 	private void buildSpell() {
 		spTex = new BufferedImage(32, 32, ColorSpace.TYPE_RGB);
 		Graphics2D g2d = (Graphics2D)spTex.getGraphics();
@@ -182,6 +183,7 @@ public class Player extends GameObject implements IUpdateable {
 	public Heading getHeading() {
 		return heading;
 	}
+	
 
 	@Override
 	protected BufferedImage getTexture() {
@@ -434,10 +436,26 @@ public class Player extends GameObject implements IUpdateable {
 		statusbar.draw(graphics);
 	}
 
+//	public void setHealth(Health health) {
+//		this.health = health;
+//	}
+	
+//	public Heading getHeading() {
+//		return heading;
+//	}
+
+//	public DynamicObjectState getState() {
+//		return state;
+//	}
+
+//	public void setState(DynamicObjectState state) {
+//		this.state = state;
+//	}
+
 	public void setHealth(Health health) {
 		this.health = health;
 	}
-	
+
 	public void setHeading(Heading heading) {
 		this.heading = heading;
 	}

@@ -34,6 +34,10 @@ public class BaseNPC extends GameObject implements IUpdateable {
 		velocity = new Vector2();
 	}
 	
+	public void activateState(DynamicObjectState state) {
+		machine.setState(state);
+	}
+	
 	public void setMachine(EnemyStateMachine machine) {
 		this.machine = machine;
 	}
@@ -44,14 +48,6 @@ public class BaseNPC extends GameObject implements IUpdateable {
 	
 	public Vector2 getVelocity() {
 		return velocity;
-	}
-	
-	public Heading getHeading() {
-		return heading;
-	}
-	
-	public NPCDescription getDescription() {
-		return desc;
 	}
 	
 	public DynamicObjectManager getManager() {
@@ -78,10 +74,6 @@ public class BaseNPC extends GameObject implements IUpdateable {
 	
 	public void setState(DynamicObjectState state) {
 		curState = state;
-	}
-	
-	public void activateState(DynamicObjectState state) {
-		machine.setState(state);
 	}
 	
 	public Health getHealth() {
@@ -111,10 +103,18 @@ public class BaseNPC extends GameObject implements IUpdateable {
 		screenPosition = screenPosition.add(velocity);
 	}
 
+	public Heading getHeading() {
+		return heading;
+	}
+
+	public NPCDescription getDescription() {
+		return desc;
+	}
+
 	public void setPosition(Vector2 position) {
-		this.screenPosition = position;
-		collisionRect.x = (int)screenPosition.x;
-		collisionRect.y = (int)screenPosition.y;
+		screenPosition = position;
+		collisionRect.x = (int)position.x;
+		collisionRect.y = (int)position.y;
 	}
 
 	public void setHeading(Heading heading) {

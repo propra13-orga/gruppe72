@@ -15,11 +15,10 @@ public class Mana {
     }
         
     public int getCurrentMana() {
-     return curMana;
+    	return curMana;
     }
    
     public void reduceMana(int amount) {
-    
         this.curMana -= amount;
         if(curMana < 0)
             curMana = 0;
@@ -50,5 +49,4 @@ public class Mana {
 	public int getMaxMana() {
 		return maxMana;
 	}
-
 }

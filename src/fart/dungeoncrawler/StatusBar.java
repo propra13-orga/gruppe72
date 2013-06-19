@@ -8,9 +8,9 @@ import java.awt.image.BufferedImage;
 public class StatusBar implements IDrawable {
 	private Health health;
 	private Mana mana;
-	private BufferedImage healthFrame;
 	private Rectangle healthRect;
 	private Rectangle manaRect;
+	private BufferedImage healthFrame;
 	
 	//zur anzeige von lebenspunkten etc
 	public StatusBar(Player player) {
@@ -48,6 +48,6 @@ public class StatusBar implements IDrawable {
 		graphics.setColor(new Color(0.0f, 0.0f, 1.0f));
 		graphics.fillRect(xStart, yStart, xWidth, yWidth);
 		
-		//hier noch draw frame etc, aber bilder fehlen. 
+		//hier noch draw frame etc, aber bilder fehlen.
 	}
 }

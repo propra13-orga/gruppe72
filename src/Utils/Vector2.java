@@ -20,7 +20,7 @@ public class Vector2 {
 		this.x = v.x;
 		this.y = v.y;
 	}
-	
+
 	public Vector2 add(Vector2 v) {
 		return new Vector2(x + v.x, y + v.y);
 	}
