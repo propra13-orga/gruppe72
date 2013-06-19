@@ -40,6 +40,7 @@ public class Game extends JPanel implements Runnable
 	private Menu menu;
 	private boolean isGameStarted;
 	private DynamicObjectManager manager;
+	private StaticObjectManager sManager;
 	
 	//DEBUG
 	private MeleeEnemy e;
@@ -63,17 +64,14 @@ public class Game extends JPanel implements Runnable
 		menu = new Menu(this, controller);
 		
 		isGameStarted = false;
-		
-		//startNewGame();
-		//changeMap(2, new Point(2, 3));
 	}
 	
 	public void startGame(boolean newGame) {
-		//if(!isGameStarted) {
 		if(newGame) {
-			map = new Tilemap(this);
-			colDetector = new Collision(map);
 			manager = new DynamicObjectManager();
+			sManager = new StaticObjectManager();
+			map = new Tilemap(this, sManager, manager);
+			colDetector = new Collision(map);
 			
 			player = new Player(new Vector2(1, 13), colDetector, controller, this, manager);
 			colDetector.addDynamicObject(player);
@@ -118,7 +116,7 @@ public class Game extends JPanel implements Runnable
 	}
 	
 	public void changeMap(int room, Vector2 playerPosition) {
-		map.changeRoom(room);
+		map.changeRoom(room, sManager, manager);
 		colDetector.changeMap(map);
 
 		player.setTilePosition(playerPosition);
@@ -198,8 +196,6 @@ public class Game extends JPanel implements Runnable
 	}
 	
 	private void updateGame(float elapsed) {
-		//player.update(elapsed);
-		//e.update(elapsed);
 		manager.update(elapsed);
 	}
 	
@@ -209,8 +205,7 @@ public class Game extends JPanel implements Runnable
 	
 	private void drawGame(Graphics2D g2d) {
 		map.draw(g2d);
-		//player.draw(g2d);
-		//e.draw(g2d);
+		sManager.draw(g2d);
 		manager.draw(g2d);
 	}
 }

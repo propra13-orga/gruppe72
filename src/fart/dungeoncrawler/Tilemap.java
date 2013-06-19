@@ -24,10 +24,10 @@ public class Tilemap implements IDrawable {
 	private HashMap<Vector2, Goal> goals;
 	private Game game;
 	
-	public Tilemap(Game game) {
+	public Tilemap(Game game, StaticObjectManager sManager, DynamicObjectManager dManager) {
 		this.game = game;
 		init();
-		changeRoom(0);
+		changeRoom(0, sManager, dManager);
 	}
 	
 	private void init() {
@@ -111,7 +111,7 @@ public class Tilemap implements IDrawable {
 		return actRoom;
 	}
 	
-	public void changeRoom(int room) {
+	public void changeRoom(int room, StaticObjectManager staticManager, DynamicObjectManager dynamicManager) {
 		if(room > rooms.length)
 			throw new IndexOutOfBoundsException();
 		
@@ -119,6 +119,7 @@ public class Tilemap implements IDrawable {
 		traps.clear();
 		actPortals.clear();
 		goals.clear();
+		staticManager.clearObjects();
 		
 		for(int j = 0; j < ROOM_SIZE; j++)
 			for(int i = 0; i < ROOM_SIZE; i++)
@@ -142,6 +143,13 @@ public class Tilemap implements IDrawable {
 			goals.put(new Vector2(13, 13), new Goal(new Vector2(13, 13), game));
 			break;
 		}
+
+		for(Map.Entry<Vector2, Trap> entry : traps.entrySet())
+			staticManager.addObject(entry.getValue());
+		for(Map.Entry<Vector2, Portal> entry : actPortals.entrySet())
+			staticManager.addObject(entry.getValue());
+		for(Map.Entry<Vector2, Goal> entry : goals.entrySet())
+			staticManager.addObject(entry.getValue());
 		
 		System.out.println("Finished loading map. Added " + traps.size() + " traps.");
 	}
@@ -182,12 +190,12 @@ public class Tilemap implements IDrawable {
 					//graphics.drawImage(goal, null, i*TILE_SIZE, j*TILE_SIZE);
 			}
 		
-		for(Map.Entry<Vector2, Trap> entry : traps.entrySet())
+		/*for(Map.Entry<Vector2, Trap> entry : traps.entrySet())
 			entry.getValue().draw(graphics);
 		for(Map.Entry<Vector2, Portal> entry : actPortals.entrySet())
 			entry.getValue().draw(graphics);
 		for(Map.Entry<Vector2, Goal> entry : goals.entrySet())
-			entry.getValue().draw(graphics);
+			entry.getValue().draw(graphics);*/
 	}
 
 }
