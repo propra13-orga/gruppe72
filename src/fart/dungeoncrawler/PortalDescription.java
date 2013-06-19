@@ -1,10 +1,15 @@
 package fart.dungeoncrawler;
 
 public class PortalDescription extends BaseDescription {
-	private String mapTo;
 	
-	public PortalDescription(String spritePath, String map) {
+	private String spritePath;
+	
+	public PortalDescription(String spritePath) {
 		super(spritePath);
-		mapTo = map;
+		this.spritePath = spritePath;
+	}
+	
+	public String getSpritePath(){
+		return spritePath;
 	}
 }

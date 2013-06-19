@@ -21,8 +21,8 @@
 		###############
 	</tiles>
 	<descriptions>
-		<object name="teleporter" id="0">
-			<spritesheet></spritesheet>
+		<object name="portal" id="0">
+			<spritesheet>res/tp.png</spritesheet>
 			<colWidth>32</colWidth>
 			<colHeight>32</colHeight>
 			<passable>1</passable>
@@ -33,7 +33,7 @@
 			<colHeight>32</colHeight>
 			<passable>1</passable>
 		</object>
-		<trap name="fire" id="0">
+		<trap name="fire" id="2">
 			<spritesheet></spritesheet>
 			<colWidth>32</colWidth>
 			<colHeight>32</colHeight>
@@ -45,46 +45,49 @@
 			<object id="0">
 				<positionX>14</positionX>
 				<positionY>5</positionY>
+				<mapToName>L0R1.xml</mapToName>
+				<mapToX>1</mapToX>
+				<mapTo>>1</mapToY>
 			</object>
 		</objects>
 		<traps>
-			<trap id="0">
+			<trap id="2">
 				<positionX>1</positionX>
 				<positionY>1</positionY>
 			</trap>
-			<trap id="0">
+			<trap id="2">
 				<positionX>2</positionX>
 				<positionY>1</positionY>
 			</trap>
-			<trap id="0">
+			<trap id="2">
 				<positionX>3</positionX>
 				<positionY>1</positionY>
 			</trap>
-			<trap id="0">
+			<trap id="2">
 				<positionX>1</positionX>
 				<positionY>2</positionY>
 			</trap>
-			<trap id="0">
+			<trap id="2">
 				<positionX>2</positionX>
 				<positionY>2</positionY>
 			</trap>
-			<trap id="0">
+			<trap id="2">
 				<positionX>1</positionX>
 				<positionY>3</positionY>
 			</trap>
-			<trap id="0">
+			<trap id="2">
 				<positionX>12</positionX>
 				<positionY>4</positionY>
 			</trap>
-			<trap id="0">
+			<trap id="2">
 				<positionX>6</positionX>
 				<positionY>5</positionY>
 			</trap>
-			<trap id="0">
+			<trap id="2">
 				<positionX>1</positionX>
 				<positionY>10</positionY>
 			</trap>
-			<trap id="0">
+			<trap id="2">
 				<positionX>8</positionX>
 				<positionY>10</positionY>
 			</trap>

@@ -28,6 +28,7 @@ public class Tilemap implements IDrawable {
 		this.game = game;
 		init();
 		changeRoom(0, sManager, dManager);
+		new MapLoader(game, "res/maps/L0R0.xml", sManager, dManager);
 	}
 	
 	private void init() {
