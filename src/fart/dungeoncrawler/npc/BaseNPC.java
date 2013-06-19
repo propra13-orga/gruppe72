@@ -4,13 +4,13 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import Utils.Vector2;
+import fart.dungeoncrawler.DynamicObjectManager;
 import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.Health;
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.Heading;
 import fart.dungeoncrawler.npc.states.EnemyStateMachine;
-import fart.dungeoncrawler.npc.states.NPCState;
 
 public class BaseNPC extends GameObject implements IUpdateable {
 	protected Rectangle collisionRect;
@@ -19,11 +19,15 @@ public class BaseNPC extends GameObject implements IUpdateable {
 	protected EnemyStateMachine machine;
 	protected Health health;
 	protected Heading heading;
+	protected DynamicObjectManager manager;
+	protected NPCDescription desc;
 	
-	public BaseNPC(NPCDescription desc) {
+	public BaseNPC(NPCDescription desc, DynamicObjectManager manager) {
 		this.screenPosition = desc.getPosition();
 		this.collisionRect = desc.getColRect();
 		this.curState = DynamicObjectState.Idle;
+		this.manager = manager;
+		this.desc = desc;
 		
 		health = new Health(100);
 		
@@ -40,6 +44,18 @@ public class BaseNPC extends GameObject implements IUpdateable {
 	
 	public Vector2 getVelocity() {
 		return velocity;
+	}
+	
+	public Heading getHeading() {
+		return heading;
+	}
+	
+	public NPCDescription getDescription() {
+		return desc;
+	}
+	
+	public DynamicObjectManager getManager() {
+		return manager;
 	}
 	
 	public void setVelocity(Vector2 velocity) {
@@ -64,6 +80,10 @@ public class BaseNPC extends GameObject implements IUpdateable {
 		curState = state;
 	}
 	
+	public void activateState(DynamicObjectState state) {
+		machine.setState(state);
+	}
+	
 	public Health getHealth() {
 		return health;
 	}
@@ -72,11 +92,12 @@ public class BaseNPC extends GameObject implements IUpdateable {
 	public Rectangle getCollisionRect() {
 		return collisionRect;
 	}
-
+	
 	@Override
 	public void terminate() {
 		velocity = new Vector2();
 		curState = DynamicObjectState.Terminated;
+		machine.setState(DynamicObjectState.Terminated);
 	}
 
 	@Override
@@ -88,5 +109,15 @@ public class BaseNPC extends GameObject implements IUpdateable {
 	@Override
 	public void update(float elapsed) {
 		screenPosition = screenPosition.add(velocity);
+	}
+
+	public void setPosition(Vector2 position) {
+		this.screenPosition = position;
+		collisionRect.x = (int)screenPosition.x;
+		collisionRect.y = (int)screenPosition.y;
+	}
+
+	public void setHeading(Heading heading) {
+		this.heading = heading;
 	}
 }

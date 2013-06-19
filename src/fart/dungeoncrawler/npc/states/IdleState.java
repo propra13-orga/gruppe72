@@ -2,7 +2,6 @@ package fart.dungeoncrawler.npc.states;
 
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.npc.BaseEnemy;
-import fart.dungeoncrawler.npc.BaseNPC;
 
 public class IdleState extends NPCState {
 	private static final DynamicObjectState doState = DynamicObjectState.Idle;

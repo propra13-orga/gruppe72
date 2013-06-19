@@ -3,8 +3,6 @@ package fart.dungeoncrawler;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import fart.dungeoncrawler.npc.BaseEnemy;
-
 import Utils.Vector2;
 
 public class Collision {
@@ -12,6 +10,11 @@ public class Collision {
 	private ArrayList<ITriggerable> triggers;
 	private ArrayList<GameObject> dynamicObjects;
 	
+	/**
+	 * CollisionDetector. Has methods to check all collisions (player/map, player/trigger, player/npc, etc.).
+	 * 
+	 * @param map Current TileMap
+	 */
 	public Collision(Tilemap map) {
 		staticObjects = new ArrayList<Rectangle>();
 		triggers = new ArrayList<ITriggerable>();
@@ -20,6 +23,10 @@ public class Collision {
 		changeMap(map);
 	}
 	
+	/**
+	 * Sets a new TileMap and gets all needed data from it.
+	 * @param tilemap
+	 */
 	public void changeMap(Tilemap tilemap) {
 		staticObjects.clear();
 		triggers.clear();
@@ -43,15 +50,36 @@ public class Collision {
 		map = tilemap.getActRoom();
 	}
 	
+	/**
+	 * Adds a dynamic Object (GameObject) to the list. 
+	 * @param obj Object to add
+	 */
 	public void addDynamicObject(GameObject obj) {
 		dynamicObjects.add(obj);
 	}
 	
+	public void removeDynamicObject(GameObject obj) {
+		int id = obj.getID();
+		for(int i = 0; i < dynamicObjects.size(); i++) {
+			if(dynamicObjects.get(i).getID() == id) {
+				dynamicObjects.remove(i);
+				return;
+			}
+		}
+	}
+	
+	/**
+	 * Clears the list of all dynamic objects.
+	 */
 	public void clearDynamicObjects() {
 		dynamicObjects.clear();
 	}
 	
-	//Checks if a gameObject is colliding with static objects
+	/**
+	 * Checks wether an object is colliding with static geometry.
+	 * @param collider Object to check.
+	 * @return if a collision happens. 
+	 */
 	public boolean isCollidingStatic(GameObject collider) {
 		Rectangle rect = collider.getCollisionRect();
 		for(int i = 0; i < staticObjects.size(); i++) {
@@ -62,6 +90,11 @@ public class Collision {
 		return false;
 	}
 	
+	/**
+	 * Checks wether an object is colliding with any of the dynamic objects.
+	 * @param collider Object to check.
+	 * @return if a collision happens.
+	 */
 	public boolean isCollidingDynamic(GameObject collider) {
 		Rectangle rect = collider.getCollisionRect();
 		for(int i = 0; i < dynamicObjects.size(); i++) {
@@ -76,7 +109,10 @@ public class Collision {
 		return false;
 	}
 	
-	//checks if a gameObject stands on a trigger. If so it gets triggered
+	/**
+	 * Checks if an object stands on a trigger. If so, it is triggered. 
+	 * @param collider Object to check.
+	 */
 	public void checkTriggers(GameObject collider) {
 		Rectangle rect = collider.getCollisionRect();
 		for(int i = 0; i < triggers.size(); i++) {
@@ -88,9 +124,14 @@ public class Collision {
 		}
 	}
 	
-	//checks if a gameObject is near a trigger. this is used for NPCs so that they don't run
-	//on triggers. To do this we take the original rectangle and enlarge it. The collision-test
-	//is done with the enlarged rect. 
+	/**
+	 * checks if a gameObject is near a trigger. this is used for NPCs so that they don't run
+	 * on triggers. To do this we take the original rectangle and enlarge it. The collision-test
+	 * is done with the enlarged rect. 
+	 * @param collider Object to check.
+	 * @param pixel How many pixel the collisionRect is enlarged (per side)
+	 * @return if it is near a trigger.
+	 */
 	public boolean isNearTrigger(GameObject collider, int pixel) {
 		Rectangle origRect = collider.getCollisionRect();
 		Rectangle rect = new Rectangle(origRect);

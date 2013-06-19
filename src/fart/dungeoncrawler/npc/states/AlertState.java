@@ -5,11 +5,9 @@ import Utils.Vector2;
 import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.npc.BaseEnemy;
-import fart.dungeoncrawler.npc.BaseNPC;
 
 public class AlertState extends NPCState {
 	private static final DynamicObjectState DO_STATE = DynamicObjectState.Alerted;
-	private static final float SPEED = 0.75f;
 	private GameObject goal;
 	private int freezeTime;
 	
@@ -32,21 +30,17 @@ public class AlertState extends NPCState {
 	@Override
 	public void update(float elapsed) {
 		if(freezeTime > 0) {
+			//TODO: Set correct heading.
 			owner.setVelocity(Vector2.Zero);
 			freezeTime--;
 			return;
 		}
-		Vector2 pos = owner.getPosition();
-		Vector2 dir = goal.getPosition().sub(pos);
-		dir.normalize();
-		dir = dir.mul(SPEED);
 		
-		owner.setVelocity(dir);
+		owner.activateState(DynamicObjectState.Chasing);
 	}
 
 	@Override
 	public void exit() {
-		//this.goal = null;
 		owner.setVelocity(Vector2.Zero);
 	}
 

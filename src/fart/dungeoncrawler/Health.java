@@ -23,8 +23,22 @@ public class Health {
         invulnerable = invul;
     }
     
+    public Health(Health h) {
+    	this.curHealth = h.curHealth;
+    	this.maxHealth = h.maxHealth;
+    	this.invulnerable = h.invulnerable;
+    }
+    
     public int getCurrentHealth() {
     	return curHealth;
+    }
+    
+    public int getMaxHealth() {
+    	return maxHealth;
+    }
+    
+    public boolean isInvul() {
+    	return invulnerable;
     }
    
     public void reduceHealth(int amount) {

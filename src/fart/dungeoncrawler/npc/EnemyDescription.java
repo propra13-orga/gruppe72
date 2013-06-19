@@ -11,6 +11,7 @@ public class EnemyDescription extends NPCDescription{
 	
 	private boolean isRanged;
 	private int aggroRange;
+	private int attackRange;
 	private Health health;
 	
 	public EnemyDescription(Vector2 position,
@@ -19,14 +20,17 @@ public class EnemyDescription extends NPCDescription{
 							BufferedImage spriteSheet,
 							Heading heading,
 							int aggroRange,
+							int attackRange,
 							Health health) {
 		super(position, colDimension, spriteSheet, heading);
 		this.isRanged = isRanged;
 		this.aggroRange = aggroRange;
+		this.attackRange = attackRange;
 		this.health = health;
 	}
 	
 	public boolean getIsRanged() { return isRanged; }
 	public int getAggroRange() { return aggroRange; }
+	public int getAttackRange() { return attackRange; }
 	public Health getHealth() { return health; }
 }

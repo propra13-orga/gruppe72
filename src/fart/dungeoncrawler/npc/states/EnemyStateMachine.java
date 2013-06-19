@@ -1,5 +1,6 @@
 package fart.dungeoncrawler.npc.states;
 
+import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -8,10 +9,8 @@ import Utils.Vector2;
 import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.Player;
-import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.npc.BaseEnemy;
-import fart.dungeoncrawler.npc.MeleeEnemy;
 
 public class EnemyStateMachine implements IUpdateable {
 	private HashMap<DynamicObjectState, NPCState> states;
@@ -20,6 +19,11 @@ public class EnemyStateMachine implements IUpdateable {
 	private Player player;
 	private Random random;
 	
+	/**
+	 * Updates and manages all enemyStates. All AI and logic for enemies is updated here.
+	 * @param owner The enemy this machine belongs to.
+	 * @param player The Player. 
+	 */
 	public EnemyStateMachine(BaseEnemy owner, Player player) {
 		this.owner = owner;
 		this.player = player;
@@ -29,24 +33,36 @@ public class EnemyStateMachine implements IUpdateable {
 		initStates();
 	}
 	
+	/**
+	 * Gets the Player.
+	 * @return The Player. 
+	 */
 	public GameObject getPlayer() {
 		return player;
 	}
 	
+	/**
+	 * Creates and initializes all states and puts them in the state-hashmap.
+	 */
 	private void initStates() {
 		states = new HashMap<DynamicObjectState, NPCState>();
 		
 		states.put(DynamicObjectState.Idle, new IdleState(this, owner));
 		states.put(DynamicObjectState.Walking, new WalkingState(this, owner));
 		states.put(DynamicObjectState.Alerted, new AlertState(this, owner));
+		states.put(DynamicObjectState.Chasing, new ChasingState(this, owner));
 		states.put(DynamicObjectState.Terminated, new TerminatedState(this, owner));
 		states.put(DynamicObjectState.Fleeing, new FleeingState(this, owner));
+		states.put(DynamicObjectState.Hit, new HitState(this, owner));
+		states.put(DynamicObjectState.Attacking, new AttackingState(this, owner));
 		
 		curState = states.get(DynamicObjectState.Idle);
 	}
 	
 	@Override
 	public void update(float elapsed) {
+		if(owner.getHealth().isDead())
+			setState(DynamicObjectState.Terminated);
 		DynamicObjectState doState = owner.getState();
 		
 		//Check if the current state needs to be switched
@@ -67,17 +83,36 @@ public class EnemyStateMachine implements IUpdateable {
 		//Alerted - player is in range, so we start heading towards him. If our 
 		//health is below a certain threshold we start fleeing
 		if(doState == DynamicObjectState.Alerted) {
-			Vector2 dirToPlayer = player.getPosition().sub(owner.getPosition());
-			float distanceToPlayer = dirToPlayer.length();
+			//Vector2 dirToPlayer = player.getPosition().sub(owner.getPosition());
+			//float distanceToPlayer = dirToPlayer.length();
 			
 			if(owner.getHealth().lowerThan(0.15f)) {
 				//HP is lower than 15%, we start to flee
 				setState(DynamicObjectState.Fleeing);
 				((FleeingState)curState).setThreat(player);
-			} else if(owner.getAttackRange() <= distanceToPlayer) {
-				//Change to Attacking. Careful, add delays, otherwise enemies are too powerful...
+			} else if(checkPlayerInAttackRange()) {
+				//TODO: Check if enemy is facing the player...
+				double d = random.nextDouble();
+				if(d < 0.02) {
+					setState(DynamicObjectState.Attacking);
+					System.out.println("Attack!");
+				}
 			}
 			
+		}
+		if(doState == DynamicObjectState.Chasing) {
+			if(owner.getHealth().lowerThan(0.15f)) {
+				//HP is lower than 15%, we start to flee
+				setState(DynamicObjectState.Fleeing);
+				((FleeingState)curState).setThreat(player);
+			} else if(checkPlayerInAttackRange()) {
+				//TODO: Check if enemy is facing the player...
+				double d = random.nextDouble();
+				if(d < 0.02) {
+					setState(DynamicObjectState.Attacking);
+					System.out.println("Attack!");
+				}
+			}
 		}
 		//Attacking
 		if(doState == DynamicObjectState.Attacking) {
@@ -98,22 +133,46 @@ public class EnemyStateMachine implements IUpdateable {
 		curState.update(elapsed);
 	}
 	
+	/**
+	 * Sets a new state. Exit() is called for the current state, the new state is set and activate()d. 
+	 * @param state The new state to set. 
+	 */
 	public void setState(DynamicObjectState state) {
+		if(state == DynamicObjectState.Terminated) {
+			owner.getCollisionDetector().removeDynamicObject(owner);
+		}
+		
 		if(!states.containsKey(state))
+			return;
+		
+		if(curState.getDOState() == state)
 			return;
 		
 		curState.exit();
 		curState = states.get(state);
 		curState.activate();
 		
+		if(state == DynamicObjectState.Chasing)
+			((ChasingState)curState).setGoal(player);
+		
 		owner.setState(state);
 		owner.setCurrentAnimation(state);
 	}
 	
+	/**
+	 * Return the current DynamicObjectState.
+	 * @return The current state. 
+	 */
 	public DynamicObjectState getState() {
 		return curState.getDOState();
 	}
 	
+	/**
+	 * Checks if the player is in aggroRange, to change to alertstate. 
+	 * Function is not in use. Use checkPlayerInAggroRange() instead. 
+	 * @return If the player is in range.
+	 */ 
+	@Deprecated
 	public boolean isPlayerInAggroRange() {
 		Vector2 dirToPlayer = player.getPosition().sub(owner.getPosition());
 		float distanceToPlayer = dirToPlayer.length();
@@ -121,6 +180,10 @@ public class EnemyStateMachine implements IUpdateable {
 		return distanceToPlayer < owner.getAggroRange();
 	}
 	
+	/**
+	 * Checks if the player is in aggroRange. If so, the state is switched to alerted.
+	 * @return Is the Player is in aggroRange. 
+	 */
 	public boolean checkPlayerInAggroRange() {
 		Vector2 dirToPlayer = player.getPosition().sub(owner.getPosition());
 		float distanceToPlayer = dirToPlayer.length();
@@ -133,5 +196,21 @@ public class EnemyStateMachine implements IUpdateable {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Checks if the player is in attackRange. 
+	 * @return If the player is in range. 
+	 */
+	public boolean checkPlayerInAttackRange() {
+		Rectangle collisionRect = new Rectangle(owner.getCollisionRect());
+		int range = owner.getAttackRange();
+		
+		collisionRect.x -= range;
+		collisionRect.y -= range;
+		collisionRect.width += (range * 2);
+		collisionRect.height += (range * 2);
+		
+		return player.getCollisionRect().intersects(collisionRect);
 	}
 }

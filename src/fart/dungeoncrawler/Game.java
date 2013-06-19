@@ -39,6 +39,7 @@ public class Game extends JPanel implements Runnable
 	private GameState state;
 	private Menu menu;
 	private boolean isGameStarted;
+	private DynamicObjectManager manager;
 	
 	//DEBUG
 	private MeleeEnemy e;
@@ -72,8 +73,9 @@ public class Game extends JPanel implements Runnable
 		if(newGame) {
 			map = new Tilemap(this);
 			colDetector = new Collision(map);
+			manager = new DynamicObjectManager();
 			
-			player = new Player(new Vector2(1, 13), colDetector, controller, this);
+			player = new Player(new Vector2(1, 13), colDetector, controller, this, manager);
 			colDetector.addDynamicObject(player);
 			state = GameState.InGame;
 			isGameStarted = true;
@@ -82,11 +84,12 @@ public class Game extends JPanel implements Runnable
 			BufferedImage bi;
 			try {
 				bi = ImageIO.read(new File("res/player.png"));
-				EnemyDescription ed = new EnemyDescription(new Vector2(90, 160), new Dimension(32, 32), false, bi, Heading.Down, 4 * Tilemap.TILE_SIZE, new Health(100, 10));
-				e = new MeleeEnemy(ed, colDetector);
+				EnemyDescription ed = new EnemyDescription(new Vector2(90, 160), new Dimension(32, 32), false, bi, Heading.Down, 4 * Tilemap.TILE_SIZE, 12, new Health(100, 30));
+				e = new MeleeEnemy(ed, colDetector, manager);
 				EnemyStateMachine machine = new EnemyStateMachine(e, player);
 				e.setMachine(machine);
 				colDetector.addDynamicObject(e);
+				manager.addObject(e);
 			} catch(IOException e) {
 				System.err.println("Couldn't load image!");
 				System.exit(1);
@@ -195,8 +198,9 @@ public class Game extends JPanel implements Runnable
 	}
 	
 	private void updateGame(float elapsed) {
-		player.update(elapsed);
-		e.update(elapsed);
+		//player.update(elapsed);
+		//e.update(elapsed);
+		manager.update(elapsed);
 	}
 	
 	private void drawMenu(Graphics2D g2d) {
@@ -205,7 +209,8 @@ public class Game extends JPanel implements Runnable
 	
 	private void drawGame(Graphics2D g2d) {
 		map.draw(g2d);
-		player.draw(g2d);
-		e.draw(g2d);
+		//player.draw(g2d);
+		//e.draw(g2d);
+		manager.draw(g2d);
 	}
 }

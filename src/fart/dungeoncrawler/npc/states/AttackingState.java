@@ -1,10 +1,11 @@
 package fart.dungeoncrawler.npc.states;
 
+import Utils.Vector2;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.npc.BaseEnemy;
-import fart.dungeoncrawler.npc.BaseNPC;
 
 public class AttackingState extends NPCState {
+	private static final DynamicObjectState DO_STATE = DynamicObjectState.Attacking;
 
 	public AttackingState(EnemyStateMachine machine, BaseEnemy owner) {
 		super(machine, owner);
@@ -12,26 +13,25 @@ public class AttackingState extends NPCState {
 	
 	@Override
 	public void activate() {
-		// TODO Auto-generated method stub
-
+		owner.setState(DO_STATE);
+		owner.setVelocity(Vector2.Zero);
+		owner.setCurrentAnimation(owner.getSimpleAttack().getAnimation(owner.getHeading()));
+		//TODO: Evaluate which attack...
 	}
 
 	@Override
 	public void update(float elapsed) {
-		// TODO Auto-generated method stub
-
+		if(owner.getSimpleAttack().Update())
+			machine.setState(DynamicObjectState.Idle);
 	}
 
 	@Override
 	public void exit() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public DynamicObjectState getDOState() {
-		// TODO Auto-generated method stub
-		return null;
+		return DO_STATE;
 	}
 
 }

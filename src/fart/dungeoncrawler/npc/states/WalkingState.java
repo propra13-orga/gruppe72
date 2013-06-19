@@ -7,20 +7,18 @@ import Utils.Vector2;
 import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.npc.BaseEnemy;
-import fart.dungeoncrawler.npc.BaseNPC;
 
 public class WalkingState extends NPCState {
 	private static final DynamicObjectState DO_STATE = DynamicObjectState.Walking;
 	private static final float SPEED = 0.66f;
 	private Vector2 direction;
 	private int distanceToTravel;
-	private long lastMovement;
 	
 	//In this state, the object walks straight in one direction
 	public WalkingState(EnemyStateMachine machine, BaseEnemy owner) {
 		super(machine, owner);
 		
-		lastMovement = System.currentTimeMillis();
+		//lastMovement = System.currentTimeMillis();
 	}
 	
 	@Override
@@ -68,7 +66,7 @@ public class WalkingState extends NPCState {
 		
 		if(distanceToTravel <= 0) {
 			machine.setState(DynamicObjectState.Idle);
-			lastMovement = System.currentTimeMillis();
+			//lastMovement = System.currentTimeMillis();
 		}
 	}
 

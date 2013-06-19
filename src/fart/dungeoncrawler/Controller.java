@@ -34,6 +34,16 @@ public class Controller implements KeyListener
 		return false;
 	}
 	
+	public boolean justReleased(int key)
+	{
+		if(key < thisFrame.length)
+		{
+			if(lastFrame[key] && !thisFrame[key])
+				return true;
+		}
+		return false;
+	}
+	
 	public void update()
 	{
 		lastFrame = thisFrame.clone();
