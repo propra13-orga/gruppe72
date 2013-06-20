@@ -1,5 +1,7 @@
 package fart.dungeoncrawler;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -10,6 +12,8 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import fart.dungeoncrawler.enums.GameState;
+
 public class Menu implements IDrawable, IUpdateable{
 	private BufferedImage titleScreen;
 	private BufferedImage selectionTexture;
@@ -18,6 +22,9 @@ public class Menu implements IDrawable, IUpdateable{
 	private int cursorPosition;
 	private int optionCount;
 	private HashMap<Integer, Point> positions;
+	private boolean isGameStarted;
+	private Font font;
+	private Color fontColor;
 	
 	public Menu(Game game, Controller controller) {
 		this.game = game;
@@ -37,6 +44,10 @@ public class Menu implements IDrawable, IUpdateable{
 		} catch (IllegalArgumentException e) {
 			System.err.println("Couldn't load images.");
 		}
+		
+		isGameStarted = false;
+		font = new Font("Arial", Font.BOLD, 16);
+		fontColor = new Color(50, 15, 200);
 	}
 	
 	@Override
@@ -53,11 +64,20 @@ public class Menu implements IDrawable, IUpdateable{
 		
 		if(controller.justPressed(KeyEvent.VK_ENTER)) {
 			if(cursorPosition == 0) {
+				game.setGameState(GameState.InGame);
 				game.startGame(true);
+				isGameStarted = true;
 			} else if(cursorPosition == 1){
 				System.exit(0);
 			}
 		}
+		
+		if(controller.justPressed(KeyEvent.VK_ESCAPE))
+			game.setGameState(GameState.InGame);
+	}
+	
+	public void setGameStarted(boolean started) {
+		isGameStarted = started;
 	}
 
 	@Override
@@ -68,6 +88,12 @@ public class Menu implements IDrawable, IUpdateable{
 		int xPos = drawPosition.x;
 		int yPos = drawPosition.y;
 		graphics.drawImage(selectionTexture, xPos, yPos, null);
+		
+		if(isGameStarted) {
+			graphics.setFont(font);
+			graphics.setColor(fontColor);
+			graphics.drawString("Press Escape to resume the current game!", 30, 460);
+		}
 	}
 	
 }

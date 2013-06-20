@@ -3,21 +3,24 @@ package fart.dungeoncrawler;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import Utils.Vector2;
 
+import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.GameState;
 import fart.dungeoncrawler.enums.Heading;
+import fart.dungeoncrawler.gamestates.BaseGameState;
 import fart.dungeoncrawler.npc.EnemyDescription;
 import fart.dungeoncrawler.npc.MeleeEnemy;
 import fart.dungeoncrawler.npc.states.EnemyStateMachine;
+import fart.dungeoncrawler.gamestates.*;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable
@@ -26,24 +29,38 @@ public class Game extends JPanel implements Runnable
 	private long frameDelta;
 	private long frameLast;
 	private final long frameTime = 32l;
-	
-	//temp. varis for GameState
 	private boolean isRunning = true;
 	
 	private Player player;
+	public Player getPlayer() { return player; }
+	
 	private Tilemap map;
+	public Tilemap getMap() { return map ; }
+	
+	private DynamicObjectManager manager;
+	public DynamicObjectManager getDynamicManager() { return manager; }
+	
+	private StaticObjectManager sManager;
+	public StaticObjectManager getStaticManager() { return sManager; }
 	
 	private Controller controller;
-	private Collision colDetector;
+	public Controller getController() { return controller; }
 	
-	private GameState state;
+	private Collision collision;
+	public Collision getCollision() { return collision; }
+	
 	private Menu menu;
-	private boolean isGameStarted;
-	private DynamicObjectManager manager;
-	private StaticObjectManager sManager;
+	public Menu getMenu() { return menu; }
+	
+	private HashMap<GameState, BaseGameState> states;
+	private GameState currentState;
+	public GameState getState() { return currentState; }
+	private BaseGameState currentGameState;
+	public BaseGameState getGameState() { return currentGameState; }
 	
 	//DEBUG
 	private MeleeEnemy e;
+	private static final Vector2 PLAYER_START_POS = new Vector2(1, 13);
 	
 	public Game()
 	{
@@ -55,71 +72,80 @@ public class Game extends JPanel implements Runnable
 	
 	private void initGame()
 	{
-		state = GameState.InMenu;
-		
 		controller = new Controller();
 		frameLast = System.currentTimeMillis();
 		this.addKeyListener(controller);
 		
 		menu = new Menu(this, controller);
+		manager = new DynamicObjectManager();
+		sManager = new StaticObjectManager();
+		collision = new Collision();
+		map = new Tilemap(this, sManager, manager, collision);
+
+		player = new Player(PLAYER_START_POS, collision, controller, this, manager);
+		collision.addDynamicObject(player);
 		
-		isGameStarted = false;
+		states = new HashMap<GameState, BaseGameState>();
+		states.put(GameState.InMenu, new GameStateInMenu(this));
+		states.put(GameState.InGame, new GameStateInGame(this));
+		
+		setGameState(GameState.InMenu);
+	}
+	
+	public void setGameState(GameState state) {
+		currentState = state;
+		if(currentGameState != null)
+			currentGameState.exit();
+		
+		currentGameState = states.get(state);
+		currentGameState.activate();
 	}
 	
 	public void startGame(boolean newGame) {
-		if(newGame) {
-			manager = new DynamicObjectManager();
-			sManager = new StaticObjectManager();
-			map = new Tilemap(this, sManager, manager);
-			colDetector = new Collision(map);
-			
-			player = new Player(new Vector2(1, 13), colDetector, controller, this, manager);
-			colDetector.addDynamicObject(player);
-			state = GameState.InGame;
-			isGameStarted = true;
-			
+			manager.clearObjects();
+			sManager.clearObjects();
+			collision.clearDynamicObjects();
+			collision.clearTriggers();
+			map.loadMap("res/maps/L0R0.xml");
+			resetPlayer();
+
 			//DEBUG
 			BufferedImage bi;
 			try {
 				bi = ImageIO.read(new File("res/player.png"));
 				EnemyDescription ed = new EnemyDescription(new Vector2(90, 160), new Dimension(32, 32), false, bi, Heading.Down, 4 * Tilemap.TILE_SIZE, 12, new Health(100, 30));
-				e = new MeleeEnemy(ed, colDetector, manager);
+				e = new MeleeEnemy(ed, collision, manager);
 				EnemyStateMachine machine = new EnemyStateMachine(e, player);
 				e.setMachine(machine);
-				colDetector.addDynamicObject(e);
+				collision.addDynamicObject(e);
 				manager.addObject(e);
 			} catch(IOException e) {
 				System.err.println("Couldn't load image!");
 				System.exit(1);
 			}
-			
-		} else {
-			state = GameState.InGame;
-		}
 	}
 	
 	public void playerDead() {
-		isGameStarted = false;
-		pauseResumeGame();
+		menu.setGameStarted(false);
+		setGameState(GameState.InMenu);
+		resetPlayer();
+	}
+	
+	private void resetPlayer() {
+		player.setScreenPosition(PLAYER_START_POS.mul(Tilemap.TILE_SIZE));
+		player.getHealth().addHealth(10000);
+		player.getMana().addMana(10000);
+		player.setState(DynamicObjectState.Idle);
+		player.setHeading(Heading.Up);
 	}
 	
 	public void playerWins() {
-		isGameStarted = false;
-		state = GameState.InMenu;
+		currentState = GameState.InMenu;
 	}
 	
-	public void pauseResumeGame() {
-		if(state == GameState.InMenu) {
-			startGame(false);
-		} else
-			state = GameState.InMenu;
-	}
-	
-	public void changeMap(int room, Vector2 playerPosition) {
-		map.changeRoom(room, sManager, manager);
-		colDetector.changeMap(map);
-
-		player.setTilePosition(playerPosition);
+	public void changeMap(String mapTo, Vector2 position) {
+		map.loadMap(mapTo);
+		player.setScreenPosition(position);
 	}
 	
 	public void startGameLoop() {
@@ -127,10 +153,6 @@ public class Game extends JPanel implements Runnable
 		thread.run();
 		
 		run();
-	}
-	
-	public Player getPlayer() {
-		return player;
 	}
 	
 	public void run()
@@ -146,18 +168,9 @@ public class Game extends JPanel implements Runnable
 				frameSleep = 2l;
 
 			frameLast = frameAct;
-			controller.update();
-			if(controller.justPressed(KeyEvent.VK_ESCAPE))
-				pauseResumeGame();
 			
-			switch(state) {
-			case InMenu:
-				updateMenu(frameTime);
-				break;
-			case InGame:
-				updateGame(frameTime);
-				break;
-			}
+			controller.update();
+			currentGameState.update(frameTime);
 			
 			repaint();
 			
@@ -180,32 +193,6 @@ public class Game extends JPanel implements Runnable
 		super.paintComponent(g);
 		
 		Graphics2D g2d = (Graphics2D)g;
-		
-		switch(state) {
-		case InMenu:
-			drawMenu(g2d);
-			break;
-		case InGame:
-			drawGame(g2d);
-			break;
-		}
-	}
-	
-	private void updateMenu(float elapsed) {
-		menu.update(elapsed);
-	}
-	
-	private void updateGame(float elapsed) {
-		manager.update(elapsed);
-	}
-	
-	private void drawMenu(Graphics2D g2d) {
-		menu.draw(g2d);
-	}
-	
-	private void drawGame(Graphics2D g2d) {
-		map.draw(g2d);
-		sManager.draw(g2d);
-		manager.draw(g2d);
+		currentGameState.draw(g2d);
 	}
 }

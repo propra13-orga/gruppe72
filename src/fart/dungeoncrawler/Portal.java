@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import fart.dungeoncrawler.npc.BaseNPC;
+
 import Utils.Vector2;
 
 public class Portal extends GameObject implements ITriggerable {
@@ -30,13 +32,13 @@ public class Portal extends GameObject implements ITriggerable {
 		this.game = game;
 		this.spritePath = spritePath;
 		this.mapTo = mapTo;
-		pointTo = tilePositionTo;
+		pointTo = tilePositionTo.mul(Tilemap.TILE_SIZE);
 		screenPosition = new Vector2(tilePositionFrom.x * Tilemap.TILE_SIZE, tilePositionFrom.y * Tilemap.TILE_SIZE);
 		collisionRect = new Rectangle((int)screenPosition.x + Tilemap.TILE_SIZE / 4, (int)screenPosition.y + Tilemap.TILE_SIZE / 4, Tilemap.TILE_SIZE / 2, Tilemap.TILE_SIZE / 2);
 	}
 	
 	@Override
-	public void trigger(GameObject trigger) {
+	public void trigger(Player trigger) {
 		game.changeMap(mapTo, pointTo);
 	}
 
@@ -68,5 +70,8 @@ public class Portal extends GameObject implements ITriggerable {
 	@Override
 	public void terminate() {
 	}
+
+	@Override
+	public void trigger(BaseNPC npc) { }
 
 }

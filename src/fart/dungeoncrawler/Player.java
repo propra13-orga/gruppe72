@@ -153,7 +153,6 @@ public class Player extends GameObject implements IUpdateable {
 		buildSpell();
 		//
 	}
-	
 
 	private void buildSpell() {
 		spTex = new BufferedImage(32, 32, ColorSpace.TYPE_RGB);

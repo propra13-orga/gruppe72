@@ -5,20 +5,20 @@
 	<height>15</height>
 	<tiles>
 		###############
-		#             #
-		#             #
-		#             #
-		#   ##   ##  ##
-		#   ## # ##    
-		#      #      #
-		#    #####    #
-		#      #      #
-		#   ## # ######
-		#   ##   ######
-		#        ######
-		#        ######
-		#        ######
-		###############
+		###           #
+		###    ###    #
+		###     #     #
+		#####   #     #
+		    #   #     #
+		#   #   #     #
+		#   #   #     #
+		#   #   #     #
+		#       #     #
+		#########   ###
+		#     #       #
+		#     #       #
+		###           #
+		### ###########
 	</tiles>
 	<descriptions>
 		<object name="portal" id="0">
@@ -45,9 +45,9 @@
 			<object id="0">
 				<positionX>14</positionX>
 				<positionY>5</positionY>
-				<mapToName>res/maps/L0R1.xml</mapToName>
+				<mapToName>L0R1.xml</mapToName>
 				<mapToX>1</mapToX>
-				<mapToY>5</mapToY>
+				<mapToY>1</mapToY>
 			</object>
 		</objects>
 		<traps>

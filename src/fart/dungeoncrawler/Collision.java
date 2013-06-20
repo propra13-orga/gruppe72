@@ -15,12 +15,12 @@ public class Collision {
 	 * 
 	 * @param map Current TileMap
 	 */
-	public Collision(Tilemap map) {
+	public Collision(/*Tilemap map*/) {
 		staticObjects = new ArrayList<Rectangle>();
 		triggers = new ArrayList<ITriggerable>();
 		dynamicObjects = new ArrayList<GameObject>();
 		
-		changeMap(map);
+		//changeMap(map);
 	}
 	
 	/**
@@ -37,17 +37,44 @@ public class Collision {
 			for(int j=0; j<15; j++){
 				if((map[i][j]&2) != 0) {
 					staticObjects.add(new Rectangle(i * Tilemap.TILE_SIZE, j * Tilemap.TILE_SIZE, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE));
-				} else if((map[i][j]&16) != 0) {
+				}/* else if((map[i][j]&16) != 0) {
 					triggers.add(tilemap.getTrap(new Vector2(i, j)));
 				} else if((map[i][j]&4) != 0) {
 					triggers.add(tilemap.getPortal(new Vector2(i, j)));
 				} else if((map[i][j]&8) != 0) {
 					triggers.add(tilemap.getGoal(new Vector2(i, j)));
-				}
+				}*/
 			}
 		}
 		
-		map = tilemap.getActRoom();
+		//map = tilemap.getActRoom();
+	}
+	
+	/**
+	 * Sets a new TileMap and gets all needed data from it.
+	 * @param tilemap
+	 */
+	public void changeMap(MapLoader loader) {
+		staticObjects.clear();
+		triggers.clear();
+		
+		int[][] map = loader.getMap();
+		
+		for(int i=0; i<15; i++) {
+			for(int j=0; j<15; j++){
+				if((map[i][j]&2) != 0) {
+					staticObjects.add(new Rectangle(i * Tilemap.TILE_SIZE, j * Tilemap.TILE_SIZE, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE));
+				}/* else if((map[i][j]&16) != 0) {
+					triggers.add(tilemap.getTrap(new Vector2(i, j)));
+				} else if((map[i][j]&4) != 0) {
+					triggers.add(tilemap.getPortal(new Vector2(i, j)));
+				} else if((map[i][j]&8) != 0) {
+					triggers.add(tilemap.getGoal(new Vector2(i, j)));
+				}*/
+			}
+		}
+		
+		//map = tilemap.getActRoom();
 	}
 	
 	/**
@@ -73,6 +100,18 @@ public class Collision {
 	 */
 	public void clearDynamicObjects() {
 		dynamicObjects.clear();
+	}
+	
+	public void addTrigger(ITriggerable trigger) {
+		triggers.add(trigger);
+	}
+	
+	public void removeTrigger(ITriggerable trigger) {
+		triggers.remove(trigger);
+	}
+	
+	public void clearTriggers() {
+		triggers.clear();
 	}
 	
 	/**
@@ -113,7 +152,7 @@ public class Collision {
 	 * Checks if an object stands on a trigger. If so, it is triggered. 
 	 * @param collider Object to check.
 	 */
-	public void checkTriggers(GameObject collider) {
+	public void checkTriggers(Player collider) {
 		Rectangle rect = collider.getCollisionRect();
 		for(int i = 0; i < triggers.size(); i++) {
 			Rectangle triggerArea = ((GameObject)triggers.get(i)).getCollisionRect();

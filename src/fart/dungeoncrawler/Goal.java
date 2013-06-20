@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import fart.dungeoncrawler.npc.BaseNPC;
+
 import Utils.Vector2;
 
 public class Goal extends GameObject implements ITriggerable {
@@ -31,10 +33,13 @@ public class Goal extends GameObject implements ITriggerable {
 	}
 
 	@Override
-	public void trigger(GameObject trigger) {
+	public void trigger(Player trigger) {
 		System.out.println("Player reached the goal!");
 		game.playerWins();
 	}
+	
+	@Override
+	public void trigger(BaseNPC npc) { }
 
 	@Override
 	protected BufferedImage getTexture() {

@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import fart.dungeoncrawler.npc.BaseNPC;
+
 import Utils.Vector2;
 
 public class Trap extends GameObject implements ITriggerable
@@ -14,6 +16,7 @@ public class Trap extends GameObject implements ITriggerable
 	//private Point tilePosition;
 	private Rectangle triggerArea;
 	private BufferedImage texture;
+	private int damage = 1;
 	
 	public Trap(Vector2 tilePosition)
 	{
@@ -23,12 +26,25 @@ public class Trap extends GameObject implements ITriggerable
 		this.triggerArea = new Rectangle((int)screenPosition.x, (int)screenPosition.y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
 	}
 	
+	public Trap(TrapDescription desc, Vector2 position) {
+		this.screenPosition = position;
+		this.triggerArea = new Rectangle(desc.getCollisionRect());
+		this.texture = desc.getTexture();
+		this.damage = desc.getDamage();
+	}
+	
 	@Override
-	public void trigger(GameObject trigger)
+	public void trigger(Player trigger)
 	{
-		trigger.terminate();
-		//System.out.println("GAME OVER");
-		// To Do: Go into Main Menu
+		Health health = trigger.getHealth();
+		health.reduceHealth(damage);
+		if(health.isDead())
+			trigger.terminate();
+	}
+	
+	@Override
+	public void trigger(BaseNPC npc) {
+		npc.getHealth().reduceHealth(damage);
 	}
 
 	@Override

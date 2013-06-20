@@ -1,5 +1,7 @@
 package fart.dungeoncrawler;
 
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import fart.dungeoncrawler.enums.DynamicObjectState;
@@ -12,7 +14,7 @@ import fart.dungeoncrawler.npc.NPCDescription;
 import fart.dungeoncrawler.npc.RangedEnemy;
 import Utils.Vector2;
 
-public class CheckPoint {
+public class CheckPoint extends GameObject {
 	class GameObjectInfo {
 		private Vector2 position;
 		private int heading;
@@ -84,6 +86,16 @@ public class CheckPoint {
 	private String map;
 	private GameObjectInfo savedPlayer;
 	private ArrayList<GameObjectInfo> npcs = new ArrayList<GameObjectInfo>();
+	private BufferedImage texture;
+	private Rectangle collisionRect;
+	
+	public CheckPoint(CheckPointDescription desc, Vector2 position) {
+		this.screenPosition = position;
+		this.collisionRect = new Rectangle(desc.getCollisionRect());
+		collisionRect.x = (int)position.x;
+		collisionRect.y = (int)position.y;
+		this.texture = desc.getTexture();
+	}
 	
 	public void saveCheckPoint(String map, Player player, ArrayList<BaseNPC> npcList) {
 		this.map = map;
@@ -124,4 +136,17 @@ public class CheckPoint {
 			npc.setHeading(info.getHeading());
 		}
 	}
+
+	@Override
+	protected BufferedImage getTexture() {
+		return texture;
+	}
+
+	@Override
+	public Rectangle getCollisionRect() {
+		return collisionRect;
+	}
+
+	@Override
+	public void terminate() { }
 }

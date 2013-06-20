@@ -17,6 +17,7 @@ public class BaseDescription {
 			collisionRect = new Rectangle(0, 0, texture.getWidth(), texture.getHeight());
 		} catch (IOException e) {
 			System.err.println("Could not load image.");
+			e.printStackTrace();
 			System.exit(2);
 		}
 	}

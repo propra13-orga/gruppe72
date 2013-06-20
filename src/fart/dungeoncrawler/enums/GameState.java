@@ -2,5 +2,7 @@ package fart.dungeoncrawler.enums;
 
 public enum GameState {
 	InMenu,
-	InGame
+	InGame,
+	InConversation,
+	InShop
 }

@@ -20,19 +20,29 @@ public class MapLoader
 	private int width, height;
 	private int output[][];
 	private BaseDescription descriptions[];
+	private Game game;
+	private StaticObjectManager sManager;
+	private DynamicObjectManager dManager;
+	private Collision collision;
 	
 	public MapLoader(Game game,
-					String fileName,
+					/*String fileName,*/
 					StaticObjectManager sManager,
-					DynamicObjectManager dManager)
+					DynamicObjectManager dManager,
+					Collision collision)
 	{
-		loadMap(game, fileName, sManager, dManager);
+		//loadMap(game, fileName, sManager, dManager, collision);
+		this.game = game;
+		this.sManager = sManager;
+		this.dManager = dManager;
+		this.collision = collision;
 	}
 	
-	public void loadMap(Game game,
-					String fileName,
+	public void loadMap(//Game game,
+					String fileName/*,
 					StaticObjectManager sManager,
-					DynamicObjectManager dManager)
+					DynamicObjectManager dManager,
+					Collision collision*/)
 	{
 		File source = new File(fileName);
 		
@@ -97,6 +107,10 @@ public class MapLoader
 			}
 		}
 		
+		collision.changeMap(this);
+		sManager.clearObjects();
+		dManager.clearObjects();
+		
 		current = map.getRootElement().getChildElements("descriptions").get(0);
 		descriptions = new BaseDescription[current.getChildElements().size()];
 		for(i=0; i<current.getChildElements().size(); i++)
@@ -130,7 +144,9 @@ public class MapLoader
 					int mapToX = Integer.parseInt(tmp2.getChildElements().get(3).getValue());
 					int mapToY = Integer.parseInt(tmp2.getChildElements().get(4).getValue());
 					
-					sManager.addObject(new Portal(game, pd.getSpritePath(), mapToName, new Vector2(posX,posY), new Vector2(mapToX,mapToY)));
+					Portal portal = new Portal(game, pd.getSpritePath(), mapToName, new Vector2(posX,posY), new Vector2(mapToX,mapToY));
+					sManager.addObject(portal);
+					collision.addTrigger(portal);
 				}
 				// Load ALL the goals
 				else if(tmp2.getAttribute(0).getValue().equals("1"))
@@ -138,7 +154,9 @@ public class MapLoader
 					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
 					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
 					
-					sManager.addObject(new Goal(new Vector2(posX,posY), game));
+					Goal goal = new Goal(new Vector2(posX,posY), game);
+					sManager.addObject(goal);
+					collision.addTrigger(goal);
 				}
 				// Load ALL the fire traps
 				else if(tmp2.getAttribute(0).getValue().equals("2"))
@@ -146,7 +164,9 @@ public class MapLoader
 					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
 					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
 					
-					sManager.addObject(new Trap(new Vector2(posX,posY)));
+					Trap trap = new Trap(new Vector2(posX,posY));
+					sManager.addObject(trap);
+					collision.addTrigger(trap);
 				}
 			}
 		}

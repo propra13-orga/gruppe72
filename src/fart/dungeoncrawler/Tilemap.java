@@ -23,12 +23,25 @@ public class Tilemap implements IDrawable {
 	private HashMap<Vector2, Portal> actPortals;
 	private HashMap<Vector2, Goal> goals;
 	private Game game;
+	private MapLoader loader;
 	
-	public Tilemap(Game game, StaticObjectManager sManager, DynamicObjectManager dManager) {
+	public Tilemap(Game game, StaticObjectManager sManager, DynamicObjectManager dManager, Collision collision) {
 		this.game = game;
-		init();
-		changeRoom(0, sManager, dManager);
-		new MapLoader(game, "res/maps/L0R0.xml", sManager, dManager);
+		//init();
+		//changeRoom(0, sManager, dManager);
+		loader = new MapLoader(game, sManager, dManager, collision);
+		try
+		{
+			wall = ImageIO.read(new File("res/wall.png"));
+			grass = ImageIO.read(new File("res/grass.png"));
+			//goal = ImageIO.read(new File("res/goal.png"));
+			//tp = ImageIO.read(new File("res/tp.png"));
+		}
+		catch (IOException e)
+		{
+			System.err.println("Couldn't load images");
+			System.exit(1);
+		}
 	}
 	
 	private void init() {
@@ -112,26 +125,31 @@ public class Tilemap implements IDrawable {
 		return actRoom;
 	}
 	
+	public void loadMap(String mapname) {
+		loader.loadMap(mapname);
+		actRoom = loader.getMap();
+	}
+	
 	public void changeRoom(int room, StaticObjectManager staticManager, DynamicObjectManager dynamicManager) {
 		if(room > rooms.length)
 			throw new IndexOutOfBoundsException();
 		
 		actRoom = rooms[room];
-		traps.clear();
-		actPortals.clear();
-		goals.clear();
-		staticManager.clearObjects();
+		//traps.clear();
+		//actPortals.clear();
+		//goals.clear();
+		//staticManager.clearObjects();
 		
-		for(int j = 0; j < ROOM_SIZE; j++)
+		/*for(int j = 0; j < ROOM_SIZE; j++)
 			for(int i = 0; i < ROOM_SIZE; i++)
 			{
 				if((actRoom[i][j]&16) != 0) {
 					Vector2 p = new Vector2(i, j);
 					traps.put(p, new Trap(p));
 				}
-			}
+			}*/
 		
-		switch(room) {
+		/*switch(room) {
 		case 0:
 			actPortals.put(new Vector2(14, 5), new Portal(game, 1, new Vector2(14, 5), new Vector2(1, 5)));
 			break;
@@ -143,8 +161,9 @@ public class Tilemap implements IDrawable {
 			actPortals.put(new Vector2(3, 0), new Portal(game, 1, new Vector2(3, 0), new Vector2(3, 13)));
 			goals.put(new Vector2(13, 13), new Goal(new Vector2(13, 13), game));
 			break;
-		}
+		}*/
 
+		/*
 		for(Map.Entry<Vector2, Trap> entry : traps.entrySet())
 			staticManager.addObject(entry.getValue());
 		for(Map.Entry<Vector2, Portal> entry : actPortals.entrySet())
@@ -153,6 +172,7 @@ public class Tilemap implements IDrawable {
 			staticManager.addObject(entry.getValue());
 		
 		System.out.println("Finished loading map. Added " + traps.size() + " traps.");
+		*/
 	}
 	
 	public Trap getTrap(Vector2 v) {
