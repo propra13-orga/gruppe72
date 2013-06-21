@@ -21,8 +21,9 @@ public class EnemyDescription extends NPCDescription{
 							Heading heading,
 							int aggroRange,
 							int attackRange,
-							Health health) {
-		super(position, colDimension, spriteSheet, heading);
+							Health health,
+							int type) {
+		super(position, colDimension, spriteSheet, heading, type);
 		this.isRanged = isRanged;
 		this.aggroRange = aggroRange;
 		this.attackRange = attackRange;

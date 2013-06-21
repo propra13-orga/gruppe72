@@ -17,10 +17,14 @@ import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.GameState;
 import fart.dungeoncrawler.enums.Heading;
 import fart.dungeoncrawler.gamestates.BaseGameState;
+import fart.dungeoncrawler.gamestates.GameStateInInventory;
 import fart.dungeoncrawler.npc.EnemyDescription;
 import fart.dungeoncrawler.npc.MeleeEnemy;
 import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 import fart.dungeoncrawler.gamestates.*;
+import fart.dungeoncrawler.items.Inventory;
+import fart.dungeoncrawler.items.ItemCollection;
+import fart.dungeoncrawler.items.Shop;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable
@@ -77,7 +81,7 @@ public class Game extends JPanel implements Runnable
 		this.addKeyListener(controller);
 		
 		menu = new Menu(this, controller);
-		manager = new DynamicObjectManager();
+		manager = new DynamicObjectManager(this);
 		sManager = new StaticObjectManager();
 		collision = new Collision();
 		map = new Tilemap(this, sManager, manager, collision);
@@ -88,8 +92,17 @@ public class Game extends JPanel implements Runnable
 		states = new HashMap<GameState, BaseGameState>();
 		states.put(GameState.InMenu, new GameStateInMenu(this));
 		states.put(GameState.InGame, new GameStateInGame(this));
+		states.put(GameState.InShop, new GameStateInShop(this));
+		states.put(GameState.InInventory, new GameStateInInventory(this));
 		
 		setGameState(GameState.InMenu);
+		//setGameState(GameState.InShop);
+		Inventory debugInventory = new Inventory(controller);
+		((GameStateInShop)states.get(GameState.InShop)).setCurrentShop(new Shop(controller));
+		((GameStateInShop)states.get(GameState.InShop)).setCurrentInventory(debugInventory);
+		((GameStateInInventory)states.get(GameState.InInventory)).setCurrentInventory(debugInventory);
+		
+		ItemCollection.createNewInstace();
 	}
 	
 	public void setGameState(GameState state) {
@@ -113,7 +126,7 @@ public class Game extends JPanel implements Runnable
 			BufferedImage bi;
 			try {
 				bi = ImageIO.read(new File("res/player.png"));
-				EnemyDescription ed = new EnemyDescription(new Vector2(90, 160), new Dimension(32, 32), false, bi, Heading.Down, 4 * Tilemap.TILE_SIZE, 12, new Health(100, 30));
+				EnemyDescription ed = new EnemyDescription(new Vector2(90, 160), new Dimension(32, 32), false, bi, Heading.Down, 4 * Tilemap.TILE_SIZE, 12, new Health(100, 30), 3);
 				e = new MeleeEnemy(ed, collision, manager);
 				EnemyStateMachine machine = new EnemyStateMachine(e, player);
 				e.setMachine(machine);

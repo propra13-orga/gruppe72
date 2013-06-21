@@ -10,6 +10,7 @@ import fart.dungeoncrawler.Health;
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.Heading;
+import fart.dungeoncrawler.enums.NPCType;
 import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
 public class BaseNPC extends GameObject implements IUpdateable {
@@ -21,6 +22,7 @@ public class BaseNPC extends GameObject implements IUpdateable {
 	protected Heading heading;
 	protected DynamicObjectManager manager;
 	protected NPCDescription desc;
+	protected NPCType type;
 	
 	public BaseNPC(NPCDescription desc, DynamicObjectManager manager) {
 		this.screenPosition = desc.getPosition();
@@ -28,6 +30,7 @@ public class BaseNPC extends GameObject implements IUpdateable {
 		this.curState = DynamicObjectState.Idle;
 		this.manager = manager;
 		this.desc = desc;
+		this.type = desc.getType();
 		
 		health = new Health(100);
 		

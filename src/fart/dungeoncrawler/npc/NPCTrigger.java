@@ -3,6 +3,7 @@ package fart.dungeoncrawler.npc;
 import fart.dungeoncrawler.DynamicObjectManager;
 import fart.dungeoncrawler.ITriggerable;
 import fart.dungeoncrawler.Player;
+import fart.dungeoncrawler.enums.GameState;
 
 public class NPCTrigger extends BaseNPC implements ITriggerable {
 
@@ -13,7 +14,7 @@ public class NPCTrigger extends BaseNPC implements ITriggerable {
 
 	@Override
 	public void trigger(Player player) {
-		
+		manager.getGame().setGameState(GameState.InShop);
 	}
 
 	@Override

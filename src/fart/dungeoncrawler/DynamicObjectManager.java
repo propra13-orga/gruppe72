@@ -13,6 +13,15 @@ public class DynamicObjectManager {
 	private int playerID;
 	private ArrayList<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
+	private Game game;
+	
+	public DynamicObjectManager(Game game) {
+		this.game = game;
+	}
+	
+	public Game getGame() {
+		return game;
+	}
 	
 	public void addPlayer(Player player) {
 		this.player = player;

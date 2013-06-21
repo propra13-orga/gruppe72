@@ -42,6 +42,12 @@ public class GameStateInGame extends BaseGameState {
 		if(controller.justPressed(KeyEvent.VK_ESCAPE))
 			game.setGameState(GameState.InMenu);
 		
+		if(controller.justPressed(KeyEvent.VK_B))
+			game.setGameState(GameState.InShop);
+		
+		if(controller.justPressed(KeyEvent.VK_I))
+			game.setGameState(GameState.InInventory);
+		
 		dManager.update(elapsed);
 	}
 

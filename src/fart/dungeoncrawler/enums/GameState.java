@@ -4,5 +4,6 @@ public enum GameState {
 	InMenu,
 	InGame,
 	InConversation,
-	InShop
+	InShop,
+	InInventory
 }
