@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import fart.dungeoncrawler.npc.BaseNPC;
+import fart.dungeoncrawler.actor.Actor;
 
 import Utils.Vector2;
 
@@ -38,7 +38,7 @@ public class Portal extends GameObject implements ITriggerable {
 	}
 	
 	@Override
-	public void trigger(Player trigger) {
+	public void trigger(Actor trigger) {
 		game.changeMap(mapTo, pointTo);
 	}
 
@@ -71,7 +71,7 @@ public class Portal extends GameObject implements ITriggerable {
 	public void terminate() {
 	}
 
-	@Override
-	public void trigger(BaseNPC npc) { }
+	//@Override
+	//public void trigger(BaseNPC npc) { }
 
 }

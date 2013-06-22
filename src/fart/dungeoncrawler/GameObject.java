@@ -25,6 +25,7 @@ public abstract class GameObject implements IDrawable {
 	public void draw(Graphics2D graphics) {
 		graphics.drawImage(getTexture(), (int)screenPosition.x, (int)screenPosition.y, null);
 	}
+	
 	public Vector2 getPosition() {
 		return screenPosition;
 	}

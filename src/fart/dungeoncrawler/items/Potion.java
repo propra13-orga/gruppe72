@@ -1,5 +1,7 @@
 package fart.dungeoncrawler.items;
 
+import fart.dungeoncrawler.actor.Actor;
+
 public class Potion extends BaseItem {
 	private int healthRestore;
 	private int manaRestore;
@@ -13,7 +15,8 @@ public class Potion extends BaseItem {
 	}
 	
 	@Override
-	public void use() {
-		System.out.println("Used potion.");
+	public void use(Actor owner) {
+		owner.getHealth().addHealth(healthRestore);
+		owner.getMana().addMana(manaRestore);
 	}
 }

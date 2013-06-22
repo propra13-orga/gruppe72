@@ -19,7 +19,6 @@ public class IconController implements IDrawable, IUpdateable {
 	private Controller controller;
 	private Vector2 startPosition;
 	private int border;
-	private int maxIcons;
 	private int rows;
 	private int columns;
 	private int curX;
@@ -32,7 +31,6 @@ public class IconController implements IDrawable, IUpdateable {
 		this.border = border;
 		this.columns = columns;
 		this.rows = rows;
-		this.maxIcons = rows * columns;
 		
 		try {
 			frame = ImageIO.read(new File("res/iconFrame.png"));

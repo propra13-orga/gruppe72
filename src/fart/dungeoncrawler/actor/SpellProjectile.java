@@ -1,7 +1,11 @@
-package fart.dungeoncrawler;
+package fart.dungeoncrawler.actor;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+
+import fart.dungeoncrawler.Collision;
+import fart.dungeoncrawler.GameObject;
+import fart.dungeoncrawler.IUpdateable;
 
 import Utils.Vector2;
 

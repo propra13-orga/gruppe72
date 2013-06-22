@@ -1,7 +1,7 @@
 package fart.dungeoncrawler.npc.states;
 
+import fart.dungeoncrawler.actor.BaseEnemy;
 import fart.dungeoncrawler.enums.DynamicObjectState;
-import fart.dungeoncrawler.npc.BaseEnemy;
 
 public abstract class NPCState {
 	protected EnemyStateMachine machine;

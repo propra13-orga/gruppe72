@@ -1,4 +1,4 @@
-package fart.dungeoncrawler;
+package fart.dungeoncrawler.actor;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;

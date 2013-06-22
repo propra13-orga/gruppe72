@@ -4,14 +4,14 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
 import fart.dungeoncrawler.*;
+import fart.dungeoncrawler.actor.NewPlayer;
 import fart.dungeoncrawler.enums.GameState;
 
 public class GameStateInGame extends BaseGameState {
 	private DynamicObjectManager dManager;
 	private StaticObjectManager sManager;
-	private Collision collision;
 	private Tilemap map;
-	private Player player;
+	private NewPlayer player;
 	private Controller controller;
 	
 	public GameStateInGame(Game game) {
@@ -19,7 +19,6 @@ public class GameStateInGame extends BaseGameState {
 		
 		dManager = game.getDynamicManager();
 		sManager = game.getStaticManager();
-		collision = game.getCollision();
 		map = game.getMap();
 		player = game.getPlayer();
 		controller = game.getController();
@@ -42,11 +41,15 @@ public class GameStateInGame extends BaseGameState {
 		if(controller.justPressed(KeyEvent.VK_ESCAPE))
 			game.setGameState(GameState.InMenu);
 		
-		if(controller.justPressed(KeyEvent.VK_B))
+		if(controller.justPressed(KeyEvent.VK_B)) {
 			game.setGameState(GameState.InShop);
+			((GameStateInShop)game.getGameState()).setCurrentInventory(player.getInventory());
+		}
 		
-		if(controller.justPressed(KeyEvent.VK_I))
+		if(controller.justPressed(KeyEvent.VK_I)) {
 			game.setGameState(GameState.InInventory);
+			((GameStateInInventory)game.getGameState()).setCurrentInventory(player.getInventory());
+		}
 		
 		dManager.update(elapsed);
 	}

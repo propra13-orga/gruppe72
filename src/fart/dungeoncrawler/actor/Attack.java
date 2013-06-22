@@ -1,9 +1,11 @@
-package fart.dungeoncrawler;
+package fart.dungeoncrawler.actor;
 
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
 
+import fart.dungeoncrawler.GameObject;
+import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.enums.Heading;
 
 public class Attack {

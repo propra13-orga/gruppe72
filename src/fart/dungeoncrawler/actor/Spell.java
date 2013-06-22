@@ -1,5 +1,6 @@
-package fart.dungeoncrawler;
+package fart.dungeoncrawler.actor;
 
+import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.enums.Heading;
 import Utils.Vector2;
 

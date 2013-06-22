@@ -13,18 +13,11 @@ import javax.swing.JPanel;
 
 import Utils.Vector2;
 
-import fart.dungeoncrawler.enums.DynamicObjectState;
-import fart.dungeoncrawler.enums.GameState;
-import fart.dungeoncrawler.enums.Heading;
-import fart.dungeoncrawler.gamestates.BaseGameState;
-import fart.dungeoncrawler.gamestates.GameStateInInventory;
-import fart.dungeoncrawler.npc.EnemyDescription;
-import fart.dungeoncrawler.npc.MeleeEnemy;
-import fart.dungeoncrawler.npc.states.EnemyStateMachine;
+import fart.dungeoncrawler.actor.*;
+import fart.dungeoncrawler.enums.*;
 import fart.dungeoncrawler.gamestates.*;
-import fart.dungeoncrawler.items.Inventory;
-import fart.dungeoncrawler.items.ItemCollection;
-import fart.dungeoncrawler.items.Shop;
+import fart.dungeoncrawler.npc.states.*;
+import fart.dungeoncrawler.items.*;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable
@@ -35,8 +28,8 @@ public class Game extends JPanel implements Runnable
 	private final long frameTime = 32l;
 	private boolean isRunning = true;
 	
-	private Player player;
-	public Player getPlayer() { return player; }
+	private NewPlayer player;
+	public NewPlayer getPlayer() { return player; }
 	
 	private Tilemap map;
 	public Tilemap getMap() { return map ; }
@@ -64,7 +57,7 @@ public class Game extends JPanel implements Runnable
 	
 	//DEBUG
 	private MeleeEnemy e;
-	private static final Vector2 PLAYER_START_POS = new Vector2(1, 13);
+	private static final Vector2 PLAYER_START_POS = new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE);
 	
 	public Game()
 	{
@@ -85,8 +78,11 @@ public class Game extends JPanel implements Runnable
 		sManager = new StaticObjectManager();
 		collision = new Collision();
 		map = new Tilemap(this, sManager, manager, collision);
+		
+		ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 100, 100, new Stats(), Heading.Up);
 
-		player = new Player(PLAYER_START_POS, collision, controller, this, manager);
+		player = new NewPlayer(this, actDesc, PLAYER_START_POS);
+		manager.addPlayer(player);
 		collision.addDynamicObject(player);
 		
 		states = new HashMap<GameState, BaseGameState>();
@@ -97,10 +93,10 @@ public class Game extends JPanel implements Runnable
 		
 		setGameState(GameState.InMenu);
 		//setGameState(GameState.InShop);
-		Inventory debugInventory = new Inventory(controller);
+		//Inventory debugInventory = new Inventory(controller);
 		((GameStateInShop)states.get(GameState.InShop)).setCurrentShop(new Shop(controller));
-		((GameStateInShop)states.get(GameState.InShop)).setCurrentInventory(debugInventory);
-		((GameStateInInventory)states.get(GameState.InInventory)).setCurrentInventory(debugInventory);
+		//((GameStateInShop)states.get(GameState.InShop)).setCurrentInventory(debugInventory);
+		//((GameStateInInventory)states.get(GameState.InInventory)).setCurrentInventory(debugInventory);
 		
 		ItemCollection.createNewInstace();
 	}
@@ -126,8 +122,10 @@ public class Game extends JPanel implements Runnable
 			BufferedImage bi;
 			try {
 				bi = ImageIO.read(new File("res/player.png"));
-				EnemyDescription ed = new EnemyDescription(new Vector2(90, 160), new Dimension(32, 32), false, bi, Heading.Down, 4 * Tilemap.TILE_SIZE, 12, new Health(100, 30), 3);
-				e = new MeleeEnemy(ed, collision, manager);
+				EnemyDescription ed = new EnemyDescription(false, bi, 96, 16, 3);
+				//e = new MeleeEnemy(ed, collision, manager);
+				ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 80, 80, new Stats(), Heading.Down);
+				e = new MeleeEnemy(this, actDesc, new Vector2(90, 160), ed);
 				EnemyStateMachine machine = new EnemyStateMachine(e, player);
 				e.setMachine(machine);
 				collision.addDynamicObject(e);
@@ -145,7 +143,7 @@ public class Game extends JPanel implements Runnable
 	}
 	
 	private void resetPlayer() {
-		player.setScreenPosition(PLAYER_START_POS.mul(Tilemap.TILE_SIZE));
+		player.setScreenPosition(PLAYER_START_POS);
 		player.getHealth().addHealth(10000);
 		player.getMana().addMana(10000);
 		player.setState(DynamicObjectState.Idle);

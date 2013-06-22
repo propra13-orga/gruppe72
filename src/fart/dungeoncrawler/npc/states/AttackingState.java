@@ -1,8 +1,8 @@
 package fart.dungeoncrawler.npc.states;
 
 import Utils.Vector2;
+import fart.dungeoncrawler.actor.BaseEnemy;
 import fart.dungeoncrawler.enums.DynamicObjectState;
-import fart.dungeoncrawler.npc.BaseEnemy;
 
 public class AttackingState extends NPCState {
 	private static final DynamicObjectState DO_STATE = DynamicObjectState.Attacking;

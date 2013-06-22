@@ -9,6 +9,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import fart.dungeoncrawler.actor.NewPlayer;
+
 public class StatusBar implements IDrawable {
 	private Health health;
 	private Mana mana;
@@ -17,7 +19,7 @@ public class StatusBar implements IDrawable {
 	private BufferedImage barTexture;
 	
 	//zur anzeige von lebenspunkten etc
-	public StatusBar(Player player) {
+	public StatusBar(NewPlayer player) {
 		this.health = player.getHealth();
 		this.mana = player.getMana();
 		

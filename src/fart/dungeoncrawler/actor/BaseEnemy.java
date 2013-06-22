@@ -1,6 +1,5 @@
-package fart.dungeoncrawler.npc;
+package fart.dungeoncrawler.actor;
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -8,18 +7,10 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import Utils.TextureSplitter;
-import Utils.Vector2;
+import Utils.*;
 
-import fart.dungeoncrawler.Animation;
-import fart.dungeoncrawler.Attack;
-import fart.dungeoncrawler.Collision;
-import fart.dungeoncrawler.DynamicObjectManager;
-import fart.dungeoncrawler.GameObject;
-import fart.dungeoncrawler.Health;
-import fart.dungeoncrawler.IUpdateable;
-import fart.dungeoncrawler.enums.DynamicObjectState;
-import fart.dungeoncrawler.enums.Heading;
+import fart.dungeoncrawler.*;
+import fart.dungeoncrawler.enums.*;
 
 public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	protected Animation curAnim;
@@ -29,17 +20,17 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	protected Collision collision;
 	protected HashMap<DynamicObjectState, HashMap<Heading, Animation>> animations;
 	protected Attack simpleAttack;
-	protected EnemyDescription desc;
+	protected EnemyDescription enemyDesc;
 	
-	public BaseEnemy(EnemyDescription desc, Collision collision, DynamicObjectManager manager) {
-		super(desc, manager);
-		this.collision = collision;
-		this.aggroRange = desc.getAggroRange();
-		this.attackRange = desc.getAttackRange();
-		this.health = desc.getHealth();
-		this.desc = desc;
+	public BaseEnemy(Game game, ActorDescription actDesc, Vector2 position, EnemyDescription enemyDesc) {
+		super(game, actDesc, position, (NPCDescription)enemyDesc);
+		this.aggroRange = enemyDesc.getAggroRange();
+		this.attackRange = enemyDesc.getAttackRange();
+		this.enemyDesc = enemyDesc;
+		this.collision = game.getCollision();
 		
 		animations = new HashMap<DynamicObjectState, HashMap<Heading, Animation>>();
+		buildAnimations(enemyDesc.getSpriteSheet());
 	}
 
 	protected void buildAnimations(BufferedImage spriteSheet) {
@@ -95,11 +86,6 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	}
 
 	@Override
-	public Rectangle getCollisionRect() {
-		return collisionRect;
-	}
-
-	@Override
 	public void terminate() {
 		machine.setState(DynamicObjectState.Terminated);
 		collision.removeDynamicObject(this);
@@ -124,7 +110,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	}
 	
 	public EnemyDescription getDescription() {
-		return desc;
+		return enemyDesc;
 	}
 	
 	public void setHeading() {
@@ -141,16 +127,8 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		
 		if(heading != newHeading) {
 			heading = newHeading;
-			setCurrentAnimation(curState);
+			setCurrentAnimation(state);
 		}
-	}
-	
-	public void setHeading(Heading heading) {
-		this.heading = heading;
-	}
-	
-	public Collision getCollisionDetector() {
-		return collision;
 	}
 	
 	public void setCurrentAnimation(DynamicObjectState state) {
@@ -184,13 +162,13 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	
 	@Override
 	public void update(float elapsed) {
-		curState = machine.getState();
-		if(curState == DynamicObjectState.Terminated) {
+		state = machine.getState();
+		if(state == DynamicObjectState.Terminated) {
 			return;
 		}
 		curAnim.update(elapsed);
 		
-		if(curState == DynamicObjectState.Attacking) {
+		if(state == DynamicObjectState.Attacking) {
 			manager.handleAttack(simpleAttack, ID);
 		}
 		
@@ -202,13 +180,13 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 			//if the object is in front of a static object it stops it's movement. If it is hunting the player
 			//it tries to avoid obstacles and moves further. offset is used to enlarge the collisionRect.
 			int offset = 4;
-			if(curState == DynamicObjectState.Alerted || curState == DynamicObjectState.Fleeing)
+			if(state == DynamicObjectState.Alerted || state == DynamicObjectState.Fleeing)
 				offset = 0;
 			if(collision.isCollidingStatic(this) || 
 				collision.isNearTrigger(this, offset) || 
 				collision.isCollidingDynamic(this)) {
 				
-				if(curState == DynamicObjectState.Alerted) {
+				if(state == DynamicObjectState.Alerted) {
 					//reset simulated step
 					screenPosition = screenPosition.sub(getVelocity());
 					collisionRect.x = (int)screenPosition.x;
@@ -231,7 +209,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 						
 						return;
 					}
-				} else if(curState == DynamicObjectState.Fleeing) {
+				} else if(state == DynamicObjectState.Fleeing) {
 					//reset simulated step
 					screenPosition = screenPosition.sub(getVelocity());
 					collisionRect.x = (int)screenPosition.x;

@@ -1,5 +1,7 @@
 package fart.dungeoncrawler;
 
+import fart.dungeoncrawler.actor.BaseDescription;
+
 public class TrapDescription extends BaseDescription {
 	private int damage;
 	

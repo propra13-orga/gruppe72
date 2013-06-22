@@ -1,36 +1,25 @@
-package fart.dungeoncrawler.npc;
+package fart.dungeoncrawler.actor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
-import javax.imageio.ImageIO;
-
-import Utils.TextureSplitter;
 import Utils.Vector2;
 
-import fart.dungeoncrawler.Animation;
-import fart.dungeoncrawler.Attack;
-import fart.dungeoncrawler.Collision;
-import fart.dungeoncrawler.DynamicObjectManager;
-import fart.dungeoncrawler.GameObject;
-import fart.dungeoncrawler.enums.DynamicObjectState;
-import fart.dungeoncrawler.enums.Heading;
+import fart.dungeoncrawler.*;
+import fart.dungeoncrawler.enums.*;
 
 public class MeleeEnemy extends BaseEnemy {
 	private DynamicObjectState curState;
 	
-	public MeleeEnemy(EnemyDescription desc, Collision collision, DynamicObjectManager manager) {
-		super(desc, collision, manager);
+	public MeleeEnemy(Game game, ActorDescription actDesc, Vector2 position, EnemyDescription enemyDesc) {
+		super(game, actDesc, position, enemyDesc);
 		curState = DynamicObjectState.Idle;
 		heading = Heading.Down;
 		
-		buildAnimations(desc.getSpriteSheet());
 		buildAttacks();
 		setCurrentAnimation(curState);
 	}

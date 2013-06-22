@@ -4,12 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
-
-import Utils.Vector2;
 
 public class Tilemap implements IDrawable {
 	public static final int TILE_SIZE = 32;
@@ -19,23 +15,14 @@ public class Tilemap implements IDrawable {
 	
 	private int actRoom[][];
 	private final int ROOM_SIZE = 15;
-	private HashMap<Vector2, Trap> traps;
-	private HashMap<Vector2, Portal> actPortals;
-	private HashMap<Vector2, Goal> goals;
-	private Game game;
 	private MapLoader loader;
 	
 	public Tilemap(Game game, StaticObjectManager sManager, DynamicObjectManager dManager, Collision collision) {
-		this.game = game;
-		//init();
-		//changeRoom(0, sManager, dManager);
 		loader = new MapLoader(game, sManager, dManager, collision);
 		try
 		{
 			wall = ImageIO.read(new File("res/wall.png"));
 			grass = ImageIO.read(new File("res/grass.png"));
-			//goal = ImageIO.read(new File("res/goal.png"));
-			//tp = ImageIO.read(new File("res/tp.png"));
 		}
 		catch (IOException e)
 		{
@@ -107,18 +94,12 @@ public class Tilemap implements IDrawable {
 		{
 			wall = ImageIO.read(new File("res/wall.png"));
 			grass = ImageIO.read(new File("res/grass.png"));
-			//goal = ImageIO.read(new File("res/goal.png"));
-			//tp = ImageIO.read(new File("res/tp.png"));
 		}
 		catch (IOException e)
 		{
 			System.err.println("Couldn't load images");
 			System.exit(1);
 		}
-		
-		traps = new HashMap<Vector2, Trap>();
-		actPortals = new HashMap<Vector2, Portal>();
-		goals = new HashMap<Vector2, Goal>();
 	}
 	
 	public int[][] getActRoom() {
@@ -130,72 +111,6 @@ public class Tilemap implements IDrawable {
 		actRoom = loader.getMap();
 	}
 	
-	public void changeRoom(int room, StaticObjectManager staticManager, DynamicObjectManager dynamicManager) {
-		if(room > rooms.length)
-			throw new IndexOutOfBoundsException();
-		
-		actRoom = rooms[room];
-		//traps.clear();
-		//actPortals.clear();
-		//goals.clear();
-		//staticManager.clearObjects();
-		
-		/*for(int j = 0; j < ROOM_SIZE; j++)
-			for(int i = 0; i < ROOM_SIZE; i++)
-			{
-				if((actRoom[i][j]&16) != 0) {
-					Vector2 p = new Vector2(i, j);
-					traps.put(p, new Trap(p));
-				}
-			}*/
-		
-		/*switch(room) {
-		case 0:
-			actPortals.put(new Vector2(14, 5), new Portal(game, 1, new Vector2(14, 5), new Vector2(1, 5)));
-			break;
-		case 1:
-			actPortals.put(new Vector2(0, 5), new Portal(game, 0, new Vector2(0, 5), new Vector2(13, 5)));
-			actPortals.put(new Vector2(3,14), new Portal(game, 2, new Vector2(3,14), new Vector2(3,1)));
-			break;
-		case 2:
-			actPortals.put(new Vector2(3, 0), new Portal(game, 1, new Vector2(3, 0), new Vector2(3, 13)));
-			goals.put(new Vector2(13, 13), new Goal(new Vector2(13, 13), game));
-			break;
-		}*/
-
-		/*
-		for(Map.Entry<Vector2, Trap> entry : traps.entrySet())
-			staticManager.addObject(entry.getValue());
-		for(Map.Entry<Vector2, Portal> entry : actPortals.entrySet())
-			staticManager.addObject(entry.getValue());
-		for(Map.Entry<Vector2, Goal> entry : goals.entrySet())
-			staticManager.addObject(entry.getValue());
-		
-		System.out.println("Finished loading map. Added " + traps.size() + " traps.");
-		*/
-	}
-	
-	public Trap getTrap(Vector2 v) {
-		if(traps.containsKey(v))
-			return traps.get(v);
-		
-		return null;
-	}
-	
-	public Portal getPortal(Vector2 position) {
-		if(actPortals.containsKey(position))
-			return actPortals.get(position);
-		
-		return null;
-	}
-	
-	public Goal getGoal(Vector2 position) {
-		if(goals.containsKey(position))
-			return goals.get(position);
-		
-		return null;
-	}
-	
 	@Override
 	public void draw(Graphics2D graphics) {
 		for(int j=0; j<ROOM_SIZE; j++)
@@ -205,18 +120,7 @@ public class Tilemap implements IDrawable {
 					graphics.drawImage(grass, null, i*TILE_SIZE, j*TILE_SIZE);
 				else if((actRoom[i][j]&2) != 0)
 					graphics.drawImage(wall, null, i*TILE_SIZE, j*TILE_SIZE);
-				//else if((actRoom[i][j]&4) != 0)
-					//graphics.drawImage(tp, null, i*TILE_SIZE, j*TILE_SIZE);
-				//else if((actRoom[i][j]&8) != 0)
-					//graphics.drawImage(goal, null, i*TILE_SIZE, j*TILE_SIZE);
 			}
-		
-		/*for(Map.Entry<Vector2, Trap> entry : traps.entrySet())
-			entry.getValue().draw(graphics);
-		for(Map.Entry<Vector2, Portal> entry : actPortals.entrySet())
-			entry.getValue().draw(graphics);
-		for(Map.Entry<Vector2, Goal> entry : goals.entrySet())
-			entry.getValue().draw(graphics);*/
 	}
 
 }

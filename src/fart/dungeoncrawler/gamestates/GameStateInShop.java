@@ -35,14 +35,17 @@ public class GameStateInShop extends BaseGameState {
 	
 	public void setCurrentInventory(Inventory inventory) {
 		this.inventory = inventory;
+		shop.setInventory(inventory);
 	}
 	
 	@Override
 	public void activate() {
+		
 	}
 
 	@Override
 	public void exit() {
+		
 	}
 
 	@Override

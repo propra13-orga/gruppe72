@@ -14,7 +14,12 @@ public class Mana {
         this.curMana = curMana;
     }
         
-    public int getCurrentMana() {
+    public Mana(Mana mana) {
+    	maxMana = mana.maxMana;
+    	curMana = mana.curMana;
+	}
+
+	public int getCurrentMana() {
     	return curMana;
     }
    
@@ -41,9 +46,9 @@ public class Mana {
     }
     
     public boolean lowerThan(float percent) {
-     float perc = (float)curMana / (float)maxMana;
+    	float perc = (float)curMana / (float)maxMana;
     
-     return perc < percent;
+    	return perc < percent;
     }
 
 	public int getMaxMana() {

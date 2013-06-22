@@ -1,17 +1,18 @@
-package fart.dungeoncrawler;
+/*package fart.dungeoncrawler;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import fart.dungeoncrawler.actor.BaseEnemy;
+import fart.dungeoncrawler.actor.BaseNPC;
+import fart.dungeoncrawler.actor.EnemyDescription;
+import fart.dungeoncrawler.actor.MeleeEnemy;
+import fart.dungeoncrawler.actor.NPCDescription;
+import fart.dungeoncrawler.actor.NewPlayer;
+import fart.dungeoncrawler.actor.RangedEnemy;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.Heading;
-import fart.dungeoncrawler.npc.BaseEnemy;
-import fart.dungeoncrawler.npc.BaseNPC;
-import fart.dungeoncrawler.npc.EnemyDescription;
-import fart.dungeoncrawler.npc.MeleeEnemy;
-import fart.dungeoncrawler.npc.NPCDescription;
-import fart.dungeoncrawler.npc.RangedEnemy;
 import Utils.Vector2;
 
 public class CheckPoint extends GameObject {
@@ -34,7 +35,7 @@ public class CheckPoint extends GameObject {
 			enemyDesc = null;
 		}
 		
-		public GameObjectInfo(Player player) {
+		public GameObjectInfo(NewPlayer player) {
 			position = new Vector2(player.getPosition());
 			heading = player.getHeading().ordinal();
 			health = new Health(player.getHealth());
@@ -97,7 +98,7 @@ public class CheckPoint extends GameObject {
 		this.texture = desc.getTexture();
 	}
 	
-	public void saveCheckPoint(String map, Player player, ArrayList<BaseNPC> npcList) {
+	public void saveCheckPoint(String map, NewPlayer player, ArrayList<BaseNPC> npcList) {
 		this.map = map;
 		this.savedPlayer = new GameObjectInfo(player);
 		npcs.clear();
@@ -107,7 +108,7 @@ public class CheckPoint extends GameObject {
 		}
 	}
 	
-	public void loadCheckPoint(Tilemap map, Player player, DynamicObjectManager manager, Collision collision) {
+	public void loadCheckPoint(Tilemap map, NewPlayer player, DynamicObjectManager manager, Collision collision) {
 		//Map aus datei laden...
 		collision.changeMap(map);
 		
@@ -149,4 +150,4 @@ public class CheckPoint extends GameObject {
 
 	@Override
 	public void terminate() { }
-}
+}*/

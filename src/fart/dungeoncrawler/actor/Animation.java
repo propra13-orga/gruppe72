@@ -1,7 +1,10 @@
-package fart.dungeoncrawler;
+package fart.dungeoncrawler.actor;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+
+import fart.dungeoncrawler.IUpdateable;
+import fart.dungeoncrawler.Tilemap;
 
 public class Animation implements IUpdateable {
 	private BufferedImage[] textures;

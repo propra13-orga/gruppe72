@@ -8,15 +8,15 @@ import Utils.Vector2;
 
 import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.IUpdateable;
-import fart.dungeoncrawler.Player;
+import fart.dungeoncrawler.actor.BaseEnemy;
+import fart.dungeoncrawler.actor.NewPlayer;
 import fart.dungeoncrawler.enums.DynamicObjectState;
-import fart.dungeoncrawler.npc.BaseEnemy;
 
 public class EnemyStateMachine implements IUpdateable {
 	private HashMap<DynamicObjectState, NPCState> states;
 	private NPCState curState;
 	private BaseEnemy owner;
-	private Player player;
+	private NewPlayer player;
 	private Random random;
 	
 	/**
@@ -24,7 +24,7 @@ public class EnemyStateMachine implements IUpdateable {
 	 * @param owner The enemy this machine belongs to.
 	 * @param player The Player. 
 	 */
-	public EnemyStateMachine(BaseEnemy owner, Player player) {
+	public EnemyStateMachine(BaseEnemy owner, NewPlayer player) {
 		this.owner = owner;
 		this.player = player;
 		
@@ -139,7 +139,7 @@ public class EnemyStateMachine implements IUpdateable {
 	 */
 	public void setState(DynamicObjectState state) {
 		if(state == DynamicObjectState.Terminated) {
-			owner.getCollisionDetector().removeDynamicObject(owner);
+			owner.getCollision().removeDynamicObject(owner);
 		}
 		
 		if(!states.containsKey(state))

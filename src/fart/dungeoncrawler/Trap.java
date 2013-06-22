@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import fart.dungeoncrawler.npc.BaseNPC;
+import fart.dungeoncrawler.actor.Actor;
 
 import Utils.Vector2;
 
@@ -34,7 +34,7 @@ public class Trap extends GameObject implements ITriggerable
 	}
 	
 	@Override
-	public void trigger(Player trigger)
+	public void trigger(Actor trigger)
 	{
 		Health health = trigger.getHealth();
 		health.reduceHealth(damage);
@@ -42,10 +42,10 @@ public class Trap extends GameObject implements ITriggerable
 			trigger.terminate();
 	}
 	
-	@Override
-	public void trigger(BaseNPC npc) {
-		npc.getHealth().reduceHealth(damage);
-	}
+	//@Override
+	//public void trigger(BaseNPC npc) {
+	//	npc.getHealth().reduceHealth(damage);
+	//}
 
 	@Override
 	protected BufferedImage getTexture()

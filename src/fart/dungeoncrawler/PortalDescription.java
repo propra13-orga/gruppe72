@@ -1,5 +1,7 @@
 package fart.dungeoncrawler;
 
+import fart.dungeoncrawler.actor.BaseDescription;
+
 public class PortalDescription extends BaseDescription {
 	
 	private String spritePath;

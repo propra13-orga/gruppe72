@@ -2,6 +2,7 @@ package fart.dungeoncrawler.items;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import Utils.Vector2;
@@ -16,28 +17,51 @@ public class Shop implements IDrawable, IUpdateable {
 	private static int borderSize = 8;
 	private static int columns = 5;
 	private static int rows = 6;
-	private static int maxItems = columns * rows;
 	
 	private ArrayList<BaseItem> items;
 	private Controller controller;
 	private IconController iconController;
+	private Inventory inventory;
 	
 	//DEBUG
 	private int iCount = 26;
 	
 	public Shop(Controller controller) {
-		this.controller = controller;
 		iconController = new IconController(controller, startPosition, borderSize, columns, rows);
+		this.controller = controller;
+		
+		items = new ArrayList<BaseItem>();
+		items.add(ItemCollection.getInstance().getByID(0));
+		items.add(ItemCollection.getInstance().getByID(0));
+		items.add(ItemCollection.getInstance().getByID(0));
+		items.add(ItemCollection.getInstance().getByID(0));
+	}
+	
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
 	}
 
 	@Override
 	public void update(float elapsed) {
 		iconController.update(elapsed);
+		
+		if(controller.justPressed(KeyEvent.VK_ENTER)) {
+			int index = iconController.getCurrentIndex();
+			if(index < items.size()) {
+				BaseItem item = items.get(index);
+				int price = item.getPrice();
+				if(price <= inventory.getGold()) {
+					if(inventory.addItem(items.get(index))) {
+						inventory.reduceGold(price);
+					}
+				}
+			}
+		}
 	}
 
 	@Override
 	public void draw(Graphics2D graphics) {
-		graphics.setColor(new Color(1.0f, 0.0f, 1.0f));
+		graphics.setColor(new Color(0.6f, 0.6f, 0.6f));
 		
 		for(int i = 0; i < iCount; i++) {
 			int x = i % columns;
@@ -51,6 +75,9 @@ public class Shop implements IDrawable, IUpdateable {
 			yPos += startPosition.y;
 			
 			graphics.fillRect(xPos, yPos, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
+			
+			if(i < items.size())
+				graphics.drawImage(items.get(i).getIcon(), xPos, yPos, null);
 		}
 		
 		iconController.draw(graphics);

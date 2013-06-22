@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import fart.dungeoncrawler.IDrawable;
+import fart.dungeoncrawler.actor.Actor;
 
 public abstract class BaseItem implements IDrawable {
 	protected String name;
@@ -44,7 +45,7 @@ public abstract class BaseItem implements IDrawable {
 		
 	}
 	
-	public abstract void use();
+	public abstract void use(Actor owner);
 
 	public String getName() {
 		return name;

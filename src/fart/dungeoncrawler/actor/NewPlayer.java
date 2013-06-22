@@ -1,4 +1,4 @@
-package fart.dungeoncrawler;
+package fart.dungeoncrawler.actor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -14,68 +14,44 @@ import javax.imageio.ImageIO;
 
 import Utils.Vector2;
 
-import fart.dungeoncrawler.enums.DynamicObjectState;
-import fart.dungeoncrawler.enums.Heading;
+import fart.dungeoncrawler.*;
+import fart.dungeoncrawler.enums.*;
 
-public class Player extends GameObject implements IUpdateable {
-	private Vector2 tilePosition;
-	
+public class NewPlayer extends Actor implements IUpdateable {
 	private HashMap<Heading, Animation> walkAnim;
 	private HashMap<Heading, Animation> idleAnim;
+	private HashMap<Heading, Animation> simpleAttackAnim;
 	private Attack simpleAttack;
 	private Spell simpleSpell;
-	private HashMap<Heading, Animation> simpleAttackAnim;
-	
-	private Heading heading;
-	private DynamicObjectState state;
 	private Animation curAnim;
 	
-	private Vector2 velocity;
-	private Rectangle collisionRect;
-	
-	private Collision collision;
 	private Controller controller;
 	private Game game;
 	
 	private boolean supressEnemyCollision = false;
-	private Health health;
-	private Mana mana;
 	public StatusBar statusbar;
-	private DynamicObjectManager manager;
 	
 	//DEBUG
 	private int maxHitDuration = 40;
 	private int curHitDuration;
-	private int spDmg = 18;
 	private BufferedImage spTex;
 	private float spSpeed = 4.0f;
 	
 	/**
 	 * Represents the player.
 	 * 
-	 * @param tilePosition Startposition in tiles
-	 * @param colDetector Collision
-	 * @param controller Controller
+	 * @param Position Startposition in tiles
 	 * @param game Current instance of the game
-	 * @param manager Manages all dynamic GameObjects (updates, draws, receives attackmessages etc)
 	 */
-	public Player(Vector2 tilePosition, Collision colDetector, Controller controller, Game game, DynamicObjectManager manager) {
-		super();
+	public NewPlayer(Game game, ActorDescription desc, Vector2 position) {
+		super(game, desc, position);
 		
-		this.collision = colDetector;
-		this.tilePosition = tilePosition;
-		this.screenPosition = new Vector2(tilePosition.x * Tilemap.TILE_SIZE, tilePosition.y * Tilemap.TILE_SIZE);
-		this.collisionRect = new Rectangle((int)screenPosition.x, (int)screenPosition.y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
-		this.heading = Heading.Down;
 		this.state = DynamicObjectState.Idle;
 		this.velocity = new Vector2(0, 0);
-		this.controller = controller;
 		this.game = game;
-		this.health = new Health(100);
-		this.mana = new Mana(100);
 		statusbar = new StatusBar(this);
-		this.manager = manager;
-		manager.addPlayer(this);
+		controller = game.getController();
+		inventory.setGold(100);
 
 		//Setup Animations
 		try {
@@ -163,37 +139,6 @@ public class Player extends GameObject implements IUpdateable {
 		simpleSpell = new Spell(new SpellProjectile(this, spTex, 15, collision), 15, 15, 120, 2.5f);
 	}
 	
-	public Mana getMana() {
-		return mana;
-	}
-	
-	/**
-	 * Returns health of the player.
-	 * @return Health
-	 */
-	public Health getHealth() {
-		return health;
-	}
-	
-	/**
-	 * Returns heading of the player.
-	 * @return Heading
-	 */
-	public Heading getHeading() {
-		return heading;
-	}
-	
-
-	@Override
-	protected BufferedImage getTexture() {
-		return curAnim.getTexture();
-	}
-	
-	@Override
-	public Rectangle getCollisionRect() {
-		return collisionRect;
-	}
-	
 	@Override
 	public void terminate() {
 		System.out.println("Player is dead!");
@@ -201,61 +146,6 @@ public class Player extends GameObject implements IUpdateable {
 		game.playerDead();
 	}
 	
-	/**
-	 * Returns the tilePosition. Not in use. 
-	 * @return TilePosition
-	 */
-	@Deprecated
-	public Vector2 getTilePosition() {
-		return tilePosition;
-	}
-	
-	/**
-	 * Returns the position in pixels (screenspace).
-	 * @return Position
-	 */
-	public Vector2 getScreenPosition() {
-		return screenPosition;
-	}
-	
-	/**
-	 * Returns the objectstate.
-	 * @return Current state
-	 */
-	public DynamicObjectState getState() {
-		return state;
-	}
-	
-	/**
-	 * Sets the tilePosition. ScreenPosition will be generated too.
-	 * @param position New position
-	 */
-	public void setTilePosition(Vector2 position) {
-		tilePosition = position;
-		screenPosition = new Vector2(position.x * Tilemap.TILE_SIZE, position.y * Tilemap.TILE_SIZE);
-		collisionRect.x = (int)screenPosition.x;
-		collisionRect.y = (int)screenPosition.y;
-	}
-	
-	/**
-	 * Sets the ScreenPosition. 
-	 * @param position New Position
-	 */
-	public void setScreenPosition(Vector2 position) {
-		screenPosition = position;
-		tilePosition = new Vector2(position.x / Tilemap.TILE_SIZE, position.y / Tilemap.TILE_SIZE);
-		collisionRect.x = (int)screenPosition.x;
-		collisionRect.y = (int)screenPosition.y;
-	}
-	
-	/**
-	 * Sets a new state. 
-	 * @param state New state. 
-	 */
-	public void setState(DynamicObjectState state) {
-		this.state = state;
-	}
-
 	/**
 	 * Moves the player in the given direction. Can only move in one direction at a time.
 	 * @param direction Direction to move. 
@@ -435,27 +325,8 @@ public class Player extends GameObject implements IUpdateable {
 		statusbar.draw(graphics);
 	}
 
-//	public void setHealth(Health health) {
-//		this.health = health;
-//	}
-	
-//	public Heading getHeading() {
-//		return heading;
-//	}
-
-//	public DynamicObjectState getState() {
-//		return state;
-//	}
-
-//	public void setState(DynamicObjectState state) {
-//		this.state = state;
-//	}
-
-	public void setHealth(Health health) {
-		this.health = health;
-	}
-
-	public void setHeading(Heading heading) {
-		this.heading = heading;
+	@Override
+	protected BufferedImage getTexture() {
+		return curAnim.getTexture();
 	}
 }

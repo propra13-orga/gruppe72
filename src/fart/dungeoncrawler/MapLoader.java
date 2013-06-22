@@ -3,6 +3,8 @@ package fart.dungeoncrawler;
 import java.io.File;
 import java.io.IOException;
 
+import fart.dungeoncrawler.actor.BaseDescription;
+
 import Utils.Vector2;
 
 import nu.xom.*;

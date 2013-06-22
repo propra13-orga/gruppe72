@@ -4,9 +4,9 @@ import java.awt.Rectangle;
 
 import Utils.Vector2;
 import fart.dungeoncrawler.GameObject;
+import fart.dungeoncrawler.actor.BaseEnemy;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.Heading;
-import fart.dungeoncrawler.npc.BaseEnemy;
 
 public class ChasingState extends NPCState {
 	private static final DynamicObjectState DO_STATE = DynamicObjectState.Chasing;

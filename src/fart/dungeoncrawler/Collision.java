@@ -3,7 +3,7 @@ package fart.dungeoncrawler;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import Utils.Vector2;
+import fart.dungeoncrawler.actor.Actor;
 
 public class Collision {
 	private ArrayList<Rectangle> staticObjects;
@@ -12,15 +12,11 @@ public class Collision {
 	
 	/**
 	 * CollisionDetector. Has methods to check all collisions (player/map, player/trigger, player/npc, etc.).
-	 * 
-	 * @param map Current TileMap
 	 */
-	public Collision(/*Tilemap map*/) {
+	public Collision() {
 		staticObjects = new ArrayList<Rectangle>();
 		triggers = new ArrayList<ITriggerable>();
 		dynamicObjects = new ArrayList<GameObject>();
-		
-		//changeMap(map);
 	}
 	
 	/**
@@ -37,17 +33,9 @@ public class Collision {
 			for(int j=0; j<15; j++){
 				if((map[i][j]&2) != 0) {
 					staticObjects.add(new Rectangle(i * Tilemap.TILE_SIZE, j * Tilemap.TILE_SIZE, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE));
-				}/* else if((map[i][j]&16) != 0) {
-					triggers.add(tilemap.getTrap(new Vector2(i, j)));
-				} else if((map[i][j]&4) != 0) {
-					triggers.add(tilemap.getPortal(new Vector2(i, j)));
-				} else if((map[i][j]&8) != 0) {
-					triggers.add(tilemap.getGoal(new Vector2(i, j)));
-				}*/
+				}
 			}
 		}
-		
-		//map = tilemap.getActRoom();
 	}
 	
 	/**
@@ -64,17 +52,9 @@ public class Collision {
 			for(int j=0; j<15; j++){
 				if((map[i][j]&2) != 0) {
 					staticObjects.add(new Rectangle(i * Tilemap.TILE_SIZE, j * Tilemap.TILE_SIZE, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE));
-				}/* else if((map[i][j]&16) != 0) {
-					triggers.add(tilemap.getTrap(new Vector2(i, j)));
-				} else if((map[i][j]&4) != 0) {
-					triggers.add(tilemap.getPortal(new Vector2(i, j)));
-				} else if((map[i][j]&8) != 0) {
-					triggers.add(tilemap.getGoal(new Vector2(i, j)));
-				}*/
+				}
 			}
 		}
-		
-		//map = tilemap.getActRoom();
 	}
 	
 	/**
@@ -152,7 +132,7 @@ public class Collision {
 	 * Checks if an object stands on a trigger. If so, it is triggered. 
 	 * @param collider Object to check.
 	 */
-	public void checkTriggers(Player collider) {
+	public void checkTriggers(Actor collider) {
 		Rectangle rect = collider.getCollisionRect();
 		for(int i = 0; i < triggers.size(); i++) {
 			Rectangle triggerArea = ((GameObject)triggers.get(i)).getCollisionRect();
@@ -171,7 +151,7 @@ public class Collision {
 	 * @param pixel How many pixel the collisionRect is enlarged (per side)
 	 * @return if it is near a trigger.
 	 */
-	public boolean isNearTrigger(GameObject collider, int pixel) {
+	public boolean isNearTrigger(Actor collider, int pixel) {
 		Rectangle origRect = collider.getCollisionRect();
 		Rectangle rect = new Rectangle(origRect);
 		rect.x -= pixel;
@@ -181,7 +161,6 @@ public class Collision {
 		for(int i = 0; i < triggers.size(); i++) {
 			Rectangle triggerArea = ((GameObject)triggers.get(i)).getCollisionRect();
 			if(triggerArea.intersects(rect)) {
-				//triggers.get(i).trigger(collider);
 				return true;
 			}
 		}
