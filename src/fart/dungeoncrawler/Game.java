@@ -57,6 +57,7 @@ public class Game extends JPanel implements Runnable
 	
 	//DEBUG
 	private MeleeEnemy e;
+	private BossEnemy eboss;
 	private static final Vector2 PLAYER_START_POS = new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE);
 	
 	public Game()
@@ -125,11 +126,16 @@ public class Game extends JPanel implements Runnable
 				EnemyDescription ed = new EnemyDescription(false, bi, 96, 16, 3);
 				//e = new MeleeEnemy(ed, collision, manager);
 				ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 80, 80, new Stats(), Heading.Down);
-				e = new MeleeEnemy(this, actDesc, new Vector2(90, 160), ed);
+				/*e = new MeleeEnemy(this, actDesc, new Vector2(90, 160), ed);
 				EnemyStateMachine machine = new EnemyStateMachine(e, player);
 				e.setMachine(machine);
 				collision.addDynamicObject(e);
-				manager.addObject(e);
+				manager.addObject(e);*/
+				eboss = new BossEnemy(this, actDesc, new Vector2(90, 160), ed);
+				EnemyStateMachine machine = new EnemyStateMachine(eboss, player);
+				eboss.setMachine(machine);
+				collision.addDynamicObject(eboss);
+				manager.addObject(eboss);
 			} catch(IOException e) {
 				System.err.println("Couldn't load image!");
 				System.exit(1);

@@ -14,13 +14,17 @@ import fart.dungeoncrawler.enums.*;
 
 public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	protected Animation curAnim;
-	protected Health health;
 	protected int aggroRange;
 	protected int attackRange;
-	protected Collision collision;
+	protected int spellRange;
 	protected HashMap<DynamicObjectState, HashMap<Heading, Animation>> animations;
 	protected Attack simpleAttack;
+	
+	protected Spell simpleSpell;
+	protected AttackType curAttackType = AttackType.melee;
 	protected EnemyDescription enemyDesc;
+	protected float spSpeed = 4.0f;
+	protected BufferedImage spTex;
 	
 	public BaseEnemy(Game game, ActorDescription actDesc, Vector2 position, EnemyDescription enemyDesc) {
 		super(game, actDesc, position, (NPCDescription)enemyDesc);
@@ -147,6 +151,10 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		return simpleAttack;
 	}
 	
+	public Spell getSimpleSpell() {
+		return simpleSpell;
+	}
+	
 	@Override
 	public BufferedImage getTexture() {
 		return curAnim.getTexture();
@@ -156,8 +164,24 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		return aggroRange;
 	}
 	
+	public void setAggroRange(int newAggroRange) {
+		this.aggroRange = newAggroRange;
+	}
+	
 	public int getAttackRange() {
 		return attackRange;
+	}
+	
+	public int getSpellRange() {
+		return spellRange;
+	}
+	
+	public void setAttackType(AttackType newAttackType) {
+		this.curAttackType = newAttackType;
+	}
+	
+	public AttackType getAttackType() {
+		return curAttackType;
 	}
 	
 	@Override
@@ -169,7 +193,34 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		curAnim.update(elapsed);
 		
 		if(state == DynamicObjectState.Attacking) {
-			manager.handleAttack(simpleAttack, ID);
+			if(curAttackType == AttackType.melee) {
+				manager.handleAttack(simpleAttack, ID);
+			}
+			else if(curAttackType == AttackType.spell) {
+				Vector2 spVelo = new Vector2();
+				Vector2 startPos = new Vector2();
+				if(heading == Heading.Right) {
+					spVelo.x = spSpeed;
+					startPos = new Vector2(collisionRect.x + collisionRect.width, collisionRect.y);
+				}
+				else if(heading == Heading.Left) {
+					spVelo.x = -spSpeed;
+					startPos = new Vector2(collisionRect.x - spTex.getWidth(), collisionRect.y);
+				}
+				else if(heading == Heading.Up) {
+					spVelo.y = -spSpeed;
+					startPos = new Vector2(collisionRect.x, collisionRect.y - spTex.getHeight());
+				} else {
+					spVelo.y = spSpeed;
+					startPos = new Vector2(collisionRect.x, collisionRect.y + (float)collisionRect.getHeight());
+				}
+				
+				if(!simpleSpell.isOnCooldown() && mana.getCurrentMana() >= simpleSpell.getManaCost()) {
+					mana.reduceMana(simpleSpell.getManaCost());
+					simpleSpell.activate();
+					manager.spawnSpell(this, simpleSpell.getProjectile(startPos, heading), simpleSpell);
+				}
+			}
 		}
 		
 		if(!getVelocity().equals(new Vector2())) {

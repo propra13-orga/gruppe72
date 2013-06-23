@@ -2,6 +2,7 @@ package fart.dungeoncrawler.npc.states;
 
 import Utils.Vector2;
 import fart.dungeoncrawler.actor.BaseEnemy;
+import fart.dungeoncrawler.enums.AttackType;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 
 public class AttackingState extends NPCState {
@@ -15,7 +16,11 @@ public class AttackingState extends NPCState {
 	public void activate() {
 		owner.setState(DO_STATE);
 		owner.setVelocity(Vector2.Zero);
-		owner.setCurrentAnimation(owner.getSimpleAttack().getAnimation(owner.getHeading()));
+		if(owner.getAttackType() == AttackType.melee) {
+			owner.setCurrentAnimation(owner.getSimpleAttack().getAnimation(owner.getHeading()));
+		}
+		else
+			owner.setCurrentAnimation(DynamicObjectState.Idle);
 		//TODO: Evaluate which attack...
 	}
 

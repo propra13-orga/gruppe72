@@ -43,7 +43,7 @@ public class DynamicObjectManager {
 		}
 	}
 
-	//alle objekte löschen
+	//alle objekte lï¿½schen
 	public void clearObjects() {
 		dynamics.clear();
 	}
@@ -86,28 +86,14 @@ public class DynamicObjectManager {
 					}
 				}
 			}
-		}
-	}
-	
-	//wird aufgerufen, wenn ein objekt oder der spieler angreift. 
-	public void handleAttack(Attack attack, GameObject attacker) {
-		Rectangle attackRect = attack.getRect(player.getHeading());
-		int id = attacker.getID();
-		
-		if(id == playerID) {
-			for(Actor npc : dynamics) {
-				if(npc.getCollisionRect().intersects(attackRect)) {
-					//objekt getroffen
-					npc.getHealth().reduceHealth(attack.getDamage());
-					npc.setState(DynamicObjectState.Hit);
-				}
-			}
-		} else {
-			if(player.getCollisionRect().intersects(attackRect)) {
-				//spieler getroffen
-				player.getHealth().reduceHealth(attack.getDamage());
-				if(player.getHealth().isDead()) {
-					//spieler tot
+			if(playerID != ownerID && rect.intersects(player.getCollisionRect()))
+			{
+				Health health = player.getHealth();
+				if(!health.isDead()) {
+					health.reduceHealth(curSpell.getDamage());
+					player.setState(DynamicObjectState.Hit);
+					projectiles.remove(i);
+					return;
 				}
 			}
 		}
