@@ -123,7 +123,7 @@ public class Game extends JPanel implements Runnable
 			BufferedImage bi;
 			try {
 				bi = ImageIO.read(new File("res/player.png"));
-				EnemyDescription ed = new EnemyDescription(false, bi, 96, 16, 3);
+				EnemyDescription ed = new EnemyDescription(false, bi, 96, 16, 3, 100, 100, null, null);
 				//e = new MeleeEnemy(ed, collision, manager);
 				ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 80, 80, new Stats(), Heading.Down);
 				/*e = new MeleeEnemy(this, actDesc, new Vector2(90, 160), ed);

@@ -12,6 +12,18 @@ public class ActorDescription {
 	protected Stats stats;
 	protected Heading heading;
 	
+	public ActorDescription(Dimension collisionDim, 
+			int maxHealth, 
+			int maxMana, 
+			Stats stats, 
+			Heading heading) {
+		this.collisionDimension = collisionDim;
+		this.stats = stats;
+		this.heading = heading;
+		health = new Health(maxHealth);
+		mana = new Mana(maxMana);
+	}
+	
 	/**
 	 * @return the collisionRect
 	 */
@@ -45,17 +57,5 @@ public class ActorDescription {
 	 */
 	public Heading getHeading() {
 		return heading;
-	}
-
-	public ActorDescription(Dimension collisionDim, 
-						int maxHealth, 
-						int maxMana, 
-						Stats stats, 
-						Heading heading) {
-		this.collisionDimension = collisionDim;
-		this.stats = stats;
-		this.heading = heading;
-		health = new Health(maxHealth);
-		mana = new Mana(maxMana);
 	}
 }
