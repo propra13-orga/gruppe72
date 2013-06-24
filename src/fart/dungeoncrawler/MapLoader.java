@@ -117,7 +117,6 @@ public class MapLoader
 		dManager.clearObjects();
 		
 		current = map.getRootElement().getChildElements("descriptions").get(0);
-		//descriptions = new BaseDescription[current.getChildElements().size()];
 		descriptions = new ArrayList<BaseDescription>();
 		descLoc = new String[current.getChildElements().size()][2];
 		for(i=0; i<current.getChildElements().size(); i++)
@@ -125,18 +124,14 @@ public class MapLoader
 			Element tmp = current.getChildElements().get(i);
 			if(tmp.getAttribute(1).getValue().equals("0"))
 			{
-				//descriptions[i] = new PortalDescription(tmp.getChildElements().get(0).getValue());
 				descriptions.add(new PortalDescription(tmp.getChildElements().get(0).getValue()));
 			}
 			else if(tmp.getAttribute(1).getValue().equals("1"))
 			{
-				//descriptions[i] = new BaseDescription(tmp.getChildElements().get(0).getValue());
 				descriptions.add(new BaseDescription(tmp.getChildElements().get(0).getValue()));
 			}
 			else if(tmp.getAttribute(1).getValue().equals("2"))
 			{
-				/*descriptions[i] = new TrapDescription(tmp.getChildElements().get(0).getValue(),
-													Integer.parseInt(tmp.getChildElements().get(3).getValue()));*/
 				descriptions.add(new TrapDescription(tmp.getChildElements().get(0).getValue(),
 						Integer.parseInt(tmp.getChildElements().get(3).getValue())));
 			}
@@ -145,6 +140,8 @@ public class MapLoader
 				boolean isRanged = tmp.getChildElements().get(0).getValue().equals("0")?false:true;
 				descriptions.add(null);
 			}
+			else
+				descriptions.add(null);
 			
 			descLoc[i][0] = tmp.getAttribute(1).getValue();
 			descLoc[i][1] = String.valueOf(descriptions.size()-1);
