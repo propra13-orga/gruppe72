@@ -8,7 +8,8 @@ import fart.dungeoncrawler.actor.Actor;
 public class Collision {
 	private ArrayList<Rectangle> staticObjects;
 	private ArrayList<ITriggerable> triggers;
-	private ArrayList<GameObject> dynamicObjects;
+	private ArrayList<ITriggerableOnKey> onKeyTriggers;
+	private ArrayList<Actor> dynamicObjects;
 	
 	/**
 	 * CollisionDetector. Has methods to check all collisions (player/map, player/trigger, player/npc, etc.).
@@ -16,7 +17,8 @@ public class Collision {
 	public Collision() {
 		staticObjects = new ArrayList<Rectangle>();
 		triggers = new ArrayList<ITriggerable>();
-		dynamicObjects = new ArrayList<GameObject>();
+		dynamicObjects = new ArrayList<Actor>();
+		onKeyTriggers = new ArrayList<ITriggerableOnKey>();
 	}
 	
 	/**
@@ -42,7 +44,7 @@ public class Collision {
 	 * Adds a dynamic Object (GameObject) to the list. 
 	 * @param obj Object to add
 	 */
-	public void addDynamicObject(GameObject obj) {
+	public void addDynamicObject(Actor obj) {
 		dynamicObjects.add(obj);
 	}
 	
@@ -75,6 +77,18 @@ public class Collision {
 		triggers.clear();
 	}
 	
+	public void addTriggerOnKey(ITriggerableOnKey trigger) {
+		onKeyTriggers.add(trigger);
+	}
+	
+	public void removeTriggerOnKey(ITriggerableOnKey trigger) {
+		onKeyTriggers.remove(trigger);
+	}
+	
+	public void clearTriggersOnKey() {
+		onKeyTriggers.clear();
+	}
+	
 	/**
 	 * Checks wether an object is colliding with static geometry.
 	 * @param collider Object to check.
@@ -95,10 +109,10 @@ public class Collision {
 	 * @param collider Object to check.
 	 * @return if a collision happens.
 	 */
-	public boolean isCollidingDynamic(GameObject collider) {
+	public boolean isCollidingDynamic(Actor collider) {
 		Rectangle rect = collider.getCollisionRect();
 		for(int i = 0; i < dynamicObjects.size(); i++) {
-			GameObject o = dynamicObjects.get(i);
+			Actor o = dynamicObjects.get(i);
 			if(o.equals(collider))
 				continue;
 			
@@ -147,5 +161,15 @@ public class Collision {
 		}
 		
 		return false;
+	}
+	
+	public void checkOnKeyTriggers(Actor actor) {
+		Rectangle colRect = actor.getCollisionRect();
+		
+		for(int i = 0; i < onKeyTriggers.size(); i++) {
+			Rectangle triggerRect = ((GameObject)onKeyTriggers.get(i)).getCollisionRect();
+			if(colRect.intersects(triggerRect))
+				onKeyTriggers.get(i).trigger(actor);
+		}
 	}
 }

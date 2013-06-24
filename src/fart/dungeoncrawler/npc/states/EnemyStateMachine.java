@@ -10,6 +10,7 @@ import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.actor.BaseEnemy;
 import fart.dungeoncrawler.actor.NewPlayer;
+import fart.dungeoncrawler.enums.AttackType;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 
 public class EnemyStateMachine implements IUpdateable {
@@ -94,11 +95,19 @@ public class EnemyStateMachine implements IUpdateable {
 				//TODO: Check if enemy is facing the player...
 				double d = random.nextDouble();
 				if(d < 0.02) {
+					owner.setAttackType(AttackType.melee);
 					setState(DynamicObjectState.Attacking);
 					System.out.println("Attack!");
 				}
 			}
-			
+			else {
+				if(!owner.getSimpleSpell().isOnCooldown()) {
+					owner.setAttackType(AttackType.spell);
+					owner.setAggroRange(1000);
+					setState(DynamicObjectState.Attacking);
+					System.out.println("Spell!");
+				}
+			}
 		}
 		if(doState == DynamicObjectState.Chasing) {
 			if(owner.getHealth().lowerThan(0.15f)) {

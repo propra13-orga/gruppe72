@@ -38,6 +38,12 @@
 			<colHeight>32</colHeight>
 			<passable>1</passable>
 		</object>
+		<object name="checkpoint" id="3">
+			<spritesheet>res/goal.png</spritesheet>
+			<colWidth>32</colWidth>
+			<colHeight>32</colHeight>
+			<passable>1</passable>
+		</object>
 		<trap name="fire" id="2">
 			<spritesheet>res/trap.png</spritesheet>
 			<colWidth>32</colWidth>
@@ -60,6 +66,10 @@
 				<mapToName>res/maps/L0R1.xml</mapToName>
 				<mapToX>1</mapToX>
 				<mapToY>6</mapToY>
+			</object>
+			<object id="3">
+				<positionX>27</positionX>
+				<positionY>5</positionY>
 			</object>
 		</objects>
 		<traps>
@@ -102,6 +112,10 @@
 			<trap id="2">
 				<positionX>8</positionX>
 				<positionY>10</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>24</positionX>
+				<positionY>5</positionY>
 			</trap>
 		</traps>
 	</gameobjects>

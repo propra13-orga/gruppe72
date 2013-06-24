@@ -18,6 +18,8 @@ public class Tilemap implements IDrawable {
 	public static final int ROOM_WIDTH = 32;
 	public static final int ROOM_HEIGHT = 20;
 	private MapLoader loader;
+	private String name;
+	public String getName() { return name; }
 	
 	public Tilemap(Game game, StaticObjectManager sManager, DynamicObjectManager dManager, Collision collision) {
 		loader = new MapLoader(game, sManager, dManager, collision);
@@ -31,6 +33,10 @@ public class Tilemap implements IDrawable {
 			System.err.println("Couldn't load images");
 			System.exit(1);
 		}
+	}
+	
+	public MapLoader getLoader() {
+		return loader;
 	}
 	
 	private void init() {
@@ -109,8 +115,9 @@ public class Tilemap implements IDrawable {
 	}
 	
 	public void loadMap(String mapname) {
-		loader.loadMap(mapname);
+		loader.loadMap(this, mapname);
 		actRoom = loader.getMap();
+		name = mapname;
 	}
 	
 	@Override

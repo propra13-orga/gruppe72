@@ -13,7 +13,7 @@ public class DamageCalculator {
 		Stats aStats = attacker.getStats();
 		Stats dStats = defender.getStats();
 		
-		float redByArmor = calcMultiplyerMax(dStats.getArmor());
+		float redByArmor = 1.0f - calcMultiplyerMax(dStats.getArmor());
 		float dmgMult = 1.0f + calcMultiplyerMax(aStats.getStrength());
 		float damage = aStats.getDamage() * dmgMult;
 		

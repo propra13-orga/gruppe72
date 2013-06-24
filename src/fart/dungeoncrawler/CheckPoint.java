@@ -1,141 +1,154 @@
-/*package fart.dungeoncrawler;
+package fart.dungeoncrawler;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
-import fart.dungeoncrawler.actor.BaseEnemy;
-import fart.dungeoncrawler.actor.BaseNPC;
-import fart.dungeoncrawler.actor.EnemyDescription;
-import fart.dungeoncrawler.actor.MeleeEnemy;
-import fart.dungeoncrawler.actor.NPCDescription;
-import fart.dungeoncrawler.actor.NewPlayer;
-import fart.dungeoncrawler.actor.RangedEnemy;
-import fart.dungeoncrawler.enums.DynamicObjectState;
-import fart.dungeoncrawler.enums.Heading;
+import javax.imageio.ImageIO;
+
 import Utils.Vector2;
 
-public class CheckPoint extends GameObject {
-	class GameObjectInfo {
-		private Vector2 position;
-		private int heading;
-		private Health health;
-		private int ID;
-		private int state;
-		private EnemyDescription enemyDesc;
-		private NPCDescription npcDesc;
-		
-		public GameObjectInfo(BaseNPC npc) {
-			position = new Vector2(npc.getPosition());
-			heading = npc.getHeading().ordinal();
-			health = new Health(npc.getHealth());
-			ID = npc.getID();
-			state = npc.getState().ordinal();
-			npcDesc = npc.getDescription();
-			enemyDesc = null;
-		}
-		
-		public GameObjectInfo(NewPlayer player) {
-			position = new Vector2(player.getPosition());
-			heading = player.getHeading().ordinal();
-			health = new Health(player.getHealth());
-			ID = player.getID();
-			state = player.getState().ordinal();
-			npcDesc = null;
-			enemyDesc = null;
-		}
-		
-		public GameObjectInfo(BaseEnemy enemy) {
-			position = new Vector2(enemy.getPosition());
-			heading = enemy.getHeading().ordinal();
-			health = new Health(enemy.getHealth());
-			ID = enemy.getID();
-			state = enemy.getState().ordinal();
-			npcDesc = null;
-			enemyDesc = enemy.getDescription();
-		}
+import fart.dungeoncrawler.actor.*;
+import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
-		public Vector2 getPosition() {
-			return position;
-		}
-
-		public Heading getHeading() {
-			return Heading.values()[heading];
-		}
-
-		public Health getHealth() {
-			return health;
-		}
-
-		public int getID() {
-			return ID;
-		}
-		
-		public DynamicObjectState getState() {
-			return DynamicObjectState.values()[state];
-		}
-		
-		public NPCDescription getNPCDesc() {
-			return npcDesc;
-		}
-		
-		public EnemyDescription getEnemyDesc() {
-			return enemyDesc;
-		}
-	}
-
-	private String map;
-	private GameObjectInfo savedPlayer;
-	private ArrayList<GameObjectInfo> npcs = new ArrayList<GameObjectInfo>();
-	private BufferedImage texture;
-	private Rectangle collisionRect;
+public class CheckPoint extends GameObject implements ITriggerableOnKey {
+	private static BufferedImage texture;
 	
-	public CheckPoint(CheckPointDescription desc, Vector2 position) {
-		this.screenPosition = position;
-		this.collisionRect = new Rectangle(desc.getCollisionRect());
-		collisionRect.x = (int)position.x;
-		collisionRect.y = (int)position.y;
-		this.texture = desc.getTexture();
-	}
+	private Game game;
+	private DynamicObjectManager dManager;
+	private StaticObjectManager sManager;
+	private Collision collision;
 	
-	public void saveCheckPoint(String map, NewPlayer player, ArrayList<BaseNPC> npcList) {
+	private Tilemap map;
+	private String mapName;
+	private ArrayList<CheckPointInfo> infos;
+	private CheckPointInfo playerInfo;
+	private Rectangle rect;
+	
+	public CheckPoint(Game game, DynamicObjectManager dManager, StaticObjectManager sManager, Collision collision, Tilemap map, Rectangle rect) {
+		this.game = game;
+		this.dManager = dManager;
+		this.sManager = sManager;
+		this.collision = collision;
 		this.map = map;
-		this.savedPlayer = new GameObjectInfo(player);
-		npcs.clear();
+		this.rect = rect;
 		
-		for(BaseNPC npc : npcList) {
-			npcs.add(new GameObjectInfo(npc));
+		screenPosition = new Vector2(rect.x, rect.y);
+		
+		try {
+			texture = ImageIO.read(new File("res/goal.png"));
+		} catch (IOException e) {
+			System.out.println("Could not load image.");
+			e.printStackTrace();
+		}
+		
+		infos = new ArrayList<CheckPointInfo>();
+	}
+	
+	public void save(Tilemap map) {
+		this.mapName = new String(map.getName());
+		ArrayList<Actor> dynamics = dManager.getActors();
+		infos.clear();
+		
+		for (Actor a : dynamics) {
+			ActorDescription aDesc = a.getActorDesc();
+			EnemyDescription eDesc = null;
+			NPCDescription nDesc = null;
+			boolean isBoss = false;
+			if (a instanceof BossEnemy) {
+				BossEnemy b = (BossEnemy)a;
+				eDesc = b.getDescription();
+				nDesc = b.getNPCDescription();
+				isBoss = true;
+			}
+			//Save enemies
+			else if(a instanceof BaseEnemy) {
+				BaseEnemy e = (BaseEnemy)a;
+				eDesc = e.getDescription();
+				nDesc = e.getNPCDescription();
+			}
+			//Save all BaseNPCs
+			else if (a instanceof BaseNPC) {
+				BaseNPC n = (BaseNPC)a;
+				nDesc = n.getNPCDescription();
+			} 
+			//Save player
+			else if (a instanceof NewPlayer) {
+				NewPlayer p = (NewPlayer)a;
+				playerInfo = new CheckPointInfo(p.getID(),
+									p.getHealth().getCurrentHealth(),
+									p.getHealth().getMaxHealth(),
+									p.getMana().getCurrentMana(),
+									p.getMana().getMaxMana(),
+									p.getHeading().ordinal(),
+									p.getState().ordinal(),
+									p.getStats(),
+									p.getCollisionRect(),
+									aDesc,
+									nDesc,
+									eDesc,
+									isBoss);
+				continue;
+			} 
+			//Save all other actors
+			else {
+				
+			}
+			
+			CheckPointInfo info = new CheckPointInfo(a.getID(),
+								a.getHealth().getCurrentHealth(),
+								a.getHealth().getMaxHealth(),
+								a.getMana().getCurrentMana(),
+								a.getMana().getMaxMana(),
+								a.getHeading().ordinal(),
+								a.getState().ordinal(),
+								a.getStats(),
+								a.getCollisionRect(),
+								aDesc,
+								nDesc,
+								eDesc,
+								isBoss);
+			
+			infos.add(info);
 		}
 	}
 	
-	public void loadCheckPoint(Tilemap map, NewPlayer player, DynamicObjectManager manager, Collision collision) {
-		//Map aus datei laden...
-		collision.changeMap(map);
+	public void load() {
+		map.loadMap(mapName);
 		
-		player.setScreenPosition(savedPlayer.getPosition());
-		player.setState(savedPlayer.getState());
-		player.setHealth(savedPlayer.getHealth());
-		player.setHeading(savedPlayer.getHeading());
-
-		manager.clearObjects();
-		for(GameObjectInfo info : npcs) {
-			NPCDescription npcDesc = info.getNPCDesc();
-			BaseNPC npc;
-			if(npcDesc != null) {
-				npc = new BaseNPC(npcDesc, manager);
-			} else {
-				npcDesc = info.getEnemyDesc();
-				boolean isRanged = ((EnemyDescription)npcDesc).getIsRanged();
-				if(isRanged) {
-					npc = new RangedEnemy((EnemyDescription)npcDesc, collision, manager);
-				} else {
-					npc = new MeleeEnemy((EnemyDescription)npcDesc, collision, manager);
+		dManager.clearObjects();
+		collision.clearDynamicObjects();
+		
+		for(CheckPointInfo i : infos) {
+			EnemyDescription eDesc = i.getEnemyDesc();
+			NPCDescription nDesc = i.getNpcDesc();
+			ActorDescription aDesc = i.getActDesc();
+			if(eDesc != null) {
+				if(!eDesc.getIsRanged()) {
+					if(i.isBoss()) {
+						BossEnemy b = new BossEnemy(game, i);
+						b.setMachine(new EnemyStateMachine(b, game.getPlayer()));
+						continue;
+					}
+					MeleeEnemy e = new MeleeEnemy(game, i);
+					e.setMachine(new EnemyStateMachine(e, game.getPlayer()));
+					continue;
 				}
+			} else if(nDesc != null) {
+				
 			}
-			npc.setPosition(info.getPosition());
-			npc.activateState(info.getState());
-			npc.setHeading(info.getHeading());
 		}
+		
+		game.getPlayer().resetCheckpoint(playerInfo);
+		dManager.addObject(game.getPlayer());
+		//dManager.addPlayer(game.getPlayer());
+	}
+
+	@Override
+	public void trigger(Actor actor) {
+		game.saveCheckPoint(this);
 	}
 
 	@Override
@@ -145,9 +158,12 @@ public class CheckPoint extends GameObject {
 
 	@Override
 	public Rectangle getCollisionRect() {
-		return collisionRect;
+		return rect;
 	}
 
 	@Override
-	public void terminate() { }
-}*/
+	public void terminate() {
+		// TODO Auto-generated method stub
+		
+	}
+}

@@ -40,6 +40,14 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		inventory = new Inventory(game.getController(), this);
 		state = DynamicObjectState.Idle;
 		equip = new Equipment();
+		
+		//TEST
+
+		manager.addObject(this);
+	}
+	
+	public ActorDescription getActorDesc() {
+		return description;
 	}
 
 	/**

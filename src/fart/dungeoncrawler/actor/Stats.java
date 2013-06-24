@@ -63,6 +63,19 @@ public class Stats implements IDrawable {
 		this.spellDamage = spellDamage;
 	}
 	
+	public Stats(Stats s) {
+		stamina = s.stamina;
+		strength = s.strength;
+		agility = s.agility;
+		will = s.will;
+		armor = s.armor;
+		fireResistant = s.fireResistant;
+		waterResistant = s.waterResistant;
+		earthResistant = s.earthResistant;
+		damage = s.damage;
+		spellDamage = s.spellDamage;
+	}
+	
 	@Override
 	public void draw(Graphics2D graphics) {
 		graphics.setFont(GameStateInShop.FONT);

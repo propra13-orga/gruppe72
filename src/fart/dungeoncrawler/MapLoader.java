@@ -1,5 +1,6 @@
 package fart.dungeoncrawler;
 
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 
@@ -15,6 +16,7 @@ import nu.xom.*;
  * 		 0	PORTAL
  * 		 1	GOAL
  * 		 2	FIRE (TRAP)
+ * 		 3  CHECKPOINT
  */
 
 public class MapLoader
@@ -40,7 +42,7 @@ public class MapLoader
 		this.collision = collision;
 	}
 	
-	public void loadMap(//Game game,
+	public void loadMap(Tilemap tilemap,
 					String fileName/*,
 					StaticObjectManager sManager,
 					DynamicObjectManager dManager,
@@ -125,6 +127,8 @@ public class MapLoader
 			else if(tmp.getAttribute(1).getValue().equals("2"))
 				descriptions[i] = new TrapDescription(tmp.getChildElements().get(0).getValue(),
 													Integer.parseInt(tmp.getChildElements().get(3).getValue()));
+			//else if(tmp.getAttribute(1).getValue().equals("3"))
+				//descriptions[i] = new CheckPointDescription(tmp.getChildElements().get(0).getValue());
 		}
 
 		current = map.getRootElement().getChildElements("gameobjects").get(0);
@@ -169,6 +173,18 @@ public class MapLoader
 					Trap trap = new Trap(new Vector2(posX,posY));
 					sManager.addObject(trap);
 					collision.addTrigger(trap);
+				}
+				// Load ALL checkpoints
+				else if(tmp2.getAttribute(0).getValue().equals("3")) {
+					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+					
+					posX *= Tilemap.TILE_SIZE;
+					posY *= Tilemap.TILE_SIZE;
+					
+					CheckPoint cp = new CheckPoint(game, dManager, sManager, collision, tilemap, new Rectangle(posX, posY, 32, 32));
+					sManager.addObject(cp);
+					collision.addTriggerOnKey(cp);
 				}
 			}
 		}

@@ -8,33 +8,29 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import Utils.Vector2;
+import fart.dungeoncrawler.CheckPointInfo;
+import fart.dungeoncrawler.Game;
+import fart.dungeoncrawler.enums.DynamicObjectState;
+import fart.dungeoncrawler.enums.Heading;
 
-import fart.dungeoncrawler.*;
-import fart.dungeoncrawler.enums.*;
-
-public class MeleeEnemy extends BaseEnemy {
+public class BossEnemy extends BaseEnemy {
 	private DynamicObjectState curState;
 	
-	public MeleeEnemy(Game game, ActorDescription actDesc, Vector2 position, EnemyDescription enemyDesc) {
+	public BossEnemy(Game game, ActorDescription actDesc, Vector2 position, EnemyDescription enemyDesc) {
 		super(game, actDesc, position, enemyDesc);
 		curState = DynamicObjectState.Idle;
 		heading = Heading.Down;
 		
 		buildAttacks();
+		buildSpell();
 		setCurrentAnimation(curState);
 	}
 	
-	public MeleeEnemy(Game game, CheckPointInfo info) {
+	public BossEnemy(Game game, CheckPointInfo info) {
 		super(game, info);
-		/*npcDesc = info.getNpcDesc();
-		state = info.getState();
-		velocity = Vector2.Zero;
-		health = info.getHealth();
-		mana = info.getMana();
-		heading = info.getHeading();
-		stats = info.getStats();*/
 		
 		buildAttacks();
+		buildSpell();
 		setCurrentAnimation(curState);
 	}
 	
@@ -67,12 +63,20 @@ public class MeleeEnemy extends BaseEnemy {
 		g2.setColor(new Color(1.0f, 0.0f, 1.0f));
 		g2.fillRect(0, 0, 32, 32);
 		simpleAttackAnim.put(Heading.Down, new Animation(iSADown, 1));
+		
 		HashMap<Integer, Rectangle> atRects = new HashMap<Integer, Rectangle>();
 		atRects.put(0, new Rectangle(-16, -16, 16, 16));
 		int frameDur = 30;
 		animations.put(DynamicObjectState.Attacking, simpleAttackAnim);
-		simpleAttack = new Attack(8, simpleAttackAnim, atRects, frameDur, this);
+		simpleAttack = new Attack(15, simpleAttackAnim, atRects, frameDur, this);
+	}
+	
+	private void buildSpell() {
+		spTex = new BufferedImage(32, 32, ColorSpace.TYPE_RGB);
+		Graphics2D g2d = (Graphics2D)spTex.getGraphics();
+		g2d.setColor(new Color(0.6f, 0.1f, 0.8f));
+		g2d.fillOval(8, 8, 16, 16);
+		
+		simpleSpell = new Spell(new SpellProjectile(this, spTex, 25, collision), 25, 10, 120, 2.5f);
 	}
 }
-	
-	

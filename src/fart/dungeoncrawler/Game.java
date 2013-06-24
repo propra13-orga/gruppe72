@@ -55,9 +55,12 @@ public class Game extends JPanel implements Runnable
 	private BaseGameState currentGameState;
 	public BaseGameState getGameState() { return currentGameState; }
 	
+	private CheckPoint checkPoint = null;
+	
 	//DEBUG
 	private MeleeEnemy e;
-	private static final Vector2 PLAYER_START_POS = new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE);
+	private BossEnemy eboss;
+	private static final Vector2 PLAYER_START_POS = new Vector2(27 * Tilemap.TILE_SIZE, 7 * Tilemap.TILE_SIZE);
 	
 	public Game()
 	{
@@ -82,7 +85,6 @@ public class Game extends JPanel implements Runnable
 		ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 100, 100, new Stats(), Heading.Up);
 
 		player = new NewPlayer(this, actDesc, PLAYER_START_POS);
-		manager.addPlayer(player);
 		collision.addDynamicObject(player);
 		
 		states = new HashMap<GameState, BaseGameState>();
@@ -122,14 +124,22 @@ public class Game extends JPanel implements Runnable
 			BufferedImage bi;
 			try {
 				bi = ImageIO.read(new File("res/player.png"));
-				EnemyDescription ed = new EnemyDescription(false, bi, 96, 16, 3);
+				EnemyDescription ed = new EnemyDescription(false, bi, 96, 16, 3, 100, 100, null, null);
 				//e = new MeleeEnemy(ed, collision, manager);
 				ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 80, 80, new Stats(5, 5, 3, 1, 25, 8, 0), Heading.Down);
-				e = new MeleeEnemy(this, actDesc, new Vector2(90, 160), ed);
+				//e = new MeleeEnemy(this, actDesc, new Vector2(90, 160), ed);
+				//ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 80, 80, new Stats(), Heading.Down);
+				/*e = new MeleeEnemy(this, actDesc, new Vector2(90, 160), ed);
 				EnemyStateMachine machine = new EnemyStateMachine(e, player);
 				e.setMachine(machine);
 				collision.addDynamicObject(e);
-				manager.addObject(e);
+				manager.addObject(e);*/
+				eboss = new BossEnemy(this, actDesc, new Vector2(90, 160), ed);
+				EnemyStateMachine machine = new EnemyStateMachine(eboss, player);
+				eboss.setMachine(machine);
+				collision.addDynamicObject(eboss);
+				collision.addDynamicObject(player);
+				manager.addObject(player);
 			} catch(IOException e) {
 				System.err.println("Couldn't load image!");
 				System.exit(1);
@@ -137,6 +147,11 @@ public class Game extends JPanel implements Runnable
 	}
 	
 	public void playerDead() {
+		if(checkPoint != null) {
+			checkPoint.load();
+			saveCheckPoint(checkPoint);
+			return;
+		}
 		menu.setGameStarted(false);
 		setGameState(GameState.InMenu);
 		resetPlayer();
@@ -148,6 +163,11 @@ public class Game extends JPanel implements Runnable
 		player.getMana().addMana(10000);
 		player.setState(DynamicObjectState.Idle);
 		player.setHeading(Heading.Up);
+	}
+	
+	public void saveCheckPoint(CheckPoint cp) {
+		checkPoint = cp;
+		cp.save(map);
 	}
 	
 	public void playerWins() {

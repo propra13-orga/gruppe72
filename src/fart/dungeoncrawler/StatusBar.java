@@ -66,4 +66,12 @@ public class StatusBar implements IDrawable {
 		//hier noch draw frame etc, aber bilder fehlen.
 		graphics.drawImage(barTexture, manaRect.x - 4, manaRect.y - 3, null);
 	}
+
+	public void setHealth(Health h) {
+		this.health = h;
+	}
+	
+	public void setMana(Mana m) {
+		this.mana = m;
+	}
 }

@@ -129,6 +129,19 @@ public class NewPlayer extends Actor implements IUpdateable {
 		buildSpell();
 		//
 	}
+	
+	public void resetCheckpoint(CheckPointInfo info) {
+		state = info.getState();
+		velocity = Vector2.Zero;
+		health = info.getHealth();
+		mana = info.getMana();
+		heading = info.getHeading();
+		stats = info.getStats();
+		screenPosition = info.getPosition();
+		collisionRect = info.getRectangle();
+		statusbar.setHealth(health);
+		statusbar.setMana(mana);
+	}
 
 	private void buildSpell() {
 		spTex = new BufferedImage(32, 32, ColorSpace.TYPE_RGB);
@@ -249,7 +262,8 @@ public class NewPlayer extends Actor implements IUpdateable {
 				return;
 			}
 			curAnim.update(elapsed);
-			manager.handleAttack(simpleAttack, ID);
+			//manager.handleAttack(simpleAttack, ID);
+			manager.handleAttack(this, simpleAttack);
 			
 			return;
 		}
@@ -283,6 +297,8 @@ public class NewPlayer extends Actor implements IUpdateable {
 				controller.justReleased(KeyEvent.VK_UP) || 
 				controller.justReleased(KeyEvent.VK_DOWN))
 			stopMovement();
+		else if(controller.justPressed(KeyEvent.VK_ENTER))
+			collision.checkOnKeyTriggers(this);
 		
 		//DEBUG PURPOSE
 		if(controller.isPressed(KeyEvent.VK_SHIFT))

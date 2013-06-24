@@ -20,12 +20,24 @@ public class BaseNPC extends Actor implements IUpdateable {
 		velocity = new Vector2();
 	}
 	
+	public BaseNPC(Game game, CheckPointInfo info) {
+		super(game, info.getActDesc(), info.getPosition());
+		npcDesc = info.getNpcDesc();
+		state = info.getState();
+		velocity = Vector2.Zero;
+		health = info.getHealth();
+		mana = info.getMana();
+		heading = info.getHeading();
+		stats = info.getStats();
+	}
+	
 	public void activateState(DynamicObjectState state) {
 		machine.setState(state);
 	}
 	
 	public void setMachine(EnemyStateMachine machine) {
 		this.machine = machine;
+		machine.setState(state);
 	}
 	
 	public void setVelocity(Vector2 velocity) {

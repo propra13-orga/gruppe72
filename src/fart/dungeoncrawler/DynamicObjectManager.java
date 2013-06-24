@@ -11,8 +11,8 @@ import fart.dungeoncrawler.enums.DynamicObjectState;
 
 public class DynamicObjectManager {
 	private ArrayList<Actor> dynamics = new ArrayList<Actor>();
-	private NewPlayer player;
-	private int playerID;
+	//private NewPlayer player;
+	//private int playerID;
 	private ArrayList<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
 	private Game game;
@@ -23,11 +23,6 @@ public class DynamicObjectManager {
 	
 	public Game getGame() {
 		return game;
-	}
-	
-	public void addPlayer(NewPlayer player) {
-		this.player = player;
-		this.playerID = player.getID();
 	}
 	
 	public void addObject(Actor npc) {
@@ -50,12 +45,14 @@ public class DynamicObjectManager {
 		dynamics.clear();
 	}
 	
+	public ArrayList<Actor> getActors() {
+		return dynamics;
+	}
+	
 	//spieler und objekte updaten
 	public void update(float elapsed) {
-		player.update(elapsed);
-		
-		for(Actor npc : dynamics)
-			npc.update(elapsed);
+		for(int i = 0; i < dynamics.size(); i++)
+			dynamics.get(i).update(elapsed);
 		
 		for(int i = 0; i < spells.size(); i++) {
 			Spell spell = spells.get(i);
@@ -91,66 +88,19 @@ public class DynamicObjectManager {
 		}
 	}
 	
-	//wird aufgerufen, wenn ein objekt oder der spieler angreift. 
-	/*public void handleAttack(Attack attack, Actor attacker) {
-		Rectangle attackRect = attack.getRect(player.getHeading());
+	public void handleAttack(Actor attacker, Attack attack) {
 		int id = attacker.getID();
+		Rectangle attackRect = attack.getRect(attacker.getHeading());
 		
-		if(id == playerID) {
-			for(Actor npc : dynamics) {
-				if(npc.getCollisionRect().intersects(attackRect)) {
-					//objekt getroffen
-					int dmg = (int)DamageCalculator.calcDamage(attacker,  npc);
-					npc.getHealth().reduceHealth(dmg);
-					npc.setState(DynamicObjectState.Hit);
-				}
-			}
-		} else {
-			if(player.getCollisionRect().intersects(attackRect)) {
-				//spieler getroffen
-				int dmg = (int)DamageCalculator.calcDamage(attacker,  player);
-				player.getHealth().reduceHealth(dmg);
-				if(player.getHealth().isDead()) {
-					//spieler tot
-				}
-			}
-		}
-	}*/
-	
-	public void handleAttack(Attack attack, int attackerID) {
-		if(attackerID == playerID) {
-			for(Actor npc : dynamics) {
-				Rectangle attackRect = attack.getRect(player.getHeading());
-				if(npc.getCollisionRect().intersects(attackRect)) {
-					int dmg = (int)DamageCalculator.calcDamage(player, npc);
-					npc.getHealth().reduceHealth(dmg);
-					npc.setState(DynamicObjectState.Hit);
-					System.out.println(npc.getHealth().getCurrentHealth());
-				}
-			}
-		} else {
-			Actor attacker = null;
-			for(int i = 0; i < dynamics.size(); i++) {
-				if(dynamics.get(i).getID() == attackerID) {
-					attacker = dynamics.get(i);
-					break;
-				}
-			}
-			if(attacker == null)
-				return;
-			Rectangle attackRect = attack.getRect(attacker.getHeading());
-			if(player.getCollisionRect().intersects(attackRect)) {
-				int dmg = (int)DamageCalculator.calcDamage(attacker, player);
-				Health health = player.getHealth();
-				health.reduceHealth(dmg);
-				if(!health.isInvul())
-					System.out.println("Player is hit. HP: " + health.getCurrentHealth());
-				health.setInvul(true);
-				
-				player.setState(DynamicObjectState.Hit);
-				if(health.isDead()) {
-					player.terminate();
-				}
+		for(Actor defender : dynamics) {
+			if(defender.getID() == id)
+				continue;
+			
+			if(defender.getCollisionRect().intersects(attackRect)) {
+				int dmg = (int)DamageCalculator.calcDamage(attacker, defender);
+				defender.getHealth().reduceHealth(dmg);
+				defender.setState(DynamicObjectState.Hit);
+				System.out.println(defender.getHealth().getCurrentHealth());
 			}
 		}
 	}
@@ -166,7 +116,5 @@ public class DynamicObjectManager {
 		
 		for(SpellProjectile projectile : projectiles)
 			projectile.draw(g2d);
-		
-		player.draw(g2d);
 	}
 }
