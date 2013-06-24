@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import Utils.DamageCalculator;
+
 import fart.dungeoncrawler.actor.*;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 
@@ -90,7 +92,7 @@ public class DynamicObjectManager {
 	}
 	
 	//wird aufgerufen, wenn ein objekt oder der spieler angreift. 
-	public void handleAttack(Attack attack, GameObject attacker) {
+	/*public void handleAttack(Attack attack, Actor attacker) {
 		Rectangle attackRect = attack.getRect(player.getHeading());
 		int id = attacker.getID();
 		
@@ -98,27 +100,30 @@ public class DynamicObjectManager {
 			for(Actor npc : dynamics) {
 				if(npc.getCollisionRect().intersects(attackRect)) {
 					//objekt getroffen
-					npc.getHealth().reduceHealth(attack.getDamage());
+					int dmg = (int)DamageCalculator.calcDamage(attacker,  npc);
+					npc.getHealth().reduceHealth(dmg);
 					npc.setState(DynamicObjectState.Hit);
 				}
 			}
 		} else {
 			if(player.getCollisionRect().intersects(attackRect)) {
 				//spieler getroffen
-				player.getHealth().reduceHealth(attack.getDamage());
+				int dmg = (int)DamageCalculator.calcDamage(attacker,  player);
+				player.getHealth().reduceHealth(dmg);
 				if(player.getHealth().isDead()) {
 					//spieler tot
 				}
 			}
 		}
-	}
+	}*/
 	
 	public void handleAttack(Attack attack, int attackerID) {
 		if(attackerID == playerID) {
 			for(Actor npc : dynamics) {
 				Rectangle attackRect = attack.getRect(player.getHeading());
 				if(npc.getCollisionRect().intersects(attackRect)) {
-					npc.getHealth().reduceHealth(attack.getDamage());
+					int dmg = (int)DamageCalculator.calcDamage(player, npc);
+					npc.getHealth().reduceHealth(dmg);
 					npc.setState(DynamicObjectState.Hit);
 					System.out.println(npc.getHealth().getCurrentHealth());
 				}
@@ -135,8 +140,9 @@ public class DynamicObjectManager {
 				return;
 			Rectangle attackRect = attack.getRect(attacker.getHeading());
 			if(player.getCollisionRect().intersects(attackRect)) {
+				int dmg = (int)DamageCalculator.calcDamage(attacker, player);
 				Health health = player.getHealth();
-				health.reduceHealth(attack.getDamage());
+				health.reduceHealth(dmg);
 				if(!health.isInvul())
 					System.out.println("Player is hit. HP: " + health.getCurrentHealth());
 				health.setInvul(true);

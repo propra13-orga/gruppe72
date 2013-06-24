@@ -1,5 +1,7 @@
 package fart.dungeoncrawler.gamestates;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
@@ -8,17 +10,26 @@ import fart.dungeoncrawler.DynamicObjectManager;
 import fart.dungeoncrawler.Game;
 import fart.dungeoncrawler.StaticObjectManager;
 import fart.dungeoncrawler.Tilemap;
+import fart.dungeoncrawler.actor.Actor;
+import fart.dungeoncrawler.actor.Stats;
 import fart.dungeoncrawler.enums.GameState;
+import fart.dungeoncrawler.items.Equipment;
 import fart.dungeoncrawler.items.Inventory;
 import fart.dungeoncrawler.items.Shop;
 
 public class GameStateInShop extends BaseGameState {
 	private Shop shop;
 	private Inventory inventory;
+	private Equipment equip;
+	private Stats stats;
 	private StaticObjectManager sManager;
 	private DynamicObjectManager dManager;
 	private Tilemap map;
 	private Controller controller;
+	
+	
+	public static final Font FONT = new Font("Lucida Console", 0x1, 12);
+	public static final Color FONT_COLOR = new Color(0.275f, 0.0f, 0.14f);
 	
 	public GameStateInShop(Game game) {
 		super(game);
@@ -33,8 +44,10 @@ public class GameStateInShop extends BaseGameState {
 		this.shop = shop;
 	}
 	
-	public void setCurrentInventory(Inventory inventory) {
-		this.inventory = inventory;
+	public void setCurrentActor(Actor actor) {
+		this.inventory = actor.getInventory();
+		this.equip = actor.getEquipment();
+		this.stats = actor.getStats();
 		shop.setInventory(inventory);
 	}
 	
@@ -54,7 +67,6 @@ public class GameStateInShop extends BaseGameState {
 			game.setGameState(GameState.InGame);
 		
 		shop.update(elapsed);
-		//inventory.update(elapsed);
 	}
 
 	@Override
@@ -64,6 +76,8 @@ public class GameStateInShop extends BaseGameState {
 		dManager.draw(graphics);
 		shop.draw(graphics);
 		inventory.draw(graphics);
+		equip.draw(graphics);
+		stats.draw(graphics);
 	}
 
 }

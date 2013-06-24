@@ -25,7 +25,8 @@ public class StatusBar implements IDrawable {
 		
 		//bilder fehlen noch... können nicht geladen werden. rect muss etwas kleiner als healthframe sein.
 		healthRect = new Rectangle(20, 20, 93, 13);
-		manaRect = new Rectangle(360, 20, 93, 13);
+		//manaRect = new Rectangle(360, 20, 93, 13);
+		manaRect = new Rectangle(20, 40, 93, 13);
 		
 		try {
 			barTexture = ImageIO.read(new File("res/emptyBar.png"));

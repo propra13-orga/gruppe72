@@ -43,12 +43,12 @@ public class GameStateInGame extends BaseGameState {
 		
 		if(controller.justPressed(KeyEvent.VK_B)) {
 			game.setGameState(GameState.InShop);
-			((GameStateInShop)game.getGameState()).setCurrentInventory(player.getInventory());
+			((GameStateInShop)game.getGameState()).setCurrentActor(player);
 		}
 		
 		if(controller.justPressed(KeyEvent.VK_I)) {
 			game.setGameState(GameState.InInventory);
-			((GameStateInInventory)game.getGameState()).setCurrentInventory(player.getInventory());
+			((GameStateInInventory)game.getGameState()).setCurrentActor(player);
 		}
 		
 		dManager.update(elapsed);

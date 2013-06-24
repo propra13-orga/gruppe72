@@ -23,33 +23,14 @@ public class Collision {
 	 * Sets a new TileMap and gets all needed data from it.
 	 * @param tilemap
 	 */
-	public void changeMap(Tilemap tilemap) {
-		staticObjects.clear();
-		triggers.clear();
-		
-		int[][] map = tilemap.getActRoom();
-		
-		for(int i=0; i<15; i++) {
-			for(int j=0; j<15; j++){
-				if((map[i][j]&2) != 0) {
-					staticObjects.add(new Rectangle(i * Tilemap.TILE_SIZE, j * Tilemap.TILE_SIZE, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE));
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Sets a new TileMap and gets all needed data from it.
-	 * @param tilemap
-	 */
 	public void changeMap(MapLoader loader) {
 		staticObjects.clear();
 		triggers.clear();
 		
 		int[][] map = loader.getMap();
 		
-		for(int i=0; i<15; i++) {
-			for(int j=0; j<15; j++){
+		for(int i=0; i<Tilemap.ROOM_WIDTH; i++) {
+			for(int j=0; j<Tilemap.ROOM_HEIGHT; j++){
 				if((map[i][j]&2) != 0) {
 					staticObjects.add(new Rectangle(i * Tilemap.TILE_SIZE, j * Tilemap.TILE_SIZE, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE));
 				}

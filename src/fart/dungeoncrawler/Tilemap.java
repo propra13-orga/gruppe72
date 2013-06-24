@@ -15,6 +15,8 @@ public class Tilemap implements IDrawable {
 	
 	private int actRoom[][];
 	private final int ROOM_SIZE = 15;
+	public static final int ROOM_WIDTH = 32;
+	public static final int ROOM_HEIGHT = 20;
 	private MapLoader loader;
 	
 	public Tilemap(Game game, StaticObjectManager sManager, DynamicObjectManager dManager, Collision collision) {
@@ -113,8 +115,8 @@ public class Tilemap implements IDrawable {
 	
 	@Override
 	public void draw(Graphics2D graphics) {
-		for(int j=0; j<ROOM_SIZE; j++)
-			for(int i=0; i<ROOM_SIZE; i++)
+		for(int j=0; j<ROOM_HEIGHT; j++)
+			for(int i=0; i<ROOM_WIDTH; i++)
 			{
 				if((actRoom[i][j]&1) != 0)
 					graphics.drawImage(grass, null, i*TILE_SIZE, j*TILE_SIZE);

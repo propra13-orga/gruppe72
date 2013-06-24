@@ -32,9 +32,6 @@ public class NPCTrigger extends BaseNPC implements ITriggerable {
 	}
 
 	@Override
-	public void terminate() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void terminate() {}
 	
 }

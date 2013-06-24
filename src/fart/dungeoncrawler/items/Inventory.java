@@ -12,13 +12,15 @@ import fart.dungeoncrawler.IDrawable;
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.actor.Actor;
+import fart.dungeoncrawler.actor.Stats;
+import fart.dungeoncrawler.enums.EquipSlot;
 
 public class Inventory implements IDrawable, IUpdateable {
 	public static final int ROWS = 4;
 	public static final int COLUMNS = 4;
 	public static final int MAX_ITEMS = ROWS * COLUMNS;
 	public static final int BORDER_SIZE = 8;
-	public static final Vector2 START_POS = new Vector2(300, 300);
+	public static final Vector2 START_POS = new Vector2(860, 474);
 	private BaseItem[] items;
 	private int gold;
 	private Controller controller;
@@ -31,10 +33,8 @@ public class Inventory implements IDrawable, IUpdateable {
 		this.controller = controller;
 		iconController = new IconController(controller, START_POS, BORDER_SIZE, COLUMNS, ROWS);
 		items[0] = ItemCollection.getInstance().getByID(0);
-		items[11] = ItemCollection.getInstance().getByID(0);
-		items[4] = ItemCollection.getInstance().getByID(0);
 		this.owner = owner;
-		font = new Font("Arial", 0, 12);
+		font = new Font("Arial", 0x1, 12);
 	}
 	
 	public void setGold(int amount) {
@@ -73,15 +73,33 @@ public class Inventory implements IDrawable, IUpdateable {
 			
 			BaseItem item = items[index];
 			if(item != null) {
-				item.use(owner);
-				if(item.isConsumed())
+				EquipSlot slot = item.getSlot();
+				if(slot == EquipSlot.None) {
+					item.use(owner);
+					if(item.isConsumed())
+						items[index] = null;
+				} else {
+					Equipment equip = owner.getEquipment();
+					StatItem prev = equip.equipItem(slot, (StatItem)item);
+					((StatItem)item).use(owner);
 					items[index] = null;
+					if(prev != null) {
+						prev.unuse(owner);
+						addItem(prev);
+					}
+				}
 			}
+			
+			owner.getHealth().setMaxHealh(owner.getStats().getStamina() * Stats.HEALTH_PER_STAM);
+			owner.getMana().setMaxMana(owner.getStats().getWill() * Stats.MANA_PER_WILL);
 		}
 	}
 
 	@Override
 	public void draw(Graphics2D graphics) {
+		graphics.setColor(new Color(0.2f, 0.2f, 0.1f));
+		graphics.fillRect((int)START_POS.x - BORDER_SIZE, 0, 400, 640);
+		
 		graphics.setColor(new Color(0.6f, 0.6f, 0.6f));
 		BaseItem item;
 		
@@ -107,7 +125,7 @@ public class Inventory implements IDrawable, IUpdateable {
 		
 		graphics.setFont(font);
 		graphics.setColor(new Color(0.6f, 0.8f, 0.0f));
-		graphics.drawString("Gold: " + gold, 300, 286);
+		graphics.drawString("Gold: " + gold, (int)START_POS.x, (int)START_POS.y - (BORDER_SIZE * 2));
 	}
 
 }

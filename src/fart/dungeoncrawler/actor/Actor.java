@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import Utils.Vector2;
 import fart.dungeoncrawler.*;
 import fart.dungeoncrawler.enums.*;
+import fart.dungeoncrawler.items.Equipment;
 import fart.dungeoncrawler.items.Inventory;
 
 public abstract class Actor extends GameObject implements IUpdateable {
@@ -18,6 +19,7 @@ public abstract class Actor extends GameObject implements IUpdateable {
 	protected DynamicObjectManager manager;
 	protected Collision collision;
 	protected Inventory inventory;
+	protected Equipment equip;
 	protected Stats stats;
 	protected ActorDescription description;
 	
@@ -37,6 +39,7 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		manager = game.getDynamicManager();
 		inventory = new Inventory(game.getController(), this);
 		state = DynamicObjectState.Idle;
+		equip = new Equipment();
 	}
 
 	/**
@@ -99,6 +102,14 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		return collision;
 	}
 	
+	public Stats getStats() {
+		return stats;
+	}
+	
+	public Equipment getEquipment() {
+		return equip;
+	}
+	
 	public void setHealth(Health health) {
 		this.health = health;
 	}
@@ -134,5 +145,4 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		collisionRect.x = (int)screenPosition.x;
 		collisionRect.y = (int)screenPosition.y;
 	}
-
 }

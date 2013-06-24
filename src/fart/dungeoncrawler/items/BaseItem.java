@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import fart.dungeoncrawler.IDrawable;
 import fart.dungeoncrawler.actor.Actor;
+import fart.dungeoncrawler.enums.EquipSlot;
 
 public abstract class BaseItem implements IDrawable {
 	protected String name;
@@ -46,6 +47,7 @@ public abstract class BaseItem implements IDrawable {
 	}
 	
 	public abstract void use(Actor owner);
+	public abstract EquipSlot getSlot();
 
 	public String getName() {
 		return name;

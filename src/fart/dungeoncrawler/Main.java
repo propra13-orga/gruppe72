@@ -13,7 +13,7 @@ public class Main
 		frame.setTitle("Dungeon Crawler");
 		
 		Game mainpanel = new Game();
-		mainpanel.setPreferredSize(new Dimension(480,480));
+		mainpanel.setPreferredSize(new Dimension(32 * 32,20 * 32));
 		frame.add(mainpanel);
 		
 		frame.pack();

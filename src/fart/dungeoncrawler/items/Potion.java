@@ -1,6 +1,7 @@
 package fart.dungeoncrawler.items;
 
 import fart.dungeoncrawler.actor.Actor;
+import fart.dungeoncrawler.enums.EquipSlot;
 
 public class Potion extends BaseItem {
 	private int healthRestore;
@@ -12,6 +13,11 @@ public class Potion extends BaseItem {
 		this.healthRestore = healthRestore;
 		this.manaRestore = manaRestore;
 		this.tooltip = tooltip;
+	}
+	
+	@Override
+	public EquipSlot getSlot() {
+		return EquipSlot.None;
 	}
 	
 	@Override

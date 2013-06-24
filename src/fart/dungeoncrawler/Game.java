@@ -124,7 +124,7 @@ public class Game extends JPanel implements Runnable
 				bi = ImageIO.read(new File("res/player.png"));
 				EnemyDescription ed = new EnemyDescription(false, bi, 96, 16, 3);
 				//e = new MeleeEnemy(ed, collision, manager);
-				ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 80, 80, new Stats(), Heading.Down);
+				ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 80, 80, new Stats(5, 5, 3, 1, 25, 8, 0), Heading.Down);
 				e = new MeleeEnemy(this, actDesc, new Vector2(90, 160), ed);
 				EnemyStateMachine machine = new EnemyStateMachine(e, player);
 				e.setMachine(machine);

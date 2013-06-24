@@ -1,24 +1,29 @@
 <?xml version="1.0"?>
 <map>
 	<name>L0R0</name>
-	<width>15</width>
-	<height>15</height>
+	<width>32</width>
+	<height>20</height>
 	<tiles>
-		###############
-		#             #
-		#             #
-		#             #
-		#   ##   ##  ##
-		#   ## # ##    
-		#      #      #
-		#    #####    #
-		#      #      #
-		#   ## # ######
-		#   ##   ######
-		#        ######
-		#        ######
-		#        ######
-		###############
+		################################
+		##########################     #
+		#                        #     #
+		#                        #     #
+		#      ###########       ##  ###
+		#      ###########              
+		#      ###########              
+		#      ###########             #
+		#      #        ##             #
+		#      #        ##             #
+		#               ##             #
+		#     #   ################     #
+		#     #      #############     #
+		#     #      ##         ##     #
+		#######      ##         ##     #
+		#######      ##         ##     #
+		#     #      ##         ##     #
+		#                             ##
+		#                      #########
+		################################
 	</tiles>
 	<descriptions>
 		<object name="portal" id="0">
@@ -43,11 +48,18 @@
 	<gameobjects>
 		<objects>
 			<object id="0">
-				<positionX>14</positionX>
+				<positionX>31</positionX>
 				<positionY>5</positionY>
 				<mapToName>res/maps/L0R1.xml</mapToName>
 				<mapToX>1</mapToX>
 				<mapToY>5</mapToY>
+			</object>
+			<object id="0">
+				<positionX>31</positionX>
+				<positionY>6</positionY>
+				<mapToName>res/maps/L0R1.xml</mapToName>
+				<mapToX>1</mapToX>
+				<mapToY>6</mapToY>
 			</object>
 		</objects>
 		<traps>

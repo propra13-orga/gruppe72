@@ -8,11 +8,16 @@ import fart.dungeoncrawler.DynamicObjectManager;
 import fart.dungeoncrawler.Game;
 import fart.dungeoncrawler.StaticObjectManager;
 import fart.dungeoncrawler.Tilemap;
+import fart.dungeoncrawler.actor.Actor;
+import fart.dungeoncrawler.actor.Stats;
 import fart.dungeoncrawler.enums.GameState;
+import fart.dungeoncrawler.items.Equipment;
 import fart.dungeoncrawler.items.Inventory;
 
 public class GameStateInInventory extends BaseGameState {
 	private Inventory inventory;
+	private Equipment equip;
+	private Stats stats;
 	private StaticObjectManager sManager;
 	private DynamicObjectManager dManager;
 	private Tilemap map;
@@ -27,8 +32,10 @@ public class GameStateInInventory extends BaseGameState {
 		controller = game.getController();
 	}
 	
-	public void setCurrentInventory(Inventory inventory) {
-		this.inventory = inventory;
+	public void setCurrentActor(Actor actor) {
+		this.inventory = actor.getInventory();
+		this.equip = actor.getEquipment();
+		this.stats = actor.getStats();
 	}
 
 	@Override
@@ -45,6 +52,8 @@ public class GameStateInInventory extends BaseGameState {
 		sManager.draw(graphics);
 		dManager.draw(graphics);
 		inventory.draw(graphics);
+		equip.draw(graphics);
+		stats.draw(graphics);
 	}
 
 	@Override

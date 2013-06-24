@@ -11,6 +11,7 @@ public class BaseNPC extends Actor implements IUpdateable {
 	protected EnemyStateMachine machine;
 	protected NPCDescription npcDesc;
 	protected NPCType type;
+	protected BufferedImage texture;
 	
 	public BaseNPC(Game game, ActorDescription desc, Vector2 position, NPCDescription npcDesc) {
 		super(game, desc, position);

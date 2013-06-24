@@ -4,6 +4,8 @@ import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
 
+import Utils.DamageCalculator;
+
 import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.enums.Heading;
@@ -14,9 +16,10 @@ public class Attack {
 	private HashMap<Heading, HashMap<Integer, Rectangle>> attackRects;
 	private Animation curAnim;
 	private Rectangle curRect;
+	private int frameDuration;
 	private int duration;
 	private int curFrame;
-	private GameObject owner;
+	private Actor owner;
 	
 	/**
 	 * Represents a MeleeAttack. 
@@ -28,12 +31,14 @@ public class Attack {
 	 * @param frameDuration Duration in frames
 	 * @param owner Owner of the attack.
 	 */
-	public Attack(int damage, HashMap<Heading, Animation> anim, HashMap<Integer, Rectangle> attackRects, int frameDuration, GameObject owner) {
+	public Attack(int damage, HashMap<Heading, Animation> anim, HashMap<Integer, Rectangle> attackRects, int frameDuration, Actor owner) {
 		this.damage = damage;
 		this.anim = anim;
 		//this.attackRects = attackRects;
 		this.owner = owner;
-		duration = frameDuration;
+		this.frameDuration = frameDuration;
+		float mul = DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility());
+		duration = (int)(frameDuration * mul);
 		curFrame = 0;
 		
 		constructRectsFromList(attackRects);
@@ -124,6 +129,7 @@ public class Attack {
 	 * @return Returns if the attack is over. 
 	 */
 	public boolean Update() {
+		duration = (int)(frameDuration * DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility()));
 		curFrame += 1;
 		if(curFrame == duration) {
 			curFrame = 0;

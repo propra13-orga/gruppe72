@@ -54,4 +54,9 @@ public class Mana {
 	public int getMaxMana() {
 		return maxMana;
 	}
+	
+	public void setMaxMana(int max) {
+		maxMana = max;
+		addMana(0);
+	}
 }

@@ -17,14 +17,12 @@ public class Shop implements IDrawable, IUpdateable {
 	private static int borderSize = 8;
 	private static int columns = 5;
 	private static int rows = 6;
+	private static int maxItems = rows * columns;
 	
 	private ArrayList<BaseItem> items;
 	private Controller controller;
 	private IconController iconController;
 	private Inventory inventory;
-	
-	//DEBUG
-	private int iCount = 26;
 	
 	public Shop(Controller controller) {
 		iconController = new IconController(controller, startPosition, borderSize, columns, rows);
@@ -32,9 +30,14 @@ public class Shop implements IDrawable, IUpdateable {
 		
 		items = new ArrayList<BaseItem>();
 		items.add(ItemCollection.getInstance().getByID(0));
-		items.add(ItemCollection.getInstance().getByID(0));
-		items.add(ItemCollection.getInstance().getByID(0));
-		items.add(ItemCollection.getInstance().getByID(0));
+		items.add(ItemCollection.getInstance().getByID(1));
+		items.add(ItemCollection.getInstance().getByID(2));
+		items.add(ItemCollection.getInstance().getByID(3));
+		items.add(ItemCollection.getInstance().getByID(4));
+		items.add(ItemCollection.getInstance().getByID(5));
+		items.add(ItemCollection.getInstance().getByID(6));
+		items.add(ItemCollection.getInstance().getByID(7));
+		items.add(ItemCollection.getInstance().getByID(8));
 	}
 	
 	public void setInventory(Inventory inventory) {
@@ -63,7 +66,7 @@ public class Shop implements IDrawable, IUpdateable {
 	public void draw(Graphics2D graphics) {
 		graphics.setColor(new Color(0.6f, 0.6f, 0.6f));
 		
-		for(int i = 0; i < iCount; i++) {
+		for(int i = 0; i < maxItems; i++) {
 			int x = i % columns;
 			int xPos = x * Tilemap.TILE_SIZE;
 			xPos += (x * borderSize);

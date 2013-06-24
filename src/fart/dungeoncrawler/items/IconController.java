@@ -44,7 +44,7 @@ public class IconController implements IDrawable, IUpdateable {
 	}
 	
 	public int getCurrentIndex() {
-		return curX + curY * rows;
+		return curX + curY * columns;
 	}
 
 	@Override

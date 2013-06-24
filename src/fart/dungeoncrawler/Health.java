@@ -76,6 +76,11 @@ public class Health {
     	return perc < percent;
     }
     
+    public void setMaxHealh(int max) {
+    	maxHealth = max;
+    	addHealth(0);
+    }
+    
     public void setInvul(boolean invul) {
     	invulnerable = invul;
     }

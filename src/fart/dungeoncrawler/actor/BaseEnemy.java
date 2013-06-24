@@ -14,10 +14,8 @@ import fart.dungeoncrawler.enums.*;
 
 public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	protected Animation curAnim;
-	protected Health health;
 	protected int aggroRange;
 	protected int attackRange;
-	protected Collision collision;
 	protected HashMap<DynamicObjectState, HashMap<Heading, Animation>> animations;
 	protected Attack simpleAttack;
 	protected EnemyDescription enemyDesc;
