@@ -1,24 +1,24 @@
 <?xml version="1.0"?>
 <map>
-	<name>L0R1</name>
+	<name>L2R1</name>
 	<width>15</width>
 	<height>15</height>
 	<tiles>
 		###############
+		              #
 		#             #
-		#      ###    #
-		#       #     #
-		#####   #     #
-		    #   #     #
-		#   #   #     #
-		#   #   #     #
-		#   #   #     #
-		#       #     #
-		# ######    ###
-		#     #       #
-		#     #       #
-		###           #
-		### ###########
+		#             #
+		#             #
+		# ### #####   # 
+		# ### #####   #
+		#  #  #####   #
+		###########   #
+		###########   #
+		# # # # ###   #
+		              #
+		# # # # #######
+		###############
+		###############
 	</tiles>
 	<descriptions>
 		<object name="portal" id="0">
@@ -45,9 +45,9 @@
 			<object id="0">
 				<positionX>14</positionX>
 				<positionY>5</positionY>
-				<mapToName>L0R1.xml</mapToName>
+				<mapToName>res/maps/L0R1.xml</mapToName>
 				<mapToX>1</mapToX>
-				<mapToY>1</mapToY>
+				<mapToY>5</mapToY>
 			</object>
 		</objects>
 		<traps>
