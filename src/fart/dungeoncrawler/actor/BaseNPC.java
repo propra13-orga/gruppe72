@@ -12,8 +12,8 @@ public class BaseNPC extends Actor implements IUpdateable {
 	protected NPCDescription npcDesc;
 	protected NPCType type;
 	
-	public BaseNPC(Game game, ActorDescription desc, Vector2 position, NPCDescription npcDesc) {
-		super(game, desc, position);
+	public BaseNPC(Game game, Vector2 position, NPCDescription npcDesc) {
+		super(game, (ActorDescription)npcDesc, position);
 		this.state = DynamicObjectState.Idle;
 		this.npcDesc = npcDesc;
 		velocity = new Vector2();

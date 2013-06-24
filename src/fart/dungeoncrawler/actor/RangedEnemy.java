@@ -5,7 +5,7 @@ import fart.dungeoncrawler.Game;
 
 public class RangedEnemy extends BaseEnemy {
 	public RangedEnemy(Game game, ActorDescription actDesc, Vector2 position, EnemyDescription enemyDesc) {
-		super(game, actDesc, position, enemyDesc);
+		super(game, position, enemyDesc);
 	}
 	
 	//private void buildAttacks() {

@@ -39,6 +39,15 @@
 			<colHeight>32</colHeight>
 			<damage>1</damage>
 		</trap>
+		<actor name="meleeenemy" id="3">
+			<spritesheet>res/player.png</spritesheet>
+			<isRanged>0</isRanged>
+			<aggroRange>96</aggroRange>
+			<attackRange>16</attackRange>
+			<type>3</type>
+			<maxHealth>100</maxHealth>
+			<maxMana>100</maxMana>
+		</actor>
 	</descriptions>
 	<gameobjects>
 		<objects>

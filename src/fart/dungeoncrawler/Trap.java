@@ -27,7 +27,7 @@ public class Trap extends GameObject implements ITriggerable
 	}
 	
 	public Trap(TrapDescription desc, Vector2 position) {
-		this.screenPosition = position;
+		this.screenPosition = new Vector2(position.x * Tilemap.TILE_SIZE, position.y * Tilemap.TILE_SIZE);
 		this.triggerArea = new Rectangle(desc.getCollisionRect());
 		this.texture = desc.getTexture();
 		this.damage = desc.getDamage();

@@ -26,8 +26,8 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	protected float spSpeed = 4.0f;
 	protected BufferedImage spTex;
 	
-	public BaseEnemy(Game game, ActorDescription actDesc, Vector2 position, EnemyDescription enemyDesc) {
-		super(game, actDesc, position, (NPCDescription)enemyDesc);
+	public BaseEnemy(Game game, Vector2 position, EnemyDescription enemyDesc) {
+		super(game, position, (NPCDescription)enemyDesc);
 		this.aggroRange = enemyDesc.getAggroRange();
 		this.attackRange = enemyDesc.getAttackRange();
 		this.enemyDesc = enemyDesc;

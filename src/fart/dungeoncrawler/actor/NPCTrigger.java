@@ -10,7 +10,7 @@ import fart.dungeoncrawler.enums.GameState;
 public class NPCTrigger extends BaseNPC implements ITriggerable {
 
 	public NPCTrigger(Game game, ActorDescription actDesc, Vector2 position, NPCDescription npcDesc) {
-		super(game, actDesc, position, npcDesc);
+		super(game, position, npcDesc);
 		// TODO Auto-generated constructor stub
 	}
 

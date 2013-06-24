@@ -15,8 +15,8 @@ import fart.dungeoncrawler.enums.Heading;
 public class BossEnemy extends BaseEnemy {
 	private DynamicObjectState curState;
 	
-	public BossEnemy(Game game, ActorDescription actDesc, Vector2 position, EnemyDescription enemyDesc) {
-		super(game, actDesc, position, enemyDesc);
+	public BossEnemy(Game game, Vector2 position, EnemyDescription enemyDesc) {
+		super(game, position, enemyDesc);
 		curState = DynamicObjectState.Idle;
 		heading = Heading.Down;
 		

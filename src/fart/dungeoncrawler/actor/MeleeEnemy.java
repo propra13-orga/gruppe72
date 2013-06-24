@@ -15,8 +15,8 @@ import fart.dungeoncrawler.enums.*;
 public class MeleeEnemy extends BaseEnemy {
 	private DynamicObjectState curState;
 	
-	public MeleeEnemy(Game game, ActorDescription actDesc, Vector2 position, EnemyDescription enemyDesc) {
-		super(game, actDesc, position, enemyDesc);
+	public MeleeEnemy(Game game, Vector2 position, EnemyDescription enemyDesc) {
+		super(game, position, enemyDesc);
 		curState = DynamicObjectState.Idle;
 		heading = Heading.Down;
 		
