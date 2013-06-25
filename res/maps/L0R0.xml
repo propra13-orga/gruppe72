@@ -104,7 +104,7 @@
 		<actors>
 			<actor id="3">
 				<positionX>7</positionX>
-				<positionY>14</positionY>
+				<positionY>13</positionY>
 			</actor>
 		</actors>
 	</gameobjects>

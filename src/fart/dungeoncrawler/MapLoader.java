@@ -8,6 +8,7 @@ import fart.dungeoncrawler.actor.ActorDescription;
 import fart.dungeoncrawler.actor.BaseDescription;
 import fart.dungeoncrawler.actor.EnemyDescription;
 import fart.dungeoncrawler.actor.MeleeEnemy;
+import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
 import Utils.Vector2;
 
@@ -259,7 +260,10 @@ public class MapLoader
 					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
 					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
 					
-					MeleeEnemy me = new MeleeEnemy(game, new Vector2(posX,posY), ed);
+					MeleeEnemy me = new MeleeEnemy(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE), ed);
+					EnemyStateMachine machine = new EnemyStateMachine(me, game.getPlayer());
+					me.setMachine(machine);
+					
 					dManager.addObject(me);
 				}
 			}
