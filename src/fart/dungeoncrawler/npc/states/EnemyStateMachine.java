@@ -101,12 +101,22 @@ public class EnemyStateMachine implements IUpdateable {
 				}
 			}
 			else {
-				if(!owner.getSimpleSpell().isOnCooldown()) {
+				/*if(!owner.getSimpleSpell().isOnCooldown()) {
 					//owner.getSimpleSpell().activate();
 					owner.setAttackType(AttackType.spell);
 					owner.setAggroRange(1000);
 					setState(DynamicObjectState.Attacking);
 					//System.out.println("Spell!");
+				} else {
+					setState(DynamicObjectState.Chasing);*/
+				if(owner.getSimpleSpell() != null)
+				{
+					if(!owner.getSimpleSpell().isOnCooldown()) {
+						owner.setAttackType(AttackType.spell);
+						owner.setAggroRange(1000);
+						setState(DynamicObjectState.Attacking);
+						System.out.println("Spell!");
+					}
 				} else {
 					setState(DynamicObjectState.Chasing);
 				}

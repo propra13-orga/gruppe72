@@ -1,6 +1,5 @@
 package fart.dungeoncrawler;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -62,7 +61,7 @@ public class Game extends JPanel implements Runnable
 	private MeleeEnemy e;
 	private BossEnemy eboss;
 	private NPCShop nshop;
-	private static final Vector2 PLAYER_START_POS = new Vector2(13 * Tilemap.TILE_SIZE, 2 * Tilemap.TILE_SIZE);
+	private static final Vector2 PLAYER_START_POS = new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE);
 	
 	public Game()
 	{
@@ -84,7 +83,7 @@ public class Game extends JPanel implements Runnable
 		collision = new Collision();
 		map = new Tilemap(this, sManager, manager, collision);
 		
-		ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 100, 100, new Stats(), Heading.Up);
+		ActorDescription actDesc = new ActorDescription("res/player.png", 100, 100, new Stats(), Heading.Up);
 
 		player = new NewPlayer(this, actDesc, PLAYER_START_POS);
 		collision.addDynamicObject(player);
@@ -124,34 +123,35 @@ public class Game extends JPanel implements Runnable
 			resetPlayer();
 
 			//DEBUG
-			BufferedImage bi;
-			try {
-				bi = ImageIO.read(new File("res/player.png"));
-				EnemyDescription ed = new EnemyDescription(false, bi, 96, 16, 3, 100, 100, new Stats(8, 6, 5, 4, 55, 8, 0), Heading.Down);
+			//BufferedImage bi;
 
-				BufferedImage si = ImageIO.read(new File("res/shop.png"));
-				ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 80, 80, new Stats(5, 5, 3, 1, 25, 8, 0), Heading.Down);
-				nshop = new NPCShop(this, actDesc, new Vector2(32 * 11, 32), new NPCDescription(si, NPCType.Shop.ordinal(), actDesc), new Rectangle(32 * 11 - 16, 64 - 16, 64, 64));
+			//try {
+				//bi = ImageIO.read(new File("res/player.png"));
+				//EnemyDescription ed = new EnemyDescription(false, "res/player.png", 96, 16, 3, 100, 100, new Stats(8, 6, 5, 4, 55, 8, 0), Heading.Down);
+
+				//BufferedImage si = ImageIO.read(new File("res/shop.png"));
+				ActorDescription actDesc = new ActorDescription("res/shop.png", 80, 80, new Stats(5, 5, 3, 1, 25, 8, 0), Heading.Down);
+				nshop = new NPCShop(this, actDesc, new Vector2(32 * 11, 32), new NPCDescription("res/shop.png", NPCType.Shop.ordinal(), actDesc), new Rectangle(32 * 11 - 16, 64 - 16, 64, 64));
 				manager.addObject(nshop);
 				collision.addTriggerOnKey(nshop);
 				collision.addStaticObject(nshop.getCollisionRect());
 				
-				eboss = new BossEnemy(this, new Vector2(90, 160), ed);
-				EnemyStateMachine machine = new EnemyStateMachine(eboss, player);
-				eboss.setMachine(machine);
-				collision.addDynamicObject(eboss);
+
+				//eboss = new BossEnemy(this, new Vector2(90, 160), ed);
+				//EnemyStateMachine machine = new EnemyStateMachine(eboss, player);
+				//eboss.setMachine(machine);
+				//collision.addDynamicObject(eboss);
 				collision.addDynamicObject(player);
 				manager.addObject(player);
 				
 				MapItem mp = new MapItem(this, 4, new Vector2(164, 87));
-				NPCTalking talk = new NPCTalking(this, new Vector2(180, 87), new NPCDescription(si, NPCType.Shop.ordinal(), actDesc), new Rectangle(180 - 16, 87 - 16, 64, 64));
+				NPCTalking talk = new NPCTalking(this, new Vector2(180, 87), new NPCDescription("res/shop.png", NPCType.Shop.ordinal(), actDesc), new Rectangle(180 - 16, 87 - 16, 64, 64));
 				sManager.addObject(talk);
 				collision.addTriggerOnKey(talk);
-				
-			} catch(IOException e) {
-				System.err.println("Couldn't load image!");
-				System.exit(1);
-			}
+			//} catch(IOException e) {
+			//	System.err.println("Couldn't load image!");
+			//	System.exit(1);
+			//}
 	}
 	
 	public void playerDead() {

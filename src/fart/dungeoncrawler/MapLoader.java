@@ -5,30 +5,45 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import fart.dungeoncrawler.actor.ActorDescription;
 import fart.dungeoncrawler.actor.BaseDescription;
+import fart.dungeoncrawler.actor.BossEnemy;
+import fart.dungeoncrawler.actor.EnemyDescription;
+import fart.dungeoncrawler.actor.MeleeEnemy;
+import fart.dungeoncrawler.actor.Stats;
+import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
 import Utils.Vector2;
 
 import nu.xom.*;
 
 /*
- * 		ID	OBJECT
+ * 		 ID	OBJECT
  * 		------------------
- * 		 0	PORTAL
- * 		 1	GOAL
- * 		 2	FIRE (TRAP)
-<<<<<<< HEAD
- * 		 3  CHECKPOINT
-=======
- * 		 3	MELEEENEMY
->>>>>>> ee68b76d8868137dca74f1b707fdcce96bd0571f
+ * 		  0	PORTAL
+ * 		  1	GOAL
+ * 		  2	FIRE (TRAP)
+ * 		  3	MELEEENEMY
+ * 		  4	BOSSENEMY
+ * 		  5	NPC
+ * 		  6 CHECKPOINT
+ * 
+ * 		 ID	ITEM
+ * 		------------------
+ * 		100 
+ * 		101
+ * 		 .
+ * 		 .
+ * 		 .
  */
 
 public class MapLoader
 {
 	private int width, height;
 	private int output[][];
-	private ArrayList<BaseDescription> descriptions;
+	private ArrayList<ActorDescription> aDescriptions;
+	private ArrayList<BaseDescription> bDescriptions;
+	private String aDescLoc[][];
 	private String descLoc[][];
 	private Game game;
 	private StaticObjectManager sManager;
@@ -122,19 +137,26 @@ public class MapLoader
 		dManager.clearObjects();
 		
 		current = map.getRootElement().getChildElements("descriptions").get(0);
-		descriptions = new ArrayList<BaseDescription>();
+		aDescriptions = new ArrayList<ActorDescription>();
+		bDescriptions = new ArrayList<BaseDescription>();
 		descLoc = new String[current.getChildElements().size()][2];
 		for(i=0; i<current.getChildElements().size(); i++)
 		{
 			Element tmp = current.getChildElements().get(i);
+			boolean saveToA = false;
+			
+			// Add PortalDescription
 			if(tmp.getAttribute(1).getValue().equals("0"))
 			{
-				descriptions.add(new PortalDescription(tmp.getChildElements().get(0).getValue()));
+				bDescriptions.add(new PortalDescription(tmp.getChildElements().get(0).getValue()));
 			}
+			// Add GoalDescription (BaseDescription)
 			else if(tmp.getAttribute(1).getValue().equals("1"))
 			{
-				descriptions.add(new BaseDescription(tmp.getChildElements().get(0).getValue()));
+				bDescriptions.add(new BaseDescription(tmp.getChildElements().get(0).getValue()));
 			}
+			
+			// Add fire TrapDescription
 			else if(tmp.getAttribute(1).getValue().equals("2"))
 //<<<<<<< HEAD
 				//descriptions[i] = new TrapDescription(tmp.getChildElements().get(0).getValue(),
@@ -143,27 +165,68 @@ public class MapLoader
 				//descriptions[i] = new CheckPointDescription(tmp.getChildElements().get(0).getValue());
 //=======
 			{
-				descriptions.add(new TrapDescription(tmp.getChildElements().get(0).getValue(),
+				bDescriptions.add(new TrapDescription(tmp.getChildElements().get(0).getValue(),
 						Integer.parseInt(tmp.getChildElements().get(3).getValue())));
 			}
+			
+			// Add MeleeEnemy EnemyDescription
 			else if(tmp.getAttribute(1).getValue().equals("3"))
 			{
-				boolean isRanged = tmp.getChildElements().get(0).getValue().equals("0")?false:true;
-				descriptions.add(null);
+				boolean isRanged = tmp.getChildElements().get(1).getValue().equals("0")?false:true;
+				aDescriptions.add(new EnemyDescription(isRanged,
+						tmp.getChildElements().get(0).getValue(),
+						Integer.parseInt(tmp.getChildElements().get(2).getValue()),
+						Integer.parseInt(tmp.getChildElements().get(3).getValue()),
+						Integer.parseInt(tmp.getChildElements().get(4).getValue()),
+						Integer.parseInt(tmp.getChildElements().get(5).getValue()),
+						Integer.parseInt(tmp.getChildElements().get(6).getValue()),
+						new Stats(), null));
+				saveToA = true;
+			}
+			// Add BossEnemy EnemyDescription
+			else if(tmp.getAttribute(1).getValue().equals("4"))
+			{
+				boolean isRanged = tmp.getChildElements().get(1).getValue().equals("0")?false:true;
+				aDescriptions.add(new EnemyDescription(isRanged,
+						tmp.getChildElements().get(0).getValue(),
+						Integer.parseInt(tmp.getChildElements().get(2).getValue()),
+						Integer.parseInt(tmp.getChildElements().get(3).getValue()),
+						Integer.parseInt(tmp.getChildElements().get(4).getValue()),
+						Integer.parseInt(tmp.getChildElements().get(5).getValue()),
+						Integer.parseInt(tmp.getChildElements().get(6).getValue()),
+						new Stats(), null));
+				saveToA = true;
+			}
+			else if(tmp.getAttribute(1).getValue().equals("5"))
+			{
+				//TODO: adjust
+				aDescriptions.add(new ActorDescription(tmp.getChildElements().get(0).getValue(),
+								Integer.parseInt(tmp.getChildElements().get(1).getValue()),
+								Integer.parseInt(tmp.getChildElements().get(2).getValue()),
+								new Stats(), null));
+				saveToA = true;
 			}
 			else
-				descriptions.add(null);
+				bDescriptions.add(null);
 			
 			descLoc[i][0] = tmp.getAttribute(1).getValue();
-			descLoc[i][1] = String.valueOf(descriptions.size()-1);
+			
+			if(saveToA)
+				descLoc[i][1] = String.valueOf(aDescriptions.size()-1);
+			else
+				descLoc[i][1] = String.valueOf(bDescriptions.size()-1);
 		}
 		
 		//DEBUG
+		System.out.println("descLoc:");
 		for(i=0; i<descLoc.length; i++)
-		{
 			System.out.println(descLoc[i][0]+", "+descLoc[i][1]);
+//<<<<<<< HEAD
 //>>>>>>> ee68b76d8868137dca74f1b707fdcce96bd0571f
-		}
+		//}
+//=======
+		System.out.println("descLoc END");
+//>>>>>>> 1f1f5e8264a2691cedcaa0dbedd1e76417505ca0
 
 		current = map.getRootElement().getChildElements("gameobjects").get(0);
 		for(i=0; i<current.getChildElements().size(); i++)
@@ -178,25 +241,26 @@ public class MapLoader
 				{
 					//PortalDescription pd = (PortalDescription) descriptions[0];
 					PortalDescription pd = null;
-					for(int k=0; k<descriptions.size() && pd == null; k++)
+					for(int k=0; k<descLoc.length && pd == null; k++)
 						if(descLoc[k][0].equals("0"))
-							pd = (PortalDescription) descriptions.get(Integer.parseInt(descLoc[k][1]));
+							pd = (PortalDescription) bDescriptions.get(Integer.parseInt(descLoc[k][1]));
 					
-					if(pd==null)
+					if(pd!=null)
+					{
+						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+						String mapToName = tmp2.getChildElements().get(2).getValue();
+						int mapToX = Integer.parseInt(tmp2.getChildElements().get(3).getValue());
+						int mapToY = Integer.parseInt(tmp2.getChildElements().get(4).getValue());
+						
+						Portal portal = new Portal(game, pd.getSpritePath(), mapToName, new Vector2(posX,posY), new Vector2(mapToX,mapToY));
+						sManager.addObject(portal);
+						collision.addTrigger(portal);
+					}
+					else
 					{
 						System.err.println("No PortalDescription in XML file, but Portal Objects");
-						System.exit(1);
 					}
-					
-					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
-					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
-					String mapToName = tmp2.getChildElements().get(2).getValue();
-					int mapToX = Integer.parseInt(tmp2.getChildElements().get(3).getValue());
-					int mapToY = Integer.parseInt(tmp2.getChildElements().get(4).getValue());
-					
-					Portal portal = new Portal(game, pd.getSpritePath(), mapToName, new Vector2(posX,posY), new Vector2(mapToX,mapToY));
-					sManager.addObject(portal);
-					collision.addTrigger(portal);
 				}
 				// Load ALL the goals
 				else if(tmp2.getAttribute(0).getValue().equals("1"))
@@ -212,22 +276,87 @@ public class MapLoader
 				else if(tmp2.getAttribute(0).getValue().equals("2"))
 				{
 					TrapDescription td = null;
-					for(int k=0; k<descriptions.size() && td == null; k++)
+					for(int k=0; k<descLoc.length && td == null; k++)
 						if(descLoc[k][0].equals("2"))
-							td = (TrapDescription) descriptions.get(Integer.parseInt(descLoc[k][1]));
+							td = (TrapDescription) bDescriptions.get(Integer.parseInt(descLoc[k][1]));
 					
-					if(td==null)
+					if(td!=null)
+					{
+						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+						
+						Trap trap = new Trap(td, new Vector2(posX,posY));
+						sManager.addObject(trap);
+						collision.addTrigger(trap);
+					}
+					else
 					{
 						System.err.println("No TrapDescription in XML file, but Firetrap Objects");
-						System.exit(1);
 					}
+				}
+				// Load ALL the Melee Enemies
+				else if(tmp2.getAttribute(0).getValue().equals("3"))
+				{
+					EnemyDescription ed = null;
+					for(int k=0; k<descLoc.length && ed == null; k++)
+						if(descLoc[k][0].equals("3"))
+							ed = (EnemyDescription) aDescriptions.get(Integer.parseInt(descLoc[k][1]));
 					
+					if(ed!=null)
+					{
+						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+						
+						MeleeEnemy me = new MeleeEnemy(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE), ed);
+						EnemyStateMachine machine = new EnemyStateMachine(me, game.getPlayer());
+						me.setMachine(machine);
+						
+						//dManager.addObject(me);
+					}
+					else
+					{
+						System.err.println("No EnemyDescription in XML file, but MeleeEnemy Objects");
+					}
+				}
+				// Load ALL the Boss Enemies
+				else if(tmp2.getAttribute(0).getValue().equals("4"))
+				{
+					EnemyDescription ed = null;
+					for(int k=0; k<descLoc.length && ed == null; k++)
+						if(descLoc[k][0].equals("4"))
+							ed = (EnemyDescription) aDescriptions.get(Integer.parseInt(descLoc[k][1]));
+					
+					if(ed!=null)
+					{
+						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+						
+						BossEnemy be = new BossEnemy(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE), ed);
+						EnemyStateMachine machine = new EnemyStateMachine(be, game.getPlayer());
+						be.setMachine(machine);
+						
+						//dManager.addObject(be);
+					}
+					else
+					{
+						System.err.println("No EnemyDescription in XML file, but BossEnemy Objects");
+					}
+				}
+				else if(tmp2.getAttribute(0).getValue().equals("5"))
+				{
+					//TODO: ADD NPC
+				}
+				else if(tmp2.getAttribute(0).getValue().equals("6"))
+				{
+					//TODO: ADD CHECKPOINT
+				}
+				else if(Integer.parseInt(tmp2.getAttribute(0).getValue()) >= 100)
+				{
+					int itemID = Integer.parseInt(tmp2.getAttribute(0).getValue())-100;
 					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
 					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
 					
-					Trap trap = new Trap(td, new Vector2(posX,posY));
-					sManager.addObject(trap);
-					collision.addTrigger(trap);
+					//TODO: Add item with itemID to position (posX,posY)
 				}
 				// Load ALL checkpoints
 				else if(tmp2.getAttribute(0).getValue().equals("3")) {

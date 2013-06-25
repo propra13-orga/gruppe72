@@ -250,6 +250,11 @@ public class NewPlayer extends Actor implements IUpdateable {
 
 	@Override
 	public void update(float elapsed) {
+		if(health.isDead()) {
+			terminate();
+			return;
+		}
+		
 		if(state == DynamicObjectState.Terminated) {
 			game.startGame(true);
 			return;

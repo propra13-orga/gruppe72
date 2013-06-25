@@ -46,6 +46,7 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		//TEST
 
 		manager.addObject(this);
+		collision.addDynamicObject(this);
 	}
 	
 	public ActorDescription getActorDesc() {
