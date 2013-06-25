@@ -5,12 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import fart.dungeoncrawler.actor.ActorDescription;
-import fart.dungeoncrawler.actor.BaseDescription;
-import fart.dungeoncrawler.actor.BossEnemy;
-import fart.dungeoncrawler.actor.EnemyDescription;
-import fart.dungeoncrawler.actor.MeleeEnemy;
-import fart.dungeoncrawler.actor.Stats;
+import fart.dungeoncrawler.actor.*;
+import fart.dungeoncrawler.enums.NPCType;
 import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
 import Utils.Vector2;
@@ -25,8 +21,9 @@ import nu.xom.*;
  * 		  2	FIRE (TRAP)
  * 		  3	MELEEENEMY
  * 		  4	BOSSENEMY
- * 		  5	NPC
- * 		  6 CHECKPOINT
+ * 		  5	SHOP NPC
+ * 		  6 TALKING NPC
+ * 		  7 CHECKPOINT
  * 
  * 		 ID	ITEM
  * 		------------------
@@ -158,12 +155,6 @@ public class MapLoader
 			
 			// Add fire TrapDescription
 			else if(tmp.getAttribute(1).getValue().equals("2"))
-//<<<<<<< HEAD
-				//descriptions[i] = new TrapDescription(tmp.getChildElements().get(0).getValue(),
-				//									Integer.parseInt(tmp.getChildElements().get(3).getValue()));
-			//else if(tmp.getAttribute(1).getValue().equals("3"))
-				//descriptions[i] = new CheckPointDescription(tmp.getChildElements().get(0).getValue());
-//=======
 			{
 				bDescriptions.add(new TrapDescription(tmp.getChildElements().get(0).getValue(),
 						Integer.parseInt(tmp.getChildElements().get(3).getValue())));
@@ -199,8 +190,8 @@ public class MapLoader
 			}
 			else if(tmp.getAttribute(1).getValue().equals("5"))
 			{
-				//TODO: adjust
-				aDescriptions.add(new ActorDescription(tmp.getChildElements().get(0).getValue(),
+				aDescriptions.add(new NPCDescription(tmp.getChildElements().get(0).getValue(),
+								NPCType.Shop.ordinal(),
 								Integer.parseInt(tmp.getChildElements().get(1).getValue()),
 								Integer.parseInt(tmp.getChildElements().get(2).getValue()),
 								new Stats(), null));
@@ -221,12 +212,7 @@ public class MapLoader
 		System.out.println("descLoc:");
 		for(i=0; i<descLoc.length; i++)
 			System.out.println(descLoc[i][0]+", "+descLoc[i][1]);
-//<<<<<<< HEAD
-//>>>>>>> ee68b76d8868137dca74f1b707fdcce96bd0571f
-		//}
-//=======
 		System.out.println("descLoc END");
-//>>>>>>> 1f1f5e8264a2691cedcaa0dbedd1e76417505ca0
 
 		current = map.getRootElement().getChildElements("gameobjects").get(0);
 		for(i=0; i<current.getChildElements().size(); i++)
@@ -344,11 +330,30 @@ public class MapLoader
 				}
 				else if(tmp2.getAttribute(0).getValue().equals("5"))
 				{
-					//TODO: ADD NPC
+					NPCDescription npcd = null;
+					for(int k=0; k<descLoc.length && npcd == null; k++)
+						if(descLoc[k][0].equals("5"))
+							npcd = (NPCDescription) aDescriptions.get(Integer.parseInt(descLoc[k][1]));
+					
+					if(npcd!=null)
+					{
+						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+						
+						NPCShop npcshop = new NPCShop(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE),
+										npcd, new Rectangle(posX*Tilemap.TILE_SIZE-16,posY*Tilemap.TILE_SIZE-16, Tilemap.TILE_SIZE+32, Tilemap.TILE_SIZE+32));
+						dManager.addObject(npcshop);
+						collision.addTriggerOnKey(npcshop);
+						collision.addStaticObject(npcshop.getCollisionRect());
+					}
+					else
+					{
+						System.err.println("No NPCDescription in XML file, but NPCShop Objects");
+					}
 				}
 				else if(tmp2.getAttribute(0).getValue().equals("6"))
 				{
-					//TODO: ADD CHECKPOINT
+					//TODO: ADD STUFF
 				}
 				else if(Integer.parseInt(tmp2.getAttribute(0).getValue()) >= 100)
 				{

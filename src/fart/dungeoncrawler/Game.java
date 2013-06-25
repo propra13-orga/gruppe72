@@ -131,10 +131,10 @@ public class Game extends JPanel implements Runnable
 
 				//BufferedImage si = ImageIO.read(new File("res/shop.png"));
 				ActorDescription actDesc = new ActorDescription("res/shop.png", 80, 80, new Stats(5, 5, 3, 1, 25, 8, 0), Heading.Down);
-				nshop = new NPCShop(this, actDesc, new Vector2(32 * 11, 32), new NPCDescription("res/shop.png", NPCType.Shop.ordinal(), actDesc), new Rectangle(32 * 11 - 16, 64 - 16, 64, 64));
+				/*nshop = new NPCShop(this, new Vector2(32 * 11, 32), new NPCDescription("res/shop.png", NPCType.Shop.ordinal(), actDesc), new Rectangle(32 * 11 - 16, 64 - 16, 64, 64));
 				manager.addObject(nshop);
 				collision.addTriggerOnKey(nshop);
-				collision.addStaticObject(nshop.getCollisionRect());
+				collision.addStaticObject(nshop.getCollisionRect());*/
 				
 
 				//eboss = new BossEnemy(this, new Vector2(90, 160), ed);

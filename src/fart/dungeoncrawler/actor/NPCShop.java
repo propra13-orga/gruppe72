@@ -10,7 +10,7 @@ public class NPCShop extends NPCTrigger {
 	private Game game;
 	private Rectangle triggerArea;
 
-	public NPCShop(Game game, ActorDescription actDesc, Vector2 position,
+	public NPCShop(Game game, Vector2 position,
 			NPCDescription npcDesc, Rectangle colRect) {
 		super(game, position, npcDesc);
 		this.game = game;

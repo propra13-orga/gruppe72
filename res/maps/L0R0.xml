@@ -57,10 +57,10 @@
 			<maxHealth>150</maxHealth>
 			<maxMana>120</maxMana>
 		</actor>
-		<actor name="npc" id="5">
-			<spritesheet>res/player.png</spritesheet>
-			<maxHealth>150</maxHealth>
-			<maxMana>120</maxMana>
+		<actor name="npcshop" id="5">
+			<spritesheet>res/shop.png</spritesheet>
+			<maxHealth>100</maxHealth>
+			<maxMana>100</maxMana>
 		</actor>
 	</descriptions>
 	<gameobjects>
@@ -127,6 +127,10 @@
 			<actor id="4">
 				<positionX>13</positionX>
 				<positionY>1</positionY>
+			</actor>
+			<actor id="5">
+				<positionX>5</positionX>
+				<positionY>13</positionY>
 			</actor>
 		</actors>
 	</gameobjects>
