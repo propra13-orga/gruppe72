@@ -138,6 +138,12 @@
 				<positionY>13</positionY>
 			</actor>
 		</actors>
+		<items>
+			<item id="107">
+				<positionX>4</positionX>
+				<positionY>1</positionY>
+			</item>
+		</items>
 	</gameobjects>
 </map>
 

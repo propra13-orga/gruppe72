@@ -4,6 +4,20 @@ import java.util.ArrayList;
 
 import fart.dungeoncrawler.actor.Stats;
 
+/*
+ * 		 ID	ITEM  -  FOR XML FILES ALWAYS ADD 100 TO ID
+ * 		------------------------------
+ * 		  0	Small Healpotion
+ * 		  1 Small Manapotion
+ * 		  2 Leather Armor
+ * 		  3	Leather Gloves
+ * 		  4	Leather Boots
+ * 		  5	Rusty Helmet
+ * 		  6	Ring
+ * 		  7	Sword
+ * 		  8 Staff
+ */
+
 public class ItemCollection {
 	private ArrayList<BaseItem> itemCollection;
 	private static ItemCollection instance;
@@ -50,5 +64,9 @@ public class ItemCollection {
 	
 	public BaseItem getByID(int id) {
 		return itemCollection.get(id);
+	}
+	
+	public int getItemCount() {
+		return itemCollection.size();
 	}
 }

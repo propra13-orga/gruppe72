@@ -127,8 +127,6 @@ public class Game extends JPanel implements Runnable
 			
 			collision.addDynamicObject(player);
 			manager.addObject(player);
-			
-			MapItem mp = new MapItem(this, 4, new Vector2(164, 87));
 	}
 	
 	public void playerDead() {

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import fart.dungeoncrawler.actor.*;
 import fart.dungeoncrawler.enums.NPCType;
+import fart.dungeoncrawler.items.ItemCollection;
 import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
 import Utils.Vector2;
@@ -384,13 +385,20 @@ public class MapLoader
 				else if(Integer.parseInt(tmp2.getAttribute(0).getValue()) >= 100)
 				{
 					int itemID = Integer.parseInt(tmp2.getAttribute(0).getValue())-100;
-					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
-					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
 					
-					//TODO: Add item with itemID to position (posX,posY)
+					if(itemID < ItemCollection.getInstance().getItemCount())
+					{
+						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+						MapItem mp = new MapItem(game, itemID, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE));
+					}
+					else
+					{
+						System.err.println("Item with ID "+itemID+" does not exist.");
+					}
 				}
 				// Load ALL checkpoints
-				else if(tmp2.getAttribute(0).getValue().equals("3")) {
+				/*else if(tmp2.getAttribute(0).getValue().equals("3")) {
 					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
 					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
 					
@@ -400,7 +408,7 @@ public class MapLoader
 					CheckPoint cp = new CheckPoint(game, dManager, collision, tilemap, new Rectangle(posX, posY, 32, 32));
 					sManager.addObject(cp);
 					collision.addTriggerOnKey(cp);
-				}
+				}*/
 			}
 		}
 	}
