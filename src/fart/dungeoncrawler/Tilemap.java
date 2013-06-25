@@ -15,8 +15,8 @@ public class Tilemap implements IDrawable {
 	
 	private int actRoom[][];
 	private final int ROOM_SIZE = 15;
-	public static final int ROOM_WIDTH = 32;
-	public static final int ROOM_HEIGHT = 20;
+	public static final int ROOM_WIDTH = 15;
+	public static final int ROOM_HEIGHT = 15;
 	private MapLoader loader;
 	private String name;
 	public String getName() { return name; }

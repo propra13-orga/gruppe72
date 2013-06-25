@@ -3,8 +3,6 @@ package Utils;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import fart.dungeoncrawler.Tilemap;
-
 public class TextureSplitter {
 	
 	//Splits a texture into an array of BufferedImages. A whole row is split.

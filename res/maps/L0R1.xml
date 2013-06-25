@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <map>
-	<name>L0R0</name>
+	<name>L0R1</name>
 	<width>15</width>
 	<height>15</height>
 	<tiles>
 		###############
-		###           #
-		###    ###    #
-		###     #     #
+		#             #
+		#      ###    #
+		#       #     #
 		#####   #     #
 		    #   #     #
 		#   #   #     #
 		#   #   #     #
 		#   #   #     #
 		#       #     #
-		#########   ###
+		# ######    ###
 		#     #       #
 		#     #       #
 		###           #
@@ -43,10 +43,10 @@
 	<gameobjects>
 		<objects>
 			<object id="0">
-				<positionX>14</positionX>
-				<positionY>5</positionY>
-				<mapToName>L0R1.xml</mapToName>
-				<mapToX>1</mapToX>
+				<positionX>3</positionX>
+				<positionY>14</positionY>
+				<mapToName>res/maps/L0R2.xml</mapToName>
+				<mapToX>3</mapToX>
 				<mapToY>1</mapToY>
 			</object>
 		</objects>

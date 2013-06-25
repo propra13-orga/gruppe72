@@ -63,7 +63,7 @@ public class GameStateInShop extends BaseGameState {
 
 	@Override
 	public void update(float elapsed) {
-		if(controller.justPressed(KeyEvent.VK_B))
+		if(controller.justPressed(KeyEvent.VK_ESCAPE))
 			game.setGameState(GameState.InGame);
 		
 		shop.update(elapsed);

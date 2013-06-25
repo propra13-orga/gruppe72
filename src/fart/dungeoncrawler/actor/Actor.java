@@ -24,9 +24,11 @@ public abstract class Actor extends GameObject implements IUpdateable {
 	protected ActorDescription description;
 	
 	public Actor(Game game, ActorDescription desc, Vector2 position) {
-		this.health = desc.getHealth();
-		this.mana = desc.getMana();
+		//this.health = desc.getHealth();
+		//this.mana = desc.getMana();
 		this.stats = desc.getStats();
+		health = new Health(stats.getStamina() * Stats.HEALTH_PER_STAM);
+		mana = new Mana(stats.getWill() * Stats.MANA_PER_WILL);
 		this.heading = desc.getHeading();
 		this.screenPosition = position;
 		this.description = desc;

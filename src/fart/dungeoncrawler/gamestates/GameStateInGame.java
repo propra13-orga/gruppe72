@@ -41,11 +41,6 @@ public class GameStateInGame extends BaseGameState {
 		if(controller.justPressed(KeyEvent.VK_ESCAPE))
 			game.setGameState(GameState.InMenu);
 		
-		if(controller.justPressed(KeyEvent.VK_B)) {
-			game.setGameState(GameState.InShop);
-			((GameStateInShop)game.getGameState()).setCurrentActor(player);
-		}
-		
 		if(controller.justPressed(KeyEvent.VK_I)) {
 			game.setGameState(GameState.InInventory);
 			((GameStateInInventory)game.getGameState()).setCurrentActor(player);

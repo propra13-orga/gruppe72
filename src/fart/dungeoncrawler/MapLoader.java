@@ -3,6 +3,7 @@ package fart.dungeoncrawler;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import fart.dungeoncrawler.actor.BaseDescription;
 
@@ -16,14 +17,19 @@ import nu.xom.*;
  * 		 0	PORTAL
  * 		 1	GOAL
  * 		 2	FIRE (TRAP)
+<<<<<<< HEAD
  * 		 3  CHECKPOINT
+=======
+ * 		 3	MELEEENEMY
+>>>>>>> ee68b76d8868137dca74f1b707fdcce96bd0571f
  */
 
 public class MapLoader
 {
 	private int width, height;
 	private int output[][];
-	private BaseDescription descriptions[];
+	private ArrayList<BaseDescription> descriptions;
+	private String descLoc[][];
 	private Game game;
 	private StaticObjectManager sManager;
 	private DynamicObjectManager dManager;
@@ -116,19 +122,47 @@ public class MapLoader
 		dManager.clearObjects();
 		
 		current = map.getRootElement().getChildElements("descriptions").get(0);
-		descriptions = new BaseDescription[current.getChildElements().size()];
+		descriptions = new ArrayList<BaseDescription>();
+		descLoc = new String[current.getChildElements().size()][2];
 		for(i=0; i<current.getChildElements().size(); i++)
 		{
 			Element tmp = current.getChildElements().get(i);
 			if(tmp.getAttribute(1).getValue().equals("0"))
-				descriptions[i] = new PortalDescription(tmp.getChildElements().get(0).getValue());
+			{
+				descriptions.add(new PortalDescription(tmp.getChildElements().get(0).getValue()));
+			}
 			else if(tmp.getAttribute(1).getValue().equals("1"))
-				descriptions[i] = new BaseDescription(tmp.getChildElements().get(0).getValue());
+			{
+				descriptions.add(new BaseDescription(tmp.getChildElements().get(0).getValue()));
+			}
 			else if(tmp.getAttribute(1).getValue().equals("2"))
-				descriptions[i] = new TrapDescription(tmp.getChildElements().get(0).getValue(),
-													Integer.parseInt(tmp.getChildElements().get(3).getValue()));
+//<<<<<<< HEAD
+				//descriptions[i] = new TrapDescription(tmp.getChildElements().get(0).getValue(),
+				//									Integer.parseInt(tmp.getChildElements().get(3).getValue()));
 			//else if(tmp.getAttribute(1).getValue().equals("3"))
 				//descriptions[i] = new CheckPointDescription(tmp.getChildElements().get(0).getValue());
+//=======
+			{
+				descriptions.add(new TrapDescription(tmp.getChildElements().get(0).getValue(),
+						Integer.parseInt(tmp.getChildElements().get(3).getValue())));
+			}
+			else if(tmp.getAttribute(1).getValue().equals("3"))
+			{
+				boolean isRanged = tmp.getChildElements().get(0).getValue().equals("0")?false:true;
+				descriptions.add(null);
+			}
+			else
+				descriptions.add(null);
+			
+			descLoc[i][0] = tmp.getAttribute(1).getValue();
+			descLoc[i][1] = String.valueOf(descriptions.size()-1);
+		}
+		
+		//DEBUG
+		for(i=0; i<descLoc.length; i++)
+		{
+			System.out.println(descLoc[i][0]+", "+descLoc[i][1]);
+//>>>>>>> ee68b76d8868137dca74f1b707fdcce96bd0571f
 		}
 
 		current = map.getRootElement().getChildElements("gameobjects").get(0);
@@ -142,7 +176,17 @@ public class MapLoader
 				// Load ALL the portals
 				if(tmp2.getAttribute(0).getValue().equals("0"))
 				{
-					PortalDescription pd = (PortalDescription) descriptions[0];
+					//PortalDescription pd = (PortalDescription) descriptions[0];
+					PortalDescription pd = null;
+					for(int k=0; k<descriptions.size() && pd == null; k++)
+						if(descLoc[k][0].equals("0"))
+							pd = (PortalDescription) descriptions.get(Integer.parseInt(descLoc[k][1]));
+					
+					if(pd==null)
+					{
+						System.err.println("No PortalDescription in XML file, but Portal Objects");
+						System.exit(1);
+					}
 					
 					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
 					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
@@ -167,10 +211,21 @@ public class MapLoader
 				// Load ALL the fire traps
 				else if(tmp2.getAttribute(0).getValue().equals("2"))
 				{
+					TrapDescription td = null;
+					for(int k=0; k<descriptions.size() && td == null; k++)
+						if(descLoc[k][0].equals("2"))
+							td = (TrapDescription) descriptions.get(Integer.parseInt(descLoc[k][1]));
+					
+					if(td==null)
+					{
+						System.err.println("No TrapDescription in XML file, but Firetrap Objects");
+						System.exit(1);
+					}
+					
 					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
 					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
 					
-					Trap trap = new Trap(new Vector2(posX,posY));
+					Trap trap = new Trap(td, new Vector2(posX,posY));
 					sManager.addObject(trap);
 					collision.addTrigger(trap);
 				}
@@ -182,7 +237,7 @@ public class MapLoader
 					posX *= Tilemap.TILE_SIZE;
 					posY *= Tilemap.TILE_SIZE;
 					
-					CheckPoint cp = new CheckPoint(game, dManager, sManager, collision, tilemap, new Rectangle(posX, posY, 32, 32));
+					CheckPoint cp = new CheckPoint(game, dManager, collision, tilemap, new Rectangle(posX, posY, 32, 32));
 					sManager.addObject(cp);
 					collision.addTriggerOnKey(cp);
 				}

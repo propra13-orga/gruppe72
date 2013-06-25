@@ -40,6 +40,10 @@ public class Collision {
 		}
 	}
 	
+	public void addStaticObject(Rectangle rect) {
+		staticObjects.add(rect);
+	}
+	
 	/**
 	 * Adds a dynamic Object (GameObject) to the list. 
 	 * @param obj Object to add
@@ -167,7 +171,7 @@ public class Collision {
 		Rectangle colRect = actor.getCollisionRect();
 		
 		for(int i = 0; i < onKeyTriggers.size(); i++) {
-			Rectangle triggerRect = ((GameObject)onKeyTriggers.get(i)).getCollisionRect();
+			Rectangle triggerRect = onKeyTriggers.get(i).getTriggerArea();
 			if(colRect.intersects(triggerRect))
 				onKeyTriggers.get(i).trigger(actor);
 		}

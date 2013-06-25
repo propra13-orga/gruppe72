@@ -15,8 +15,8 @@ import fart.dungeoncrawler.enums.*;
 public class MeleeEnemy extends BaseEnemy {
 	private DynamicObjectState curState;
 	
-	public MeleeEnemy(Game game, ActorDescription actDesc, Vector2 position, EnemyDescription enemyDesc) {
-		super(game, actDesc, position, enemyDesc);
+	public MeleeEnemy(Game game, Vector2 position, EnemyDescription enemyDesc) {
+		super(game, position, enemyDesc);
 		curState = DynamicObjectState.Idle;
 		heading = Heading.Down;
 		
@@ -26,13 +26,6 @@ public class MeleeEnemy extends BaseEnemy {
 	
 	public MeleeEnemy(Game game, CheckPointInfo info) {
 		super(game, info);
-		/*npcDesc = info.getNpcDesc();
-		state = info.getState();
-		velocity = Vector2.Zero;
-		health = info.getHealth();
-		mana = info.getMana();
-		heading = info.getHeading();
-		stats = info.getStats();*/
 		
 		buildAttacks();
 		setCurrentAnimation(curState);

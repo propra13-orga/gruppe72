@@ -11,8 +11,6 @@ import fart.dungeoncrawler.enums.DynamicObjectState;
 
 public class DynamicObjectManager {
 	private ArrayList<Actor> dynamics = new ArrayList<Actor>();
-	//private NewPlayer player;
-	//private int playerID;
 	private ArrayList<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
 	private Game game;

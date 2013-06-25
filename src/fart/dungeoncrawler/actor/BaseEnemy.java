@@ -16,10 +16,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	protected Animation curAnim;
 	protected int aggroRange;
 	protected int attackRange;
-//<<<<<<< HEAD
-//=======
 	protected int spellRange;
-//>>>>>>> 21dccc14f957fd3d6854ea1459a695cb5bf83e50
 	protected HashMap<DynamicObjectState, HashMap<Heading, Animation>> animations;
 	protected Attack simpleAttack;
 	
@@ -29,8 +26,8 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	protected float spSpeed = 4.0f;
 	protected BufferedImage spTex;
 	
-	public BaseEnemy(Game game, ActorDescription actDesc, Vector2 position, EnemyDescription enemyDesc) {
-		super(game, actDesc, position, (NPCDescription)enemyDesc);
+	public BaseEnemy(Game game, Vector2 position, EnemyDescription enemyDesc) {
+		super(game, position, (NPCDescription)enemyDesc);
 		this.aggroRange = enemyDesc.getAggroRange();
 		this.attackRange = enemyDesc.getAttackRange();
 		this.enemyDesc = enemyDesc;
@@ -41,7 +38,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	}
 	
 	public BaseEnemy(Game game, CheckPointInfo info) {
-		super(game, info.getActDesc(), info.getPosition(), info.getNpcDesc());
+		super(game, info.getPosition(), info.getNpcDesc());
 		enemyDesc = info.getEnemyDesc();
 		npcDesc = info.getNpcDesc();
 		state = info.getState();
@@ -58,7 +55,6 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	protected void buildAnimations(BufferedImage spriteSheet) {
 		BufferedImage[] bi = new BufferedImage[1];
 		bi[0] = spriteSheet;
-		//curAnim = new Animation(bi, 0);
 		
 		try {
 			//Load SpriteSheet
@@ -204,7 +200,9 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	
 	@Override
 	public void update(float elapsed) {
+		machine.update(elapsed);
 		state = machine.getState();
+
 		if(state == DynamicObjectState.Terminated) {
 			return;
 		}
@@ -238,6 +236,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 					mana.reduceMana(simpleSpell.getManaCost());
 					simpleSpell.activate();
 					manager.spawnSpell(this, simpleSpell.getProjectile(startPos, heading), simpleSpell);
+					System.out.println("Spell!");
 				}
 			}
 		}
@@ -314,7 +313,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 			setHeading();
 		}
 		
-		machine.update(elapsed);
+		
 	}
 
 }

@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <map>
-	<name>L0R0</name>
+	<name>L0R2</name>
 	<width>15</width>
 	<height>15</height>
 	<tiles>
-		###############
+		### ###########
+		#             #
+		#             #
+		####### #######
 		#             #
 		#             #
 		#             #
-		#   ##   ##  ##
-		#   ## # ##    
+		#### ##### ####
 		#      #      #
-		#    #####    #
 		#      #      #
-		#   ## # ######
-		#   ##   ######
-		#        ######
-		#        ######
-		#        ######
+		#      #      #
+		###### # ######
+		#             #
+		#             #
 		###############
 	</tiles>
 	<descriptions>
@@ -39,24 +39,15 @@
 			<colHeight>32</colHeight>
 			<damage>1</damage>
 		</trap>
-		<actor name="meleeenemy" id="3">
-			<spritesheet>res/player.png</spritesheet>
-			<isRanged>0</isRanged>
-			<aggroRange>96</aggroRange>
-			<attackRange>16</attackRange>
-			<type>3</type>
-			<maxHealth>100</maxHealth>
-			<maxMana>100</maxMana>
-		</actor>
 	</descriptions>
 	<gameobjects>
 		<objects>
 			<object id="0">
 				<positionX>14</positionX>
 				<positionY>5</positionY>
-				<mapToName>res/maps/L0R1.xml</mapToName>
+				<mapToName>L0R1.xml</mapToName>
 				<mapToX>1</mapToX>
-				<mapToY>5</mapToY>
+				<mapToY>1</mapToY>
 			</object>
 		</objects>
 		<traps>
@@ -66,10 +57,6 @@
 			</trap>
 			<trap id="2">
 				<positionX>2</positionX>
-				<positionY>1</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>3</positionX>
 				<positionY>1</positionY>
 			</trap>
 			<trap id="2">

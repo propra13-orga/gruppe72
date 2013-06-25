@@ -18,7 +18,6 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 	
 	private Game game;
 	private DynamicObjectManager dManager;
-	private StaticObjectManager sManager;
 	private Collision collision;
 	
 	private Tilemap map;
@@ -27,10 +26,9 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 	private CheckPointInfo playerInfo;
 	private Rectangle rect;
 	
-	public CheckPoint(Game game, DynamicObjectManager dManager, StaticObjectManager sManager, Collision collision, Tilemap map, Rectangle rect) {
+	public CheckPoint(Game game, DynamicObjectManager dManager, Collision collision, Tilemap map, Rectangle rect) {
 		this.game = game;
 		this.dManager = dManager;
-		this.sManager = sManager;
 		this.collision = collision;
 		this.map = map;
 		this.rect = rect;
@@ -165,5 +163,10 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 	public void terminate() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Rectangle getTriggerArea() {
+		return rect;
 	}
 }

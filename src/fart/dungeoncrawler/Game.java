@@ -3,6 +3,7 @@ package fart.dungeoncrawler;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +61,8 @@ public class Game extends JPanel implements Runnable
 	//DEBUG
 	private MeleeEnemy e;
 	private BossEnemy eboss;
-	private static final Vector2 PLAYER_START_POS = new Vector2(27 * Tilemap.TILE_SIZE, 7 * Tilemap.TILE_SIZE);
+	private NPCShop nshop;
+	private static final Vector2 PLAYER_START_POS = new Vector2(13 * Tilemap.TILE_SIZE, 2 * Tilemap.TILE_SIZE);
 	
 	public Game()
 	{
@@ -92,13 +94,10 @@ public class Game extends JPanel implements Runnable
 		states.put(GameState.InGame, new GameStateInGame(this));
 		states.put(GameState.InShop, new GameStateInShop(this));
 		states.put(GameState.InInventory, new GameStateInInventory(this));
+		states.put(GameState.InConversation, new GameStateInConversation(this));
 		
 		setGameState(GameState.InMenu);
-		//setGameState(GameState.InShop);
-		//Inventory debugInventory = new Inventory(controller);
 		((GameStateInShop)states.get(GameState.InShop)).setCurrentShop(new Shop(controller));
-		//((GameStateInShop)states.get(GameState.InShop)).setCurrentInventory(debugInventory);
-		//((GameStateInInventory)states.get(GameState.InInventory)).setCurrentInventory(debugInventory);
 		
 		ItemCollection.createNewInstace();
 	}
@@ -110,6 +109,10 @@ public class Game extends JPanel implements Runnable
 		
 		currentGameState = states.get(state);
 		currentGameState.activate();
+	}
+	
+	public void setShopActor(Actor act) {
+		((GameStateInShop)states.get(GameState.InShop)).setCurrentActor(act);
 	}
 	
 	public void startGame(boolean newGame) {
@@ -124,22 +127,27 @@ public class Game extends JPanel implements Runnable
 			BufferedImage bi;
 			try {
 				bi = ImageIO.read(new File("res/player.png"));
-				EnemyDescription ed = new EnemyDescription(false, bi, 96, 16, 3, 100, 100, null, null);
-				//e = new MeleeEnemy(ed, collision, manager);
+				EnemyDescription ed = new EnemyDescription(false, bi, 96, 16, 3, 100, 100, new Stats(8, 6, 5, 4, 55, 8, 0), Heading.Down);
+
+				BufferedImage si = ImageIO.read(new File("res/shop.png"));
 				ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 80, 80, new Stats(5, 5, 3, 1, 25, 8, 0), Heading.Down);
-				//e = new MeleeEnemy(this, actDesc, new Vector2(90, 160), ed);
-				//ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 80, 80, new Stats(), Heading.Down);
-				/*e = new MeleeEnemy(this, actDesc, new Vector2(90, 160), ed);
-				EnemyStateMachine machine = new EnemyStateMachine(e, player);
-				e.setMachine(machine);
-				collision.addDynamicObject(e);
-				manager.addObject(e);*/
-				eboss = new BossEnemy(this, actDesc, new Vector2(90, 160), ed);
+				nshop = new NPCShop(this, actDesc, new Vector2(32 * 11, 32), new NPCDescription(si, NPCType.Shop.ordinal(), actDesc), new Rectangle(32 * 11 - 16, 64 - 16, 64, 64));
+				manager.addObject(nshop);
+				collision.addTriggerOnKey(nshop);
+				collision.addStaticObject(nshop.getCollisionRect());
+				
+				eboss = new BossEnemy(this, new Vector2(90, 160), ed);
 				EnemyStateMachine machine = new EnemyStateMachine(eboss, player);
 				eboss.setMachine(machine);
 				collision.addDynamicObject(eboss);
 				collision.addDynamicObject(player);
 				manager.addObject(player);
+				
+				MapItem mp = new MapItem(this, 4, new Vector2(164, 87));
+				NPCTalking talk = new NPCTalking(this, new Vector2(180, 87), new NPCDescription(si, NPCType.Shop.ordinal(), actDesc), new Rectangle(180 - 16, 87 - 16, 64, 64));
+				sManager.addObject(talk);
+				collision.addTriggerOnKey(talk);
+				
 			} catch(IOException e) {
 				System.err.println("Couldn't load image!");
 				System.exit(1);
@@ -177,6 +185,10 @@ public class Game extends JPanel implements Runnable
 	public void changeMap(String mapTo, Vector2 position) {
 		map.loadMap(mapTo);
 		player.setScreenPosition(position);
+		manager.addObject(player);
+		manager.addObject(nshop);
+		collision.addTriggerOnKey(nshop);
+		collision.addStaticObject(nshop.getCollisionRect());
 	}
 	
 	public void startGameLoop() {

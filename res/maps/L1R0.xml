@@ -1,24 +1,24 @@
 <?xml version="1.0"?>
 <map>
-	<name>L0R0</name>
+	<name>L1R0</name>
 	<width>15</width>
 	<height>15</height>
 	<tiles>
 		###############
 		#             #
-		#             #
-		#             #
-		#   ##   ##  ##
-		#   ## # ##    
+		##           ##
+		# #         # #
+		#  #       #  #
+		#             # 
+		#    #   #    #
+		#     # #     #
 		#      #      #
-		#    #####    #
-		#      #      #
-		#   ## # ######
-		#   ##   ######
-		#        ######
-		#        ######
-		#        ######
-		###############
+		#     # #     #
+		#    #   #    #
+		#         #   #
+		#  #       ####
+		# #           #
+		############# #
 	</tiles>
 	<descriptions>
 		<object name="portal" id="0">
@@ -39,15 +39,6 @@
 			<colHeight>32</colHeight>
 			<damage>1</damage>
 		</trap>
-		<actor name="meleeenemy" id="3">
-			<spritesheet>res/player.png</spritesheet>
-			<isRanged>0</isRanged>
-			<aggroRange>96</aggroRange>
-			<attackRange>16</attackRange>
-			<type>3</type>
-			<maxHealth>100</maxHealth>
-			<maxMana>100</maxMana>
-		</actor>
 	</descriptions>
 	<gameobjects>
 		<objects>
