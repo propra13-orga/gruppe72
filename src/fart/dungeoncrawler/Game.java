@@ -80,7 +80,7 @@ public class Game extends JPanel implements Runnable
 		collision = new Collision();
 		map = new Tilemap(this, sManager, manager, collision);
 		
-		ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 100, 100, new Stats(), Heading.Up);
+		ActorDescription actDesc = new ActorDescription("res/player.png", 100, 100, new Stats(), Heading.Up);
 
 		player = new NewPlayer(this, actDesc, PLAYER_START_POS);
 		manager.addPlayer(player);
@@ -121,9 +121,8 @@ public class Game extends JPanel implements Runnable
 
 			//DEBUG
 			BufferedImage bi;
-			try {
-				bi = ImageIO.read(new File("res/player.png"));
-				EnemyDescription ed = new EnemyDescription(false, bi, 96, 16, 3, 100, 100, null, null);
+			//try {
+				EnemyDescription ed = new EnemyDescription(false, "res/player.png", 96, 16, 3, 100, 100, null, null);
 				//e = new MeleeEnemy(ed, collision, manager);
 				//ActorDescription actDesc = new ActorDescription(new Dimension(32, 32), 80, 80, new Stats(), Heading.Down);
 				/*e = new MeleeEnemy(this, actDesc, new Vector2(90, 160), ed);
@@ -136,10 +135,10 @@ public class Game extends JPanel implements Runnable
 				eboss.setMachine(machine);
 				collision.addDynamicObject(eboss);
 				manager.addObject(eboss);
-			} catch(IOException e) {
+			/*} catch(IOException e) {
 				System.err.println("Couldn't load image!");
 				System.exit(1);
-			}
+			}*/
 	}
 	
 	public void playerDead() {

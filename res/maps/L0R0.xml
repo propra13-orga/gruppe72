@@ -101,6 +101,12 @@
 				<positionY>10</positionY>
 			</trap>
 		</traps>
+		<actors>
+			<actor id="3">
+				<positionX>7</positionX>
+				<positionY>14</positionY>
+			</actor>
+		</actors>
 	</gameobjects>
 </map>
 

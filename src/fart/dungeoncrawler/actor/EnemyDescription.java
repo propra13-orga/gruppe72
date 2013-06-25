@@ -11,7 +11,7 @@ public class EnemyDescription extends NPCDescription{
 	private int attackRange;
 	
 	public EnemyDescription(boolean isRanged,
-							BufferedImage spriteSheet,
+							String spritePath,
 							int aggroRange,
 							int attackRange,
 							int type,
@@ -19,19 +19,19 @@ public class EnemyDescription extends NPCDescription{
 							int maxMana, 
 							Stats stats, 
 							Heading heading) {
-		super(spriteSheet, type, maxHealth, maxMana, stats, heading);
+		super(spritePath, type, maxHealth, maxMana, stats, heading);
 		this.isRanged = isRanged;
 		this.aggroRange = aggroRange;
 		this.attackRange = attackRange;
 	}
 	
 	public EnemyDescription(boolean isRanged,
-			BufferedImage spriteSheet,
+			String spritePath,
 			int aggroRange,
 			int attackRange,
 			int type,
 			ActorDescription aDesc) {
-		super(spriteSheet,
+		super(spritePath,
 				type,
 				aDesc.health.getMaxHealth(),
 				aDesc.mana.getMaxMana(),
