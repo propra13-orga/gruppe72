@@ -62,6 +62,11 @@
 			<maxHealth>100</maxHealth>
 			<maxMana>100</maxMana>
 		</actor>
+		<actor name="npctalking" id="6">
+			<spritesheet>res/shop.png</spritesheet>
+			<maxHealth>100</maxHealth>
+			<maxMana>100</maxMana>
+		</actor>
 	</descriptions>
 	<gameobjects>
 		<objects>
@@ -128,7 +133,7 @@
 				<positionX>13</positionX>
 				<positionY>1</positionY>
 			</actor>
-			<actor id="5">
+			<actor id="6">
 				<positionX>5</positionX>
 				<positionY>13</positionY>
 			</actor>

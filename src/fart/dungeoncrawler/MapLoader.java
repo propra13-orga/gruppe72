@@ -40,7 +40,6 @@ public class MapLoader
 	private int output[][];
 	private ArrayList<ActorDescription> aDescriptions;
 	private ArrayList<BaseDescription> bDescriptions;
-	private String aDescLoc[][];
 	private String descLoc[][];
 	private Game game;
 	private StaticObjectManager sManager;
@@ -189,6 +188,15 @@ public class MapLoader
 				saveToA = true;
 			}
 			else if(tmp.getAttribute(1).getValue().equals("5"))
+			{
+				aDescriptions.add(new NPCDescription(tmp.getChildElements().get(0).getValue(),
+								NPCType.Shop.ordinal(),
+								Integer.parseInt(tmp.getChildElements().get(1).getValue()),
+								Integer.parseInt(tmp.getChildElements().get(2).getValue()),
+								new Stats(), null));
+				saveToA = true;
+			}
+			else if(tmp.getAttribute(1).getValue().equals("6"))
 			{
 				aDescriptions.add(new NPCDescription(tmp.getChildElements().get(0).getValue(),
 								NPCType.Shop.ordinal(),
@@ -353,7 +361,25 @@ public class MapLoader
 				}
 				else if(tmp2.getAttribute(0).getValue().equals("6"))
 				{
-					//TODO: ADD STUFF
+					NPCDescription npcd = null;
+					for(int k=0; k<descLoc.length && npcd == null; k++)
+						if(descLoc[k][0].equals("6"))
+							npcd = (NPCDescription) aDescriptions.get(Integer.parseInt(descLoc[k][1]));
+					
+					if(npcd!=null)
+					{
+						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+						
+						NPCTalking npctalk = new NPCTalking(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE),
+										npcd, new Rectangle(posX*Tilemap.TILE_SIZE-16,posY*Tilemap.TILE_SIZE-16, Tilemap.TILE_SIZE+32, Tilemap.TILE_SIZE+32));
+						sManager.addObject(npctalk);
+						collision.addTriggerOnKey(npctalk);
+					}
+					else
+					{
+						System.err.println("No NPCDescription in XML file, but NPCTalking Objects");
+					}
 				}
 				else if(Integer.parseInt(tmp2.getAttribute(0).getValue()) >= 100)
 				{

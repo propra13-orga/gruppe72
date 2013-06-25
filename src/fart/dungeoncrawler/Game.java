@@ -123,35 +123,12 @@ public class Game extends JPanel implements Runnable
 			resetPlayer();
 
 			//DEBUG
-			//BufferedImage bi;
-
-			//try {
-				//bi = ImageIO.read(new File("res/player.png"));
-				//EnemyDescription ed = new EnemyDescription(false, "res/player.png", 96, 16, 3, 100, 100, new Stats(8, 6, 5, 4, 55, 8, 0), Heading.Down);
-
-				//BufferedImage si = ImageIO.read(new File("res/shop.png"));
-				ActorDescription actDesc = new ActorDescription("res/shop.png", 80, 80, new Stats(5, 5, 3, 1, 25, 8, 0), Heading.Down);
-				/*nshop = new NPCShop(this, new Vector2(32 * 11, 32), new NPCDescription("res/shop.png", NPCType.Shop.ordinal(), actDesc), new Rectangle(32 * 11 - 16, 64 - 16, 64, 64));
-				manager.addObject(nshop);
-				collision.addTriggerOnKey(nshop);
-				collision.addStaticObject(nshop.getCollisionRect());*/
-				
-
-				//eboss = new BossEnemy(this, new Vector2(90, 160), ed);
-				//EnemyStateMachine machine = new EnemyStateMachine(eboss, player);
-				//eboss.setMachine(machine);
-				//collision.addDynamicObject(eboss);
-				collision.addDynamicObject(player);
-				manager.addObject(player);
-				
-				MapItem mp = new MapItem(this, 4, new Vector2(164, 87));
-				NPCTalking talk = new NPCTalking(this, new Vector2(180, 87), new NPCDescription("res/shop.png", NPCType.Shop.ordinal(), actDesc), new Rectangle(180 - 16, 87 - 16, 64, 64));
-				sManager.addObject(talk);
-				collision.addTriggerOnKey(talk);
-			//} catch(IOException e) {
-			//	System.err.println("Couldn't load image!");
-			//	System.exit(1);
-			//}
+			ActorDescription actDesc = new ActorDescription("res/shop.png", 80, 80, new Stats(5, 5, 3, 1, 25, 8, 0), Heading.Down);
+			
+			collision.addDynamicObject(player);
+			manager.addObject(player);
+			
+			MapItem mp = new MapItem(this, 4, new Vector2(164, 87));
 	}
 	
 	public void playerDead() {

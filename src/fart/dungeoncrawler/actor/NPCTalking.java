@@ -14,7 +14,8 @@ public class NPCTalking extends NPCTrigger {
 	
 	private String[] dialogs = { "It's really hot today, isn't it?", 
 							"You won't believe: It's so boring to stand here all the day...",
-							"Do we know us?" };
+							"Do we know us?",
+							"I heard of some guy named Dennis Esken...they say he's awesome"};
 
 	public NPCTalking(Game game, Vector2 position, NPCDescription npcDesc, Rectangle colRect) {
 		super(game, position, npcDesc);
