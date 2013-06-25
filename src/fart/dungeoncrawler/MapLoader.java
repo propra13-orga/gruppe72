@@ -16,13 +16,23 @@ import Utils.Vector2;
 import nu.xom.*;
 
 /*
- * 		ID	OBJECT
+ * 		 ID	OBJECT
  * 		------------------
- * 		 0	PORTAL
- * 		 1	GOAL
- * 		 2	FIRE (TRAP)
- * 		 3	MELEEENEMY
- * 		 4	BOSSENEMY
+ * 		  0	PORTAL
+ * 		  1	GOAL
+ * 		  2	FIRE (TRAP)
+ * 		  3	MELEEENEMY
+ * 		  4	BOSSENEMY
+ * 		  5	NPC
+ * 		  6 CHECKPOINT
+ * 
+ * 		 ID	ITEM
+ * 		------------------
+ * 		100 
+ * 		101
+ * 		 .
+ * 		 .
+ * 		 .
  */
 
 public class MapLoader
@@ -179,6 +189,15 @@ public class MapLoader
 						null, null));
 				saveToA = true;
 			}
+			else if(tmp.getAttribute(1).getValue().equals("5"))
+			{
+				//TODO: adjust
+				aDescriptions.add(new ActorDescription(tmp.getChildElements().get(0).getValue(),
+								Integer.parseInt(tmp.getChildElements().get(1).getValue()),
+								Integer.parseInt(tmp.getChildElements().get(2).getValue()),
+								null, null));
+				saveToA = true;
+			}
 			else
 				bDescriptions.add(null);
 			
@@ -309,6 +328,22 @@ public class MapLoader
 					{
 						System.err.println("No EnemyDescription in XML file, but BossEnemy Objects");
 					}
+				}
+				else if(tmp2.getAttribute(0).getValue().equals("5"))
+				{
+					//TODO: ADD NPC
+				}
+				else if(tmp2.getAttribute(0).getValue().equals("6"))
+				{
+					//TODO: ADD CHECKPOINT
+				}
+				else if(Integer.parseInt(tmp2.getAttribute(0).getValue()) >= 100)
+				{
+					int itemID = Integer.parseInt(tmp2.getAttribute(0).getValue())-100;
+					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+					
+					//TODO: Add item with itemID to position (posX,posY)
 				}
 			}
 		}

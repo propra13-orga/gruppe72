@@ -57,6 +57,11 @@
 			<maxHealth>150</maxHealth>
 			<maxMana>120</maxMana>
 		</actor>
+		<actor name="npc" id="5">
+			<spritesheet>res/player.png</spritesheet>
+			<maxHealth>150</maxHealth>
+			<maxMana>120</maxMana>
+		</actor>
 	</descriptions>
 	<gameobjects>
 		<objects>
@@ -66,6 +71,10 @@
 				<mapToName>res/maps/L0R1.xml</mapToName>
 				<mapToX>1</mapToX>
 				<mapToY>5</mapToY>
+			</object>
+			<object id="1">
+				<positionX>3</positionX>
+				<positionY>13</positionY>
 			</object>
 		</objects>
 		<traps>
