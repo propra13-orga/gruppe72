@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import fart.dungeoncrawler.actor.ActorDescription;
 import fart.dungeoncrawler.actor.BaseDescription;
+import fart.dungeoncrawler.actor.BossEnemy;
 import fart.dungeoncrawler.actor.EnemyDescription;
 import fart.dungeoncrawler.actor.MeleeEnemy;
 import fart.dungeoncrawler.npc.states.EnemyStateMachine;
@@ -21,6 +22,7 @@ import nu.xom.*;
  * 		 1	GOAL
  * 		 2	FIRE (TRAP)
  * 		 3	MELEEENEMY
+ * 		 4	BOSSENEMY
  */
 
 public class MapLoader
@@ -163,6 +165,20 @@ public class MapLoader
 						null, null));
 				saveToA = true;
 			}
+			// Add BossEnemy EnemyDescription
+			else if(tmp.getAttribute(1).getValue().equals("4"))
+			{
+				boolean isRanged = tmp.getChildElements().get(1).getValue().equals("0")?false:true;
+				aDescriptions.add(new EnemyDescription(isRanged,
+						tmp.getChildElements().get(0).getValue(),
+						Integer.parseInt(tmp.getChildElements().get(2).getValue()),
+						Integer.parseInt(tmp.getChildElements().get(3).getValue()),
+						Integer.parseInt(tmp.getChildElements().get(4).getValue()),
+						Integer.parseInt(tmp.getChildElements().get(5).getValue()),
+						Integer.parseInt(tmp.getChildElements().get(6).getValue()),
+						null, null));
+				saveToA = true;
+			}
 			else
 				bDescriptions.add(null);
 			
@@ -197,21 +213,22 @@ public class MapLoader
 						if(descLoc[k][0].equals("0"))
 							pd = (PortalDescription) bDescriptions.get(Integer.parseInt(descLoc[k][1]));
 					
-					if(pd==null)
+					if(pd!=null)
+					{
+						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+						String mapToName = tmp2.getChildElements().get(2).getValue();
+						int mapToX = Integer.parseInt(tmp2.getChildElements().get(3).getValue());
+						int mapToY = Integer.parseInt(tmp2.getChildElements().get(4).getValue());
+						
+						Portal portal = new Portal(game, pd.getSpritePath(), mapToName, new Vector2(posX,posY), new Vector2(mapToX,mapToY));
+						sManager.addObject(portal);
+						collision.addTrigger(portal);
+					}
+					else
 					{
 						System.err.println("No PortalDescription in XML file, but Portal Objects");
-						System.exit(1);
 					}
-					
-					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
-					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
-					String mapToName = tmp2.getChildElements().get(2).getValue();
-					int mapToX = Integer.parseInt(tmp2.getChildElements().get(3).getValue());
-					int mapToY = Integer.parseInt(tmp2.getChildElements().get(4).getValue());
-					
-					Portal portal = new Portal(game, pd.getSpritePath(), mapToName, new Vector2(posX,posY), new Vector2(mapToX,mapToY));
-					sManager.addObject(portal);
-					collision.addTrigger(portal);
 				}
 				// Load ALL the goals
 				else if(tmp2.getAttribute(0).getValue().equals("1"))
@@ -231,19 +248,21 @@ public class MapLoader
 						if(descLoc[k][0].equals("2"))
 							td = (TrapDescription) bDescriptions.get(Integer.parseInt(descLoc[k][1]));
 					
-					if(td==null)
+					if(td!=null)
+					{
+						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+						
+						Trap trap = new Trap(td, new Vector2(posX,posY));
+						sManager.addObject(trap);
+						collision.addTrigger(trap);
+					}
+					else
 					{
 						System.err.println("No TrapDescription in XML file, but Firetrap Objects");
-						System.exit(1);
 					}
-					
-					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
-					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
-					
-					Trap trap = new Trap(td, new Vector2(posX,posY));
-					sManager.addObject(trap);
-					collision.addTrigger(trap);
 				}
+				// Load ALL the Melee Enemies
 				else if(tmp2.getAttribute(0).getValue().equals("3"))
 				{
 					EnemyDescription ed = null;
@@ -251,20 +270,45 @@ public class MapLoader
 						if(descLoc[k][0].equals("3"))
 							ed = (EnemyDescription) aDescriptions.get(Integer.parseInt(descLoc[k][1]));
 					
-					if(ed==null)
+					if(ed!=null)
+					{
+						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+						
+						MeleeEnemy me = new MeleeEnemy(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE), ed);
+						EnemyStateMachine machine = new EnemyStateMachine(me, game.getPlayer());
+						me.setMachine(machine);
+						
+						dManager.addObject(me);
+					}
+					else
 					{
 						System.err.println("No EnemyDescription in XML file, but MeleeEnemy Objects");
-						System.exit(1);
 					}
+				}
+				// Load ALL the Boss Enemies
+				else if(tmp2.getAttribute(0).getValue().equals("4"))
+				{
+					EnemyDescription ed = null;
+					for(int k=0; k<descLoc.length && ed == null; k++)
+						if(descLoc[k][0].equals("4"))
+							ed = (EnemyDescription) aDescriptions.get(Integer.parseInt(descLoc[k][1]));
 					
-					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
-					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
-					
-					MeleeEnemy me = new MeleeEnemy(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE), ed);
-					EnemyStateMachine machine = new EnemyStateMachine(me, game.getPlayer());
-					me.setMachine(machine);
-					
-					dManager.addObject(me);
+					if(ed!=null)
+					{
+						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+						
+						BossEnemy be = new BossEnemy(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE), ed);
+						EnemyStateMachine machine = new EnemyStateMachine(be, game.getPlayer());
+						be.setMachine(machine);
+						
+						dManager.addObject(be);
+					}
+					else
+					{
+						System.err.println("No EnemyDescription in XML file, but BossEnemy Objects");
+					}
 				}
 			}
 		}

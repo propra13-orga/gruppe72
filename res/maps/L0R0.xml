@@ -48,6 +48,15 @@
 			<maxHealth>100</maxHealth>
 			<maxMana>100</maxMana>
 		</actor>
+		<actor name="bossenemy" id="4">
+			<spritesheet>res/player.png</spritesheet>
+			<isRanged>0</isRanged>
+			<aggroRange>96</aggroRange>
+			<attackRange>32</attackRange>
+			<type>3</type>
+			<maxHealth>150</maxHealth>
+			<maxMana>120</maxMana>
+		</actor>
 	</descriptions>
 	<gameobjects>
 		<objects>
@@ -105,6 +114,10 @@
 			<actor id="3">
 				<positionX>7</positionX>
 				<positionY>13</positionY>
+			</actor>
+			<actor id="4">
+				<positionX>13</positionX>
+				<positionY>1</positionY>
 			</actor>
 		</actors>
 	</gameobjects>
