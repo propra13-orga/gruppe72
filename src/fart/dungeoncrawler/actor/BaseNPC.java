@@ -63,7 +63,9 @@ public class BaseNPC extends Actor implements IUpdateable {
 	public void terminate() {
 		velocity = new Vector2();
 		state = DynamicObjectState.Terminated;
-		machine.setState(DynamicObjectState.Terminated);
+		if(machine != null)
+			machine.setState(DynamicObjectState.Terminated);
+		manager.removeObject(this);
 	}
 
 	@Override

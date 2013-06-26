@@ -11,13 +11,16 @@ import javax.imageio.ImageIO;
 import Utils.Vector2;
 
 import fart.dungeoncrawler.actor.*;
+import fart.dungeoncrawler.enums.NPCType;
 import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
 public class CheckPoint extends GameObject implements ITriggerableOnKey {
+	private static final int MAX_LOADS_PER_CP = 2;
 	private static BufferedImage texture;
 	
 	private Game game;
 	private DynamicObjectManager dManager;
+	private StaticObjectManager sManager;
 	private Collision collision;
 	
 	private Tilemap map;
@@ -25,11 +28,13 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 	private ArrayList<CheckPointInfo> infos;
 	private CheckPointInfo playerInfo;
 	private Rectangle rect;
+	private int loads = 0;
 	
 	public CheckPoint(Game game, DynamicObjectManager dManager, Collision collision, Tilemap map, Rectangle rect) {
 		this.game = game;
-		this.dManager = dManager;
-		this.collision = collision;
+		this.dManager = game.getDynamicManager();
+		this.sManager = game.getStaticManager();
+		this.collision = game.getCollision();
 		this.map = map;
 		this.rect = rect;
 		
@@ -113,7 +118,11 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 		}
 	}
 	
-	public void load() {
+	public boolean load() {
+		loads += 1;
+		if(loads > MAX_LOADS_PER_CP)
+			return false;
+		
 		map.loadMap(mapName);
 		
 		dManager.clearObjects();
@@ -122,7 +131,7 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 		for(CheckPointInfo i : infos) {
 			EnemyDescription eDesc = i.getEnemyDesc();
 			NPCDescription nDesc = i.getNpcDesc();
-			ActorDescription aDesc = i.getActDesc();
+			//ActorDescription aDesc = i.getActDesc();
 			if(eDesc != null) {
 				if(!eDesc.getIsRanged()) {
 					if(i.isBoss()) {
@@ -135,13 +144,22 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 					continue;
 				}
 			} else if(nDesc != null) {
-				
+				NPCType type = nDesc.getType();
+				if(type == NPCType.Talking) {
+					new NPCTalking(game, i.getPosition(), nDesc, i.getRectangle());
+				} else if (type == NPCType.Shop) {
+					new NPCShop(game, i.getPosition(), nDesc, i.getRectangle());
+				}
 			}
 		}
 		
 		game.getPlayer().resetCheckpoint(playerInfo);
 		dManager.addObject(game.getPlayer());
-		//dManager.addPlayer(game.getPlayer());
+		
+		if(loads == MAX_LOADS_PER_CP)
+			terminate();
+		
+		return true;
 	}
 
 	@Override
@@ -161,12 +179,17 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 
 	@Override
 	public void terminate() {
-		// TODO Auto-generated method stub
-		
+		collision.removeTriggerOnKey(this);
+		sManager.removeObject(this);
+		texture = null;
 	}
 
 	@Override
 	public Rectangle getTriggerArea() {
 		return rect;
+	}
+
+	public String getMapName() {
+		return mapName;
 	}
 }

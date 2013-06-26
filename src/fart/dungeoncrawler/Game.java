@@ -56,6 +56,7 @@ public class Game extends JPanel implements Runnable
 	public BaseGameState getGameState() { return currentGameState; }
 	
 	private CheckPoint checkPoint = null;
+	private String currentMap;
 	
 	//DEBUG
 	private MeleeEnemy e;
@@ -83,7 +84,7 @@ public class Game extends JPanel implements Runnable
 		collision = new Collision();
 		map = new Tilemap(this, sManager, manager, collision);
 		
-		ActorDescription actDesc = new ActorDescription("res/player.png", 100, 100, new Stats(), Heading.Up);
+		ActorDescription actDesc = new ActorDescription("res/player.png", 100, 100, new Stats(12, 8, 7, 8, 0, 8, 0), Heading.Up);
 
 		player = new NewPlayer(this, actDesc, PLAYER_START_POS);
 		collision.addDynamicObject(player);
@@ -120,6 +121,7 @@ public class Game extends JPanel implements Runnable
 			collision.clearDynamicObjects();
 			collision.clearTriggers();
 			map.loadMap("res/maps/L0R0.xml");
+			currentMap = "res/maps/L0R0.xml";
 			resetPlayer();
 
 			//DEBUG
@@ -130,11 +132,13 @@ public class Game extends JPanel implements Runnable
 				//EnemyDescription ed = new EnemyDescription(false, "res/player.png", 96, 16, 3, 100, 100, new Stats(8, 6, 5, 4, 55, 8, 0), Heading.Down);
 
 				//BufferedImage si = ImageIO.read(new File("res/shop.png"));
-				ActorDescription actDesc = new ActorDescription("res/shop.png", 80, 80, new Stats(5, 5, 3, 1, 25, 8, 0), Heading.Down);
-				nshop = new NPCShop(this, /*actDesc, */new Vector2(32 * 11, 32), new NPCDescription("res/shop.png", NPCType.Shop.ordinal(), actDesc), new Rectangle(32 * 11 - 16, 64 - 16, 64, 64));
-				manager.addObject(nshop);
-				collision.addTriggerOnKey(nshop);
-				collision.addStaticObject(nshop.getCollisionRect());
+			
+			
+				//ActorDescription actDesc = new ActorDescription("res/shop.png", 80, 80, new Stats(5, 5, 3, 1, 25, 8, 0), Heading.Down);
+				//nshop = new NPCShop(this, /*actDesc, */new Vector2(32 * 11, 32), new NPCDescription("res/shop.png", NPCType.Shop.ordinal(), actDesc), new Rectangle(32 * 11 - 16, 64 - 16, 64, 64));
+				//manager.addObject(nshop);
+				//collision.addTriggerOnKey(nshop);
+				//collision.addStaticObject(nshop.getCollisionRect());
 				
 
 				//eboss = new BossEnemy(this, new Vector2(90, 160), ed);
@@ -144,20 +148,34 @@ public class Game extends JPanel implements Runnable
 				collision.addDynamicObject(player);
 				manager.addObject(player);
 				
-				MapItem mp = new MapItem(this, 4, new Vector2(164, 87));
-				NPCTalking talk = new NPCTalking(this, new Vector2(180, 87), new NPCDescription("res/shop.png", NPCType.Shop.ordinal(), actDesc), new Rectangle(180 - 16, 87 - 16, 64, 64));
-				sManager.addObject(talk);
-				collision.addTriggerOnKey(talk);
+				//MapItem mp = new MapItem(this, 4, new Vector2(164, 87));
+				//NPCTalking talk = new NPCTalking(this, new Vector2(180, 87), new NPCDescription("res/shop.png", NPCType.Shop.ordinal(), actDesc), new Rectangle(180 - 16, 87 - 16, 64, 64));
+				//sManager.addObject(talk);
+				//collision.addTriggerOnKey(talk);
+				
+				
 			//} catch(IOException e) {
 			//	System.err.println("Couldn't load image!");
 			//	System.exit(1);
 			//}
+			//ActorDescription actDesc = new ActorDescription("res/shop.png", 80, 80, new Stats(5, 5, 3, 1, 25, 8, 0), Heading.Down);
+			
+			//collision.addDynamicObject(player);
+			//manager.addObject(player);
 	}
 	
 	public void playerDead() {
 		if(checkPoint != null) {
-			checkPoint.load();
-			saveCheckPoint(checkPoint);
+			if(checkPoint.load()) {
+				saveCheckPoint(checkPoint);
+				currentMap = checkPoint.getMapName();
+			}
+			else {
+				setGameState(GameState.InMenu);
+				menu.setGameStarted(false);
+				checkPoint = null;
+			}
+			
 			return;
 		}
 		menu.setGameStarted(false);
@@ -166,11 +184,12 @@ public class Game extends JPanel implements Runnable
 	}
 	
 	private void resetPlayer() {
-		player.setScreenPosition(PLAYER_START_POS);
+		player.setScreenPosition(new Vector2(PLAYER_START_POS));
 		player.getHealth().addHealth(10000);
 		player.getMana().addMana(10000);
 		player.setState(DynamicObjectState.Idle);
 		player.setHeading(Heading.Up);
+		player.setVelocity(Vector2.Zero);
 	}
 	
 	public void saveCheckPoint(CheckPoint cp) {
@@ -179,16 +198,22 @@ public class Game extends JPanel implements Runnable
 	}
 	
 	public void playerWins() {
-		currentState = GameState.InMenu;
+		setGameState(GameState.InMenu);
+		menu.setGameStarted(false);
 	}
 	
 	public void changeMap(String mapTo, Vector2 position) {
 		map.loadMap(mapTo);
 		player.setScreenPosition(position);
 		manager.addObject(player);
-		manager.addObject(nshop);
-		collision.addTriggerOnKey(nshop);
-		collision.addStaticObject(nshop.getCollisionRect());
+		currentMap = mapTo;
+		//manager.addObject(nshop);
+		//collision.addTriggerOnKey(nshop);
+		//collision.addStaticObject(nshop.getCollisionRect());
+	}
+	
+	public String getMapName() {
+		return currentMap;
 	}
 	
 	public void startGameLoop() {

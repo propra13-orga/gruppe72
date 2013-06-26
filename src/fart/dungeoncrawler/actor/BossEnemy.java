@@ -6,10 +6,14 @@ import java.awt.Rectangle;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.Random;
 
 import Utils.Vector2;
 import fart.dungeoncrawler.CheckPointInfo;
 import fart.dungeoncrawler.Game;
+import fart.dungeoncrawler.GoldItem;
+import fart.dungeoncrawler.Portal;
+import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.Heading;
 
@@ -66,7 +70,7 @@ public class BossEnemy extends BaseEnemy {
 		
 		HashMap<Integer, Rectangle> atRects = new HashMap<Integer, Rectangle>();
 		atRects.put(0, new Rectangle(-16, -16, 16, 16));
-		int frameDur = 30;
+		int frameDur = 44;
 		animations.put(DynamicObjectState.Attacking, simpleAttackAnim);
 		simpleAttack = new Attack(15, simpleAttackAnim, atRects, frameDur, this);
 	}
@@ -78,5 +82,35 @@ public class BossEnemy extends BaseEnemy {
 		g2d.fillOval(8, 8, 16, 16);
 		
 		simpleSpell = new Spell(new SpellProjectile(this, spTex, 25, collision), 25, 10, 120, 2.5f);
+	}
+	
+	@Override
+	public void terminate() {
+		velocity = Vector2.Zero;
+		machine.setState(DynamicObjectState.Terminated);
+		collision.removeDynamicObject(this);
+		manager.removeObject(this);
+		
+		String mapTo = new String(game.getMapName());
+		StringBuilder sb = new StringBuilder(mapTo);
+		//sb.deleteCharAt(mapTo.length() - 5);
+		sb.replace(mapTo.length() - 5, mapTo.length() - 4, "0");
+		//sb.append("0");
+		String l = "";
+		l += sb.charAt(10);
+		Integer level = Integer.parseInt(l);
+		level += 1;
+		sb.replace(10, 11, level.toString());
+		String result = sb.toString();
+		
+		Portal p = new Portal(game, result, new Vector2(screenPosition.x / Tilemap.TILE_SIZE, screenPosition.y / Tilemap.TILE_SIZE), new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE));
+		collision.addTriggerOnKey(p);
+		game.getStaticManager().addObject(p);
+		
+		Random r = new Random();
+		if(r.nextFloat() > 0.5f) {
+			int amount = r.nextInt(12);
+			new GoldItem(game, screenPosition, amount);
+		}
 	}
 }

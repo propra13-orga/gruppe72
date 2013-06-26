@@ -1,10 +1,12 @@
 package fart.dungeoncrawler;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import Utils.DamageCalculator;
+import Utils.Vector2;
 
 import fart.dungeoncrawler.actor.*;
 import fart.dungeoncrawler.enums.DynamicObjectState;
@@ -90,7 +92,8 @@ public class DynamicObjectManager {
 		int id = attacker.getID();
 		Rectangle attackRect = attack.getRect(attacker.getHeading());
 		
-		for(Actor defender : dynamics) {
+		for(int i = 0; i < dynamics.size(); i++) {
+			Actor defender = dynamics.get(i);
 			if(defender.getID() == id)
 				continue;
 			
@@ -99,6 +102,8 @@ public class DynamicObjectManager {
 				defender.getHealth().reduceHealth(dmg);
 				defender.setState(DynamicObjectState.Hit);
 				System.out.println(defender.getHealth().getCurrentHealth());
+				if(defender.getHealth().isDead())
+					defender.terminate();
 			}
 		}
 	}
@@ -114,5 +119,28 @@ public class DynamicObjectManager {
 		
 		for(SpellProjectile projectile : projectiles)
 			projectile.draw(g2d);
+		
+		drawHealthbars(g2d);
+	}
+	
+	public void drawHealthbars(Graphics2D graphics) {
+		int startX = 0;
+		int startY = 0;
+
+		for(int i = 0; i < dynamics.size(); i++) {
+			Actor actor = dynamics.get(i);
+			if((actor instanceof BaseEnemy)) {
+				Rectangle rect = actor.getCollisionRect();
+				startX = (int)rect.x;
+				startY = (int)rect.y - 10;
+				int w = (int)rect.getWidth();
+				int h = 6;
+				float perc = (float)actor.getHealth().getCurrentHealth() / (float)actor.getHealth().getMaxHealth();
+				w *= perc;
+				
+				graphics.setColor(Color.red);
+				graphics.fillRect(startX, startY, w, h);
+			}
+		}
 	}
 }

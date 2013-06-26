@@ -27,14 +27,14 @@ public class Stats implements IDrawable {
 	private static final Vector2 START_POS = new Vector2(860, 400);
 	
 	public Stats() {
-		stamina = 10;
+		stamina = 7;
 		strength = 8;
 		agility = 7;
 		will = 8;
 		armor = 0;
 		fireResistant = false;
 		waterResistant = false;
-		damage = 5;
+		damage = 4;
 		spellDamage = 0;
 	}
 	

@@ -11,7 +11,7 @@ import fart.dungeoncrawler.actor.Actor;
 
 import Utils.Vector2;
 
-public class Portal extends GameObject implements ITriggerable {
+public class Portal extends GameObject implements ITriggerableOnKey {
 
 	private String mapTo;
 	private Vector2 pointTo;
@@ -69,6 +69,11 @@ public class Portal extends GameObject implements ITriggerable {
 
 	@Override
 	public void terminate() {
+	}
+
+	@Override
+	public Rectangle getTriggerArea() {
+		return collisionRect;
 	}
 
 	//@Override

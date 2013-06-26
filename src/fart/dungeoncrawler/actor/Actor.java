@@ -22,6 +22,7 @@ public abstract class Actor extends GameObject implements IUpdateable {
 	protected Equipment equip;
 	protected Stats stats;
 	protected ActorDescription description;
+	protected Game game;
 	
 	public Actor(Game game, ActorDescription desc, Vector2 position) {
 		//this.health = desc.getHealth();
@@ -32,6 +33,7 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		this.heading = desc.getHeading();
 		this.screenPosition = position;
 		this.description = desc;
+		this.game = game;
 		
 		Dimension dim = desc.getCollisionDimension();
 		collisionRect = new Rectangle((int)position.x, (int)position.y, dim.width, dim.height);
@@ -155,5 +157,9 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		screenPosition = new Vector2(position.x * Tilemap.TILE_SIZE, position.y * Tilemap.TILE_SIZE);
 		collisionRect.x = (int)screenPosition.x;
 		collisionRect.y = (int)screenPosition.y;
+	}
+	
+	public void setVelocity(Vector2 v) {
+		this.velocity = new Vector2(v);
 	}
 }

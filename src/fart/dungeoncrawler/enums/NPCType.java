@@ -1,7 +1,7 @@
 package fart.dungeoncrawler.enums;
 
 public enum NPCType {
-	Conversation,
+	Talking,
 	Shop,
 	Quest,
 	MeleeEnemy,

@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -105,8 +106,16 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 
 	@Override
 	public void terminate() {
+		velocity = Vector2.Zero;
 		machine.setState(DynamicObjectState.Terminated);
 		collision.removeDynamicObject(this);
+		manager.removeObject(this);
+		
+		Random r = new Random();
+		if(r.nextFloat() > 0.5f) {
+			int amount = r.nextInt(12);
+			new GoldItem(game, screenPosition, amount);
+		}
 	}
 	
 	//calculates the new velocity based on the current one to try to avoid obstacles. 

@@ -115,7 +115,7 @@ public class NewPlayer extends Actor implements IUpdateable {
 			simpleAttackAnim.put(Heading.Down, new Animation(iSADown, 1));
 			HashMap<Integer, Rectangle> atRects = new HashMap<Integer, Rectangle>();
 			atRects.put(0, new Rectangle(-16, -16, 16, 16));
-			int frameDur = 30;
+			int frameDur = 44;
 			simpleAttack = new Attack(15, simpleAttackAnim, atRects, frameDur, this);
 			
 			curAnim = idleAnim.get(heading);
@@ -141,6 +141,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 		collisionRect = info.getRectangle();
 		statusbar.setHealth(health);
 		statusbar.setMana(mana);
+	}
+	
+	public void setIdleAnim() {
+		curAnim = idleAnim.get(heading);
 	}
 
 	private void buildSpell() {
