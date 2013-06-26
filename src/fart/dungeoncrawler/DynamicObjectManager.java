@@ -40,7 +40,7 @@ public class DynamicObjectManager {
 		}
 	}
 
-	//alle objekte löschen
+	//alle objekte lï¿½schen
 	public void clearObjects() {
 		dynamics.clear();
 	}
@@ -129,7 +129,7 @@ public class DynamicObjectManager {
 
 		for(int i = 0; i < dynamics.size(); i++) {
 			Actor actor = dynamics.get(i);
-			if((actor instanceof BaseEnemy)) {
+			if((actor instanceof BaseEnemy) && (actor.getHealth().getCurrentHealth() < actor.getHealth().getMaxHealth())) {
 				Rectangle rect = actor.getCollisionRect();
 				startX = (int)rect.x;
 				startY = (int)rect.y - 10;
