@@ -133,6 +133,10 @@
 				<positionX>13</positionX>
 				<positionY>1</positionY>
 			</actor>
+			<actor id="5">
+				<positionX>6</positionX>
+				<positionY>1</positionY>
+			</actor>
 			<actor id="6">
 				<positionX>5</positionX>
 				<positionY>13</positionY>
