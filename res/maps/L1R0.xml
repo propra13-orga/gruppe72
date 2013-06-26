@@ -15,8 +15,8 @@
 		#      #      #
 		#     # #     #
 		#    #   #    #
-		#         #   #
-		#  #       ####
+		#   #         #
+		#  #        ###
 		# #           #
 		############# #
 	</tiles>
@@ -39,15 +39,47 @@
 			<colHeight>32</colHeight>
 			<damage>1</damage>
 		</trap>
+		<actor name="meleeenemy" id="3">
+			<spritesheet>res/player.png</spritesheet>
+			<isRanged>0</isRanged>
+			<aggroRange>96</aggroRange>
+			<attackRange>16</attackRange>
+			<type>3</type>
+			<maxHealth>100</maxHealth>
+			<maxMana>100</maxMana>
+		</actor>
+		<actor name="bossenemy" id="4">
+			<spritesheet>res/player.png</spritesheet>
+			<isRanged>0</isRanged>
+			<aggroRange>96</aggroRange>
+			<attackRange>32</attackRange>
+			<type>3</type>
+			<maxHealth>150</maxHealth>
+			<maxMana>120</maxMana>
+		</actor>
+		<actor name="npcshop" id="5">
+			<spritesheet>res/shop.png</spritesheet>
+			<maxHealth>100</maxHealth>
+			<maxMana>100</maxMana>
+		</actor>
+		<actor name="npctalking" id="6">
+			<spritesheet>res/shop.png</spritesheet>
+			<maxHealth>100</maxHealth>
+			<maxMana>100</maxMana>
+		</actor>
 	</descriptions>
 	<gameobjects>
 		<objects>
 			<object id="0">
-				<positionX>14</positionX>
-				<positionY>5</positionY>
+				<positionX>13</positionX>
+				<positionY>14</positionY>
 				<mapToName>res/maps/L0R1.xml</mapToName>
 				<mapToX>1</mapToX>
 				<mapToY>5</mapToY>
+			</object>
+			<object id="7">
+				<positionX>3</positionX>
+				<positionY>13</positionY>
 			</object>
 		</objects>
 		<traps>
@@ -92,6 +124,29 @@
 				<positionY>10</positionY>
 			</trap>
 		</traps>
+		<actors>
+			<actor id="3">
+				<positionX>7</positionX>
+				<positionY>13</positionY>
+			</actor>
+			<actor id="4">
+				<positionX>13</positionX>
+				<positionY>1</positionY>
+			</actor>
+			<actor id="5">
+				<positionX>6</positionX>
+				<positionY>1</positionY>
+			</actor>
+			<actor id="6">
+				<positionX>5</positionX>
+				<positionY>13</positionY>
+			</actor>
+		</actors>
+		<items>
+			<item id="107">
+				<positionX>4</positionX>
+				<positionY>1</positionY>
+			</item>
+		</items>
 	</gameobjects>
 </map>
-
