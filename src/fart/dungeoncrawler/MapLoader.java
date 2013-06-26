@@ -266,7 +266,7 @@ public class MapLoader
 					
 					Goal goal = new Goal(new Vector2(posX,posY), game);
 					sManager.addObject(goal);
-					collision.addTrigger(goal);
+					collision.addTriggerOnKey(goal);
 				}
 				// Load ALL the fire traps
 				else if(tmp2.getAttribute(0).getValue().equals("2"))

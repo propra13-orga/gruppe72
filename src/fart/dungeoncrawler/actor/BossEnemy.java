@@ -11,6 +11,7 @@ import java.util.Random;
 import Utils.Vector2;
 import fart.dungeoncrawler.CheckPointInfo;
 import fart.dungeoncrawler.Game;
+import fart.dungeoncrawler.Goal;
 import fart.dungeoncrawler.GoldItem;
 import fart.dungeoncrawler.Portal;
 import fart.dungeoncrawler.Tilemap;
@@ -91,26 +92,31 @@ public class BossEnemy extends BaseEnemy {
 		collision.removeDynamicObject(this);
 		manager.removeObject(this);
 		
-		String mapTo = new String(game.getMapName());
-		StringBuilder sb = new StringBuilder(mapTo);
-		//sb.deleteCharAt(mapTo.length() - 5);
-		sb.replace(mapTo.length() - 5, mapTo.length() - 4, "0");
-		//sb.append("0");
-		String l = "";
-		l += sb.charAt(10);
-		Integer level = Integer.parseInt(l);
-		level += 1;
-		sb.replace(10, 11, level.toString());
-		String result = sb.toString();
-		
-		Portal p = new Portal(game, result, new Vector2(screenPosition.x / Tilemap.TILE_SIZE, screenPosition.y / Tilemap.TILE_SIZE), new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE));
-		collision.addTriggerOnKey(p);
-		game.getStaticManager().addObject(p);
-		
 		Random r = new Random();
 		if(r.nextFloat() > 0.5f) {
 			int amount = r.nextInt(12);
 			new GoldItem(game, screenPosition, amount);
 		}
+		
+		String mapTo = new String(game.getMapName());
+		if (mapTo.equals("res/maps/L2R2.xml")) {
+			Goal g = new Goal(new Vector2(screenPosition.x / Tilemap.TILE_SIZE, screenPosition.y / Tilemap.TILE_SIZE), game);
+			game.getStaticManager().addObject(g);
+			collision.addTriggerOnKey(g);
+		} else {
+			StringBuilder sb = new StringBuilder(mapTo);
+			sb.replace(mapTo.length() - 5, mapTo.length() - 4, "0");
+			String l = "";
+			l += sb.charAt(10);
+			Integer level = Integer.parseInt(l);
+			level += 1;
+			sb.replace(10, 11, level.toString());
+			String result = sb.toString();
+			
+			Portal p = new Portal(game, result, new Vector2(screenPosition.x / Tilemap.TILE_SIZE, screenPosition.y / Tilemap.TILE_SIZE), new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE));
+			collision.addTriggerOnKey(p);
+			game.getStaticManager().addObject(p);
+		}
+		
 	}
 }

@@ -11,7 +11,7 @@ import fart.dungeoncrawler.actor.Actor;
 
 import Utils.Vector2;
 
-public class Goal extends GameObject implements ITriggerable {
+public class Goal extends GameObject implements ITriggerableOnKey {
 	private BufferedImage texture;
 	private Rectangle triggerArea;
 	private Game game;
@@ -53,5 +53,10 @@ public class Goal extends GameObject implements ITriggerable {
 
 	@Override
 	public void terminate() { }
+
+	@Override
+	public Rectangle getTriggerArea() {
+		return triggerArea;
+	}
 
 }
