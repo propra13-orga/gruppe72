@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import fart.dungeoncrawler.actor.*;
+import fart.dungeoncrawler.enums.Heading;
 import fart.dungeoncrawler.enums.NPCType;
 import fart.dungeoncrawler.items.ItemCollection;
 import fart.dungeoncrawler.npc.states.EnemyStateMachine;
@@ -171,7 +172,7 @@ public class MapLoader
 						Integer.parseInt(tmp.getChildElements().get(4).getValue()),
 						Integer.parseInt(tmp.getChildElements().get(5).getValue()),
 						Integer.parseInt(tmp.getChildElements().get(6).getValue()),
-						new Stats(), null));
+						new Stats(), Heading.Down));
 				saveToA = true;
 			}
 			// Add BossEnemy EnemyDescription
@@ -185,7 +186,7 @@ public class MapLoader
 						Integer.parseInt(tmp.getChildElements().get(4).getValue()),
 						Integer.parseInt(tmp.getChildElements().get(5).getValue()),
 						Integer.parseInt(tmp.getChildElements().get(6).getValue()),
-						new Stats(), null));
+						new Stats(), Heading.Down));
 				saveToA = true;
 			}
 			else if(tmp.getAttribute(1).getValue().equals("5"))
@@ -194,7 +195,7 @@ public class MapLoader
 								NPCType.Shop.ordinal(),
 								Integer.parseInt(tmp.getChildElements().get(1).getValue()),
 								Integer.parseInt(tmp.getChildElements().get(2).getValue()),
-								new Stats(), null));
+								new Stats(), Heading.Down));
 				saveToA = true;
 			}
 			else if(tmp.getAttribute(1).getValue().equals("6"))
@@ -203,7 +204,7 @@ public class MapLoader
 								NPCType.Shop.ordinal(),
 								Integer.parseInt(tmp.getChildElements().get(1).getValue()),
 								Integer.parseInt(tmp.getChildElements().get(2).getValue()),
-								new Stats(), null));
+								new Stats(), Heading.Down));
 				saveToA = true;
 			}
 			else
@@ -382,6 +383,19 @@ public class MapLoader
 						System.err.println("No NPCDescription in XML file, but NPCTalking Objects");
 					}
 				}
+				// Load ALL the checkpoints
+				else if(tmp2.getAttribute(0).getValue().equals("7"))
+				{
+					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+					
+					posX *= Tilemap.TILE_SIZE;
+					posY *= Tilemap.TILE_SIZE;
+					
+					CheckPoint cp = new CheckPoint(game, dManager, collision, tilemap, new Rectangle(posX, posY, 32, 32));
+					sManager.addObject(cp);
+					collision.addTriggerOnKey(cp);
+				}
 				else if(Integer.parseInt(tmp2.getAttribute(0).getValue()) >= 100)
 				{
 					int itemID = Integer.parseInt(tmp2.getAttribute(0).getValue())-100;
@@ -397,18 +411,6 @@ public class MapLoader
 						System.err.println("Item with ID "+itemID+" does not exist.");
 					}
 				}
-				// Load ALL checkpoints
-				/*else if(tmp2.getAttribute(0).getValue().equals("3")) {
-					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
-					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
-					
-					posX *= Tilemap.TILE_SIZE;
-					posY *= Tilemap.TILE_SIZE;
-					
-					CheckPoint cp = new CheckPoint(game, dManager, collision, tilemap, new Rectangle(posX, posY, 32, 32));
-					sManager.addObject(cp);
-					collision.addTriggerOnKey(cp);
-				}*/
 			}
 		}
 	}
