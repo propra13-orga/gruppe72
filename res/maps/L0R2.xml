@@ -105,6 +105,14 @@
 				<positionX>13</positionX>
 				<positionY>1</positionY>
 			</actor>
+			<actor id="3">
+				<positionX>13</positionX>
+				<positionY>10</positionY>
+			</actor>
+			<actor id="3">
+				<positionX>11</positionX>
+				<positionY>10</positionY>
+			</actor>
 		</actors>
 		<items>
 			<item id="107">
