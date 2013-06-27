@@ -84,14 +84,6 @@
 		</objects>
 		<traps>
 			<trap id="2">
-				<positionX>2</positionX>
-				<positionY>2</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>1</positionX>
-				<positionY>3</positionY>
-			</trap>
-			<trap id="2">
 				<positionX>12</positionX>
 				<positionY>4</positionY>
 			</trap>
@@ -110,12 +102,8 @@
 				<positionY>13</positionY>
 			</actor>
 			<actor id="5">
-				<positionX>6</positionX>
+				<positionX>13</positionX>
 				<positionY>1</positionY>
-			</actor>
-			<actor id="6">
-				<positionX>5</positionX>
-				<positionY>13</positionY>
 			</actor>
 		</actors>
 		<items>

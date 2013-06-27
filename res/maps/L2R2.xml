@@ -15,7 +15,7 @@
 		#             #
 		####### #######
 		####### #######
-	        #              
+	    #              
 		#             #
 		#             #
 		###############
@@ -70,16 +70,13 @@
 	</descriptions>
 	<gameobjects>
 		<objects>
-			<object id="0">
-				<positionX>14</positionX>
-				<positionY>5</positionY>
-				<mapToName>res/maps/L0R1.xml</mapToName>
-				<mapToX>1</mapToX>
-				<mapToY>5</mapToY>
-			</object>
 			<object id="7">
 				<positionX>3</positionX>
 				<positionY>13</positionY>
+			</object>
+			<object id="1">
+				<positionX>7</positionX>
+				<positionY>1</positionY>
 			</object>
 		</objects>
 		<traps>
@@ -130,8 +127,8 @@
 				<positionY>13</positionY>
 			</actor>
 			<actor id="4">
-				<positionX>13</positionX>
-				<positionY>1</positionY>
+				<positionX>7</positionX>
+				<positionY>2</positionY>
 			</actor>
 			<actor id="5">
 				<positionX>6</positionX>
