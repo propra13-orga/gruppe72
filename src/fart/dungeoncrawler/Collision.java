@@ -1,5 +1,7 @@
 package fart.dungeoncrawler;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
@@ -28,6 +30,8 @@ public class Collision {
 	public void changeMap(MapLoader loader) {
 		staticObjects.clear();
 		triggers.clear();
+		onKeyTriggers.clear();
+		dynamicObjects.clear();
 		
 		int[][] map = loader.getMap();
 		
@@ -120,7 +124,12 @@ public class Collision {
 			if(o.equals(collider))
 				continue;
 			
-			if(o.getCollisionRect().intersects(rect))
+			Rectangle rect2 = new Rectangle(o.getCollisionRect());
+			rect2.x -= 1;
+			rect2.y -= 1;
+			rect2.width += 1;
+			rect2.height += 1;
+			if(rect2.intersects(rect))
 				return true;
 		}
 		
@@ -174,6 +183,19 @@ public class Collision {
 			Rectangle triggerRect = onKeyTriggers.get(i).getTriggerArea();
 			if(colRect.intersects(triggerRect))
 				onKeyTriggers.get(i).trigger(actor);
+		}
+	}
+	
+	public void drawCollisionRects(Graphics2D graphics) {
+		graphics.setColor(Color.red);
+		for(int i = 0; i < dynamicObjects.size(); i++) {
+			Rectangle r = dynamicObjects.get(i).getCollisionRect();
+			graphics.drawRect(r.x, r.y, (int)r.getWidth(), (int)r.getHeight());
+		}
+		graphics.setColor(Color.orange);
+		for(int i = 0; i < staticObjects.size(); i++) {
+			Rectangle r = staticObjects.get(i);
+			graphics.drawRect(r.x, r.y, (int)r.getWidth(), (int)r.getHeight());
 		}
 	}
 }

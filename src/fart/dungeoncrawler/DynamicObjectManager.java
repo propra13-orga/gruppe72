@@ -6,7 +6,6 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import Utils.DamageCalculator;
-import Utils.Vector2;
 
 import fart.dungeoncrawler.actor.*;
 import fart.dungeoncrawler.enums.DynamicObjectState;
@@ -40,7 +39,7 @@ public class DynamicObjectManager {
 		}
 	}
 
-	//alle objekte lï¿½schen
+	//alle objekte löschen
 	public void clearObjects() {
 		dynamics.clear();
 	}
@@ -51,6 +50,10 @@ public class DynamicObjectManager {
 	
 	//spieler und objekte updaten
 	public void update(float elapsed) {
+		//DEBUG
+		//if(attackRects.size() != 0)
+		//	attackRects.clear();
+		
 		for(int i = 0; i < dynamics.size(); i++)
 			dynamics.get(i).update(elapsed);
 		
@@ -98,7 +101,7 @@ public class DynamicObjectManager {
 				continue;
 			
 			if(defender.getCollisionRect().intersects(attackRect)) {
-				int dmg = (int)DamageCalculator.calcDamage(attacker, defender);
+				float dmg = DamageCalculator.calcDamage(attacker, defender);
 				defender.getHealth().reduceHealth(dmg);
 				defender.setState(DynamicObjectState.Hit);
 				System.out.println(defender.getHealth().getCurrentHealth());
@@ -121,6 +124,11 @@ public class DynamicObjectManager {
 			projectile.draw(g2d);
 		
 		drawHealthbars(g2d);
+		
+		if(Game.debugDraw) {
+			drawCollisionRects(g2d);
+			game.getCollision().drawCollisionRects(g2d);
+		}
 	}
 	
 	public void drawHealthbars(Graphics2D graphics) {
@@ -129,18 +137,28 @@ public class DynamicObjectManager {
 
 		for(int i = 0; i < dynamics.size(); i++) {
 			Actor actor = dynamics.get(i);
-			if((actor instanceof BaseEnemy) && (actor.getHealth().getCurrentHealth() < actor.getHealth().getMaxHealth())) {
+			if((actor instanceof BaseEnemy)) { // && actor.getHealth().getCurrentHealth() < actor.getHealth().getMaxHealth()
+				
 				Rectangle rect = actor.getCollisionRect();
 				startX = (int)rect.x;
-				startY = (int)rect.y - 10;
+				startY = (int)rect.y - 6;
 				int w = (int)rect.getWidth();
-				int h = 6;
+				int h = 4;
 				float perc = (float)actor.getHealth().getCurrentHealth() / (float)actor.getHealth().getMaxHealth();
 				w *= perc;
 				
-				graphics.setColor(Color.red);
+				graphics.setColor(new Color(1.0f - perc , perc, 0.0f, 0.6f));
 				graphics.fillRect(startX, startY, w, h);
 			}
+		}
+	}
+	
+	public void drawCollisionRects(Graphics2D graphics) {
+		graphics.setColor(Color.cyan);
+		
+		for(int i = 0; i < projectiles.size(); i++) {
+			Rectangle r = projectiles.get(i).getCollisionRect();
+			graphics.drawRect(r.x, r.y, (int)r.getWidth(), (int)r.getHeight());
 		}
 	}
 }

@@ -37,8 +37,8 @@ public class StatusBar implements IDrawable {
 	
 	@Override
 	public void draw(Graphics2D graphics) {
-		int hp = health.getCurrentHealth();
-		int maxHP = health.getMaxHealth();
+		int hp = (int)health.getCurrentHealth();
+		int maxHP = (int)health.getMaxHealth();
 		
 		float percent = (float)hp/maxHP;
 		int xStart = healthRect.x;

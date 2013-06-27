@@ -10,6 +10,7 @@ import fart.dungeoncrawler.gamestates.GameStateInShop;
 
 public class Stats implements IDrawable {
 	public static final int HEALTH_PER_STAM = 10;
+	public static final float HEALTH_REG_PER_STAM = 0.15f;
 	public static final int MANA_PER_WILL = 10;
 	public static final float SPELL_DMG_PER_WILL = 0.25f;
 	
@@ -27,7 +28,7 @@ public class Stats implements IDrawable {
 	private static final Vector2 START_POS = new Vector2(860, 400);
 	
 	public Stats() {
-		stamina = 7;
+		stamina = 4;
 		strength = 8;
 		agility = 7;
 		will = 8;
@@ -243,4 +244,7 @@ public class Stats implements IDrawable {
 		this.spellDamage -= amount;
 	}
 
+	public float getHealthRegAmount() {
+		return stamina * HEALTH_REG_PER_STAM;
+	}
 }

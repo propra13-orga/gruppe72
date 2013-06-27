@@ -114,7 +114,7 @@ public class NewPlayer extends Actor implements IUpdateable {
 			g2.fillRect(0, 0, 32, 32);
 			simpleAttackAnim.put(Heading.Down, new Animation(iSADown, 1));
 			HashMap<Integer, Rectangle> atRects = new HashMap<Integer, Rectangle>();
-			atRects.put(0, new Rectangle(-16, -16, 16, 16));
+			atRects.put(0, new Rectangle(-16, 0, 16, 32));
 			int frameDur = 44;
 			simpleAttack = new Attack(15, simpleAttackAnim, atRects, frameDur, this);
 			
@@ -259,6 +259,8 @@ public class NewPlayer extends Actor implements IUpdateable {
 			return;
 		}
 		
+		regenerate();
+		
 		if(state == DynamicObjectState.Terminated) {
 			game.startGame(true);
 			return;
@@ -289,8 +291,26 @@ public class NewPlayer extends Actor implements IUpdateable {
 			return;
 		}
 		
-		if(controller.justPressed(KeyEvent.VK_A))
+		if(controller.justPressed(KeyEvent.VK_A)) {
 			simpleAttack();
+		}
+		if(state == DynamicObjectState.Attacking) {
+			/*if(simpleAttack.Update()) {
+				state = DynamicObjectState.Idle;
+				return;
+			}
+			curAnim.update(elapsed);*/
+			if(simpleAttack.Update()) {
+				state = DynamicObjectState.Idle;
+				curAnim = idleAnim.get(heading);
+				return;
+			}
+			curAnim.update(elapsed);
+			//manager.handleAttack(simpleAttack, ID);
+			manager.handleAttack(this, simpleAttack);
+			
+			return;
+		}
 		else if(controller.justPressed(KeyEvent.VK_S))
 			spellAttack();
 		else if(controller.isDownPressed())
@@ -335,13 +355,7 @@ public class NewPlayer extends Actor implements IUpdateable {
 			curAnim.update(elapsed);
 		}
 		
-		if(state == DynamicObjectState.Attacking) {
-			if(simpleAttack.Update()) {
-				state = DynamicObjectState.Idle;
-				return;
-			}
-			curAnim.update(elapsed);
-		}
+		
 	}
 	
 	@Override

@@ -7,14 +7,12 @@ import fart.dungeoncrawler.enums.DynamicObjectState;
 
 public class HitState extends NPCState {
 	private static final DynamicObjectState DO_STATE = DynamicObjectState.Hit;
-	private Vector2 reboundVelocity;
 	private int frameDuration;
 
 	//If an enemy is hit, it switches to hitState. While hit, enemy is invulnerable
 	//Rebound not yet implemented.
 	public HitState(EnemyStateMachine machine, BaseEnemy owner) {
 		super(machine, owner);
-		reboundVelocity = new Vector2();
 	}
 	
 	@Override
@@ -24,10 +22,6 @@ public class HitState extends NPCState {
 		owner.getHealth().setInvul(true);
 		owner.setVelocity(new Vector2());
 		frameDuration = 45;
-	}
-	
-	public void setRebound(Vector2 v) {
-		reboundVelocity = v;
 	}
 
 	@Override
@@ -41,7 +35,6 @@ public class HitState extends NPCState {
 
 	@Override
 	public void exit() {
-		reboundVelocity = new Vector2();
 		Health h = owner.getHealth();
 		h.setInvul(false);
 	}

@@ -1,7 +1,5 @@
 package fart.dungeoncrawler.actor;
 
-import java.awt.image.BufferedImage;
-
 import fart.dungeoncrawler.enums.Heading;
 
 public class EnemyDescription extends NPCDescription{
@@ -33,7 +31,7 @@ public class EnemyDescription extends NPCDescription{
 			ActorDescription aDesc) {
 		super(spritePath,
 				type,
-				aDesc.health.getMaxHealth(),
+				(int)aDesc.health.getMaxHealth(),
 				aDesc.mana.getMaxMana(),
 				aDesc.getStats(),
 				aDesc.getHeading());

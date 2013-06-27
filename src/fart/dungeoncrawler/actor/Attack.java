@@ -6,7 +6,6 @@ import java.util.Map;
 
 import Utils.DamageCalculator;
 
-import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.enums.Heading;
 
@@ -40,6 +39,30 @@ public class Attack {
 		float mul = DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility());
 		duration = (int)(frameDuration * mul);
 		curFrame = 0;
+		
+		constructRectsFromList(attackRects);
+	}
+	
+	/**
+	 * Represents a MeleeAttack. Uses a standard attackingRect
+	 * 
+	 * @param damage The damage done. 
+	 * @param anim Animation for this attack.
+	 * @param frameDuration Duration in frames
+	 * @param owner Owner of the attack.
+	 */
+	public Attack(int damage, HashMap<Heading, Animation> anim, int frameDuration, Actor owner) {
+		this.damage = damage;
+		this.anim = anim;
+		//this.attackRects = attackRects;
+		this.owner = owner;
+		this.frameDuration = frameDuration;
+		float mul = DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility());
+		duration = (int)(frameDuration * mul);
+		curFrame = 0;
+		
+		HashMap<Integer, Rectangle> attackRects = new HashMap<Integer, Rectangle>();
+		attackRects.put(0, new Rectangle(-16, 0, 16, 32));
 		
 		constructRectsFromList(attackRects);
 	}

@@ -9,14 +9,8 @@ import java.util.HashMap;
 import java.util.Random;
 
 import Utils.Vector2;
-import fart.dungeoncrawler.CheckPointInfo;
-import fart.dungeoncrawler.Game;
-import fart.dungeoncrawler.Goal;
-import fart.dungeoncrawler.GoldItem;
-import fart.dungeoncrawler.Portal;
-import fart.dungeoncrawler.Tilemap;
-import fart.dungeoncrawler.enums.DynamicObjectState;
-import fart.dungeoncrawler.enums.Heading;
+import fart.dungeoncrawler.*;
+import fart.dungeoncrawler.enums.*;
 
 public class BossEnemy extends BaseEnemy {
 	private DynamicObjectState curState;
@@ -69,11 +63,11 @@ public class BossEnemy extends BaseEnemy {
 		g2.fillRect(0, 0, 32, 32);
 		simpleAttackAnim.put(Heading.Down, new Animation(iSADown, 1));
 		
-		HashMap<Integer, Rectangle> atRects = new HashMap<Integer, Rectangle>();
-		atRects.put(0, new Rectangle(-16, -16, 16, 16));
+		//HashMap<Integer, Rectangle> atRects = new HashMap<Integer, Rectangle>();
+		//atRects.put(0, new Rectangle(-16, -16, 16, 16));
 		int frameDur = 44;
 		animations.put(DynamicObjectState.Attacking, simpleAttackAnim);
-		simpleAttack = new Attack(15, simpleAttackAnim, atRects, frameDur, this);
+		simpleAttack = new Attack(15, simpleAttackAnim, /*atRects, */frameDur, this);
 	}
 	
 	private void buildSpell() {
@@ -113,7 +107,7 @@ public class BossEnemy extends BaseEnemy {
 			sb.replace(10, 11, level.toString());
 			String result = sb.toString();
 			
-			Portal p = new Portal(game, result, new Vector2(screenPosition.x / Tilemap.TILE_SIZE, screenPosition.y / Tilemap.TILE_SIZE), new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE));
+			PortalOnKey p = new PortalOnKey(game, result, new Vector2(screenPosition.x / Tilemap.TILE_SIZE, screenPosition.y / Tilemap.TILE_SIZE), new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE));
 			collision.addTriggerOnKey(p);
 			game.getStaticManager().addObject(p);
 		}

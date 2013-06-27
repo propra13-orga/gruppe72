@@ -11,7 +11,7 @@ import fart.dungeoncrawler.actor.Actor;
 
 import Utils.Vector2;
 
-public class Portal extends GameObject implements ITriggerable {
+public class PortalOnKey extends GameObject implements ITriggerableOnKey {
 
 	private String mapTo;
 	private Vector2 pointTo;
@@ -20,7 +20,7 @@ public class Portal extends GameObject implements ITriggerable {
 	private BufferedImage texture;
 	private Rectangle collisionRect;
 	
-	public Portal(Game game, String mapTo, Vector2 tilePositionFrom, Vector2 tilePositionTo) {
+	public PortalOnKey(Game game, String mapTo, Vector2 tilePositionFrom, Vector2 tilePositionTo) {
 		this.game = game;
 		this.mapTo = mapTo;
 		pointTo = tilePositionTo;
@@ -28,7 +28,7 @@ public class Portal extends GameObject implements ITriggerable {
 		collisionRect = new Rectangle((int)screenPosition.x + Tilemap.TILE_SIZE / 4, (int)screenPosition.y + Tilemap.TILE_SIZE / 4, Tilemap.TILE_SIZE / 2, Tilemap.TILE_SIZE / 2);
 	}
 	
-	public Portal(Game game, String spritePath, String mapTo, Vector2 tilePositionFrom, Vector2 tilePositionTo) {
+	public PortalOnKey(Game game, String spritePath, String mapTo, Vector2 tilePositionFrom, Vector2 tilePositionTo) {
 		this.game = game;
 		this.spritePath = spritePath;
 		this.mapTo = mapTo;
@@ -47,7 +47,7 @@ public class Portal extends GameObject implements ITriggerable {
 		if(texture == null) {
 			try {
 				if(spritePath == null)
-					texture = ImageIO.read(new File("res/tp.png"));
+					texture = ImageIO.read(new File("res/tp2.png"));
 				else
 					texture = ImageIO.read(new File(spritePath));
 			} catch(IOException e) {
@@ -71,10 +71,10 @@ public class Portal extends GameObject implements ITriggerable {
 	public void terminate() {
 	}
 
-	/*@Override
+	@Override
 	public Rectangle getTriggerArea() {
 		return collisionRect;
-	}*/
+	}
 
 	//@Override
 	//public void trigger(BaseNPC npc) { }

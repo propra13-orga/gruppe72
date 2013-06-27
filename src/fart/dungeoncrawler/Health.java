@@ -1,23 +1,23 @@
 package fart.dungeoncrawler;
 
 public class Health {
-    private int maxHealth;
-    private int curHealth;
+    private float maxHealth;
+    private float curHealth;
     private boolean invulnerable;
    
-    public Health(int maxHealth) {
+    public Health(float maxHealth) {
         this.maxHealth = maxHealth;
         curHealth = maxHealth;
         invulnerable = false;
     }
    
-    public Health(int maxHealth, int curHealth) {
+    public Health(float maxHealth, float curHealth) {
         this.maxHealth = maxHealth;
         this.curHealth = curHealth;
         invulnerable = false;
     }
     
-    public Health(int maxHealth, int curHealth, boolean invul) {
+    public Health(float maxHealth, float curHealth, boolean invul) {
         this.maxHealth = maxHealth;
         this.curHealth = curHealth;
         invulnerable = invul;
@@ -29,11 +29,11 @@ public class Health {
     	this.invulnerable = h.invulnerable;
     }
     
-    public int getCurrentHealth() {
+    public float getCurrentHealth() {
     	return curHealth;
     }
     
-    public int getMaxHealth() {
+    public float getMaxHealth() {
     	return maxHealth;
     }
     
@@ -41,26 +41,26 @@ public class Health {
     	return invulnerable;
     }
    
-    public void reduceHealth(int amount) {
+    public void reduceHealth(float dmg) {
     	if(invulnerable)
     		return;
     	
-        this.curHealth -= amount;
+        this.curHealth -= dmg;
         if(curHealth < 0)
             curHealth = 0;
     }
    
-    public void addHealth(int amount) {
+    public void addHealth(float amount) {
         curHealth += amount;
         if(curHealth > maxHealth)
             curHealth = maxHealth;
     }
    
-    public void addMaxHealth(int amount) {
+    public void addMaxHealth(float amount) {
         maxHealth += amount;
     }
    
-    public void reduceMaxHealth(int amount) {
+    public void reduceMaxHealth(float amount) {
         maxHealth -= amount;
         if(curHealth > maxHealth)
             curHealth = maxHealth;
@@ -76,7 +76,7 @@ public class Health {
     	return perc < percent;
     }
     
-    public void setMaxHealh(int max) {
+    public void setMaxHealh(float max) {
     	maxHealth = max;
     	addHealth(0);
     }

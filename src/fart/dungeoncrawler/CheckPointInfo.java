@@ -13,8 +13,8 @@ import fart.dungeoncrawler.enums.Heading;
 
 public class CheckPointInfo {
 	private int id;
-	private int curHealth;
-	private int maxHealth;
+	private float curHealth;
+	private float maxHealth;
 	private int curMana;
 	private int maxMana;
 	private int heading;
@@ -27,8 +27,8 @@ public class CheckPointInfo {
 	private boolean isBoss;
 	
 	public CheckPointInfo(int id,
-			int ch, 
-			int mh, 
+			float ch, 
+			float mh, 
 			int cm, 
 			int mm, 
 			int heading, 

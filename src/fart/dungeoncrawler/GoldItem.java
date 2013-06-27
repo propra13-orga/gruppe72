@@ -14,7 +14,6 @@ import fart.dungeoncrawler.actor.Actor;
 public class GoldItem extends GameObject implements ITriggerableOnKey {
 	private int amount;
 	private Rectangle triggerArea;
-	private StaticObjectManager sManager;
 	private static BufferedImage texture;
 	private Game game;
 	

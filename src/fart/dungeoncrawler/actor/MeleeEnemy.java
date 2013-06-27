@@ -60,11 +60,11 @@ public class MeleeEnemy extends BaseEnemy {
 		g2.setColor(new Color(1.0f, 0.0f, 1.0f));
 		g2.fillRect(0, 0, 32, 32);
 		simpleAttackAnim.put(Heading.Down, new Animation(iSADown, 1));
-		HashMap<Integer, Rectangle> atRects = new HashMap<Integer, Rectangle>();
-		atRects.put(0, new Rectangle(-16, -16, 16, 16));
+		//HashMap<Integer, Rectangle> atRects = new HashMap<Integer, Rectangle>();
+		//atRects.put(0, new Rectangle(-16, -16, 16, 16));
 		int frameDur = 44;
 		animations.put(DynamicObjectState.Attacking, simpleAttackAnim);
-		simpleAttack = new Attack(8, simpleAttackAnim, atRects, frameDur, this);
+		simpleAttack = new Attack(8, simpleAttackAnim/*, atRects*/, frameDur, this);
 	}
 }
 	

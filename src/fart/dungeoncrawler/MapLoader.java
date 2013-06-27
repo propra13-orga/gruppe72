@@ -83,6 +83,7 @@ public class MapLoader
 		catch (ParsingException ex)
 		{
 			System.err.println("This file is not well-formed.");
+			ex.printStackTrace();
 			System.exit(1);
 		}
 		catch (IOException ex)
@@ -251,7 +252,7 @@ public class MapLoader
 						
 						Portal portal = new Portal(game, pd.getSpritePath(), mapToName, new Vector2(posX,posY), new Vector2(mapToX,mapToY));
 						sManager.addObject(portal);
-						collision.addTriggerOnKey(portal);
+						collision.addTrigger(portal);
 					}
 					else
 					{
@@ -404,7 +405,7 @@ public class MapLoader
 					{
 						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
 						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
-						MapItem mp = new MapItem(game, itemID, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE));
+						/*MapItem mp = */new MapItem(game, itemID, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE));
 					}
 					else
 					{

@@ -12,11 +12,7 @@ import fart.dungeoncrawler.DynamicObjectManager;
 import fart.dungeoncrawler.Game;
 import fart.dungeoncrawler.StaticObjectManager;
 import fart.dungeoncrawler.Tilemap;
-import fart.dungeoncrawler.actor.Actor;
-import fart.dungeoncrawler.actor.Stats;
 import fart.dungeoncrawler.enums.GameState;
-import fart.dungeoncrawler.items.Equipment;
-import fart.dungeoncrawler.items.Inventory;
 
 public class GameStateInConversation extends BaseGameState {
 	//private Inventory inventory;

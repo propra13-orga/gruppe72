@@ -2,13 +2,8 @@ package fart.dungeoncrawler;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import Utils.Vector2;
@@ -16,7 +11,6 @@ import Utils.Vector2;
 import fart.dungeoncrawler.actor.*;
 import fart.dungeoncrawler.enums.*;
 import fart.dungeoncrawler.gamestates.*;
-import fart.dungeoncrawler.npc.states.*;
 import fart.dungeoncrawler.items.*;
 
 @SuppressWarnings("serial")
@@ -59,10 +53,8 @@ public class Game extends JPanel implements Runnable
 	private String currentMap;
 	
 	//DEBUG
-	private MeleeEnemy e;
-	private BossEnemy eboss;
-	private NPCShop nshop;
 	private static final Vector2 PLAYER_START_POS = new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE);
+	public static boolean debugDraw = false;
 	
 	public Game()
 	{
@@ -169,6 +161,7 @@ public class Game extends JPanel implements Runnable
 			if(checkPoint.load()) {
 				saveCheckPoint(checkPoint);
 				currentMap = checkPoint.getMapName();
+				collision.addDynamicObject(player);
 			}
 			else {
 				setGameState(GameState.InMenu);
@@ -204,8 +197,9 @@ public class Game extends JPanel implements Runnable
 	
 	public void changeMap(String mapTo, Vector2 position) {
 		map.loadMap(mapTo);
-		player.setScreenPosition(position);
+		player.setScreenPosition(new Vector2(position));
 		manager.addObject(player);
+		collision.addDynamicObject(player);
 		currentMap = mapTo;
 		//manager.addObject(nshop);
 		//collision.addTriggerOnKey(nshop);

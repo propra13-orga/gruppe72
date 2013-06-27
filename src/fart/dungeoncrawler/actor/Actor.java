@@ -24,6 +24,9 @@ public abstract class Actor extends GameObject implements IUpdateable {
 	protected ActorDescription description;
 	protected Game game;
 	
+	protected long lastReg;
+	protected static final int REG_MS = 1000;
+	
 	public Actor(Game game, ActorDescription desc, Vector2 position) {
 		//this.health = desc.getHealth();
 		//this.mana = desc.getMana();
@@ -49,10 +52,21 @@ public abstract class Actor extends GameObject implements IUpdateable {
 
 		manager.addObject(this);
 		collision.addDynamicObject(this);
+		
+		lastReg = System.currentTimeMillis();
 	}
 	
 	public ActorDescription getActorDesc() {
 		return description;
+	}
+	
+	protected void regenerate() {
+		long cur = System.currentTimeMillis();
+		if(cur - lastReg > REG_MS) {
+			float hpReg = stats.getHealthRegAmount();
+			health.addHealth(hpReg);
+			lastReg = cur;
+		}
 	}
 
 	/**

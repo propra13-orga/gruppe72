@@ -1,8 +1,5 @@
 package fart.dungeoncrawler.actor;
 
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-
 import fart.dungeoncrawler.enums.Heading;
 import fart.dungeoncrawler.enums.NPCType;
 
@@ -27,7 +24,7 @@ public class NPCDescription extends ActorDescription {
 			int type,
 			ActorDescription aDesc) {
 		super(spritePath,
-					aDesc.health.getMaxHealth(),
+					(int)aDesc.health.getMaxHealth(),
 					aDesc.mana.getMaxMana(),
 					aDesc.stats,
 					aDesc.heading);
