@@ -137,7 +137,7 @@ public class DynamicObjectManager {
 
 		for(int i = 0; i < dynamics.size(); i++) {
 			Actor actor = dynamics.get(i);
-			if((actor instanceof BaseEnemy)) { // && actor.getHealth().getCurrentHealth() < actor.getHealth().getMaxHealth()
+			if((actor instanceof BaseEnemy) && actor.getHealth().getCurrentHealth() < actor.getHealth().getMaxHealth()) {
 				
 				Rectangle rect = actor.getCollisionRect();
 				startX = (int)rect.x;
