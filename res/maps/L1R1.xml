@@ -71,53 +71,35 @@
 	<gameobjects>
 		<objects>
 			<object id="0">
-				<positionX>14</positionX>
+				<positionX>7</positionX>
+				<positionY>14</positionY>
+				<mapToName>res/maps/L1R2.xml</mapToName>
+				<mapToX>7</mapToX>
+				<mapToY>1</mapToY>
+			</object>
+			<object id="0">
+				<positionX>13</positionX>
+				<positionY>0</positionY>
+				<mapToName>res/maps/L1R0.xml</mapToName>
+				<mapToX>13</mapToX>
+				<mapToY>13</mapToY>
+			</object>
+			<object id="0">
+				<positionX>6</positionX>
 				<positionY>5</positionY>
-				<mapToName>res/maps/L0R1.xml</mapToName>
-				<mapToX>1</mapToX>
-				<mapToY>5</mapToY>
+				<mapToName>res/maps/LXRX.xml</mapToName>
+				<mapToX>2</mapToX>
+				<mapToY>7</mapToY>
 			</object>
 			<object id="7">
-				<positionX>3</positionX>
-				<positionY>13</positionY>
+				<positionX>1</positionX>
+				<positionY>1</positionY>
 			</object>
 		</objects>
 		<traps>
 			<trap id="2">
-				<positionX>1</positionX>
-				<positionY>1</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>2</positionX>
-				<positionY>1</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>3</positionX>
-				<positionY>1</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>1</positionX>
-				<positionY>2</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>2</positionX>
-				<positionY>2</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>1</positionX>
-				<positionY>3</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>12</positionX>
-				<positionY>4</positionY>
-			</trap>
-			<trap id="2">
 				<positionX>6</positionX>
 				<positionY>5</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>1</positionX>
-				<positionY>10</positionY>
 			</trap>
 			<trap id="2">
 				<positionX>8</positionX>
@@ -126,25 +108,29 @@
 		</traps>
 		<actors>
 			<actor id="3">
-				<positionX>7</positionX>
+				<positionX>12</positionX>
 				<positionY>13</positionY>
 			</actor>
-			<actor id="4">
+			<actor id="3">
+				<positionX>1</positionX>
+				<positionY>9</positionY>
+			</actor>
+			<actor id="3">
 				<positionX>13</positionX>
-				<positionY>1</positionY>
+				<positionY>5</positionY>
 			</actor>
 			<actor id="5">
-				<positionX>6</positionX>
-				<positionY>1</positionY>
+				<positionX>8</positionX>
+				<positionY>7</positionY>
 			</actor>
 			<actor id="6">
-				<positionX>5</positionX>
-				<positionY>13</positionY>
+				<positionX>1</positionX>
+				<positionY>5</positionY>
 			</actor>
 		</actors>
 		<items>
 			<item id="107">
-				<positionX>4</positionX>
+				<positionX>1</positionX>
 				<positionY>1</positionY>
 			</item>
 		</items>

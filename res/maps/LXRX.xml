@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <map>
-	<name>L0R0</name>
+	<name>LXRX</name>
 	<width>15</width>
 	<height>15</height>
 	<tiles>
 		###############
+		###   #   #   #
 		#             #
+		# #############
+		# #############
+		# #############
+		# #   #   #   #
 		#             #
+		# #############
+		#   ###########
+		#  ############
+		# #############
+		# #   #   #   #
 		#             #
-		#   ##   ##  ##
-		#   ## # ##    
-		#      #      #
-		#    #####    #
-		#      #      #
-		#   ## # ######
-		#   ##   ######
-		#        ######
-		#        ######
-		#        ######
 		###############
 	</tiles>
 	<descriptions>
@@ -71,90 +71,79 @@
 	<gameobjects>
 		<objects>
 			<object id="0">
-				<positionX>14</positionX>
-				<positionY>5</positionY>
+				<positionX>4</positionX>
+				<positionY>1</positionY>
+				<mapToName>res/maps/L0R0.xml</mapToName>
+				<mapToX>1</mapToX>
+				<mapToY>12</mapToY>
+			</object>
+			<object id="0">
+				<positionX>8</positionX>
+				<positionY>1</positionY>
 				<mapToName>res/maps/L0R1.xml</mapToName>
+				<mapToX>2</mapToX>
+				<mapToY>7</mapToY>
+			</object>
+			<object id="0">
+				<positionX>12</positionX>
+				<positionY>1</positionY>
+				<mapToName>res/maps/L0R2.xml</mapToName>
+				<mapToX>1</mapToX>
+				<mapToY>1</mapToY>
+			</object>
+			<object id="0">
+				<positionX>4</positionX>
+				<positionY>6</positionY>
+				<mapToName>res/maps/L1R0.xml</mapToName>
 				<mapToX>1</mapToX>
 				<mapToY>5</mapToY>
 			</object>
 			<object id="0">
-				<positionX>1</positionX>
-				<positionY>3</positionY>
-				<mapToName>res/maps/LXRX.xml</mapToName>
-				<mapToX>2</mapToX>
+				<positionX>8</positionX>
+				<positionY>6</positionY>
+				<mapToName>res/maps/L1R1.xml</mapToName>
+				<mapToX>1</mapToX>
+				<mapToY>1</mapToY>
+			</object>
+			<object id="0">
+				<positionX>12</positionX>
+				<positionY>6</positionY>
+				<mapToName>res/maps/L1R2.xml</mapToName>
+				<mapToX>12</mapToX>
+				<mapToY>1</mapToY>
+			</object>
+			<object id="0">
+				<positionX>4</positionX>
+				<positionY>12</positionY>
+				<mapToName>res/maps/L2R0.xml</mapToName>
+				<mapToX>3</mapToX>
 				<mapToY>2</mapToY>
 			</object>
+			<object id="0">
+				<positionX>8</positionX>
+				<positionY>12</positionY>
+				<mapToName>res/maps/L2R1.xml</mapToName>
+				<mapToX>1</mapToX>
+				<mapToY>5</mapToY>
+			</object>
+			<object id="0">
+				<positionX>12</positionX>
+				<positionY>12</positionY>
+				<mapToName>res/maps/L2R2.xml</mapToName>
+				<mapToX>3</mapToX>
+				<mapToY>12</mapToY>
+			</object>
 			<object id="7">
-				<positionX>3</positionX>
-				<positionY>13</positionY>
+				<positionX>1</positionX>
+				<positionY>2</positionY>
 			</object>
 		</objects>
-		<traps>
-			<trap id="2">
-				<positionX>1</positionX>
-				<positionY>1</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>2</positionX>
-				<positionY>1</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>3</positionX>
-				<positionY>1</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>1</positionX>
-				<positionY>2</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>2</positionX>
-				<positionY>2</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>1</positionX>
-				<positionY>3</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>12</positionX>
-				<positionY>4</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>6</positionX>
-				<positionY>5</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>1</positionX>
-				<positionY>10</positionY>
-			</trap>
-			<trap id="2">
-				<positionX>8</positionX>
-				<positionY>10</positionY>
-			</trap>
-		</traps>
 		<actors>
-			<actor id="3">
-				<positionX>7</positionX>
-				<positionY>13</positionY>
-			</actor>
-			<actor id="3">
-				<positionX>13</positionX>
-				<positionY>1</positionY>
-			</actor>
 			<actor id="5">
-				<positionX>6</positionX>
-				<positionY>1</positionY>
-			</actor>
-			<actor id="6">
-				<positionX>5</positionX>
-				<positionY>13</positionY>
+				<positionX>3</positionX>
+				<positionY>9</positionY>
 			</actor>
 		</actors>
-		<items>
-			<item id="107">
-				<positionX>4</positionX>
-				<positionY>1</positionY>
-			</item>
-		</items>
 	</gameobjects>
 </map>
 

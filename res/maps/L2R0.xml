@@ -5,12 +5,12 @@
 	<height>15</height>
 	<tiles>
 		###############
-		     ##  #     
-		#    ###      #
+		#    #         
 		#    #####    #
 		#    ##  #    #
-		#    ##  #    # 
-		#    ## ##    #
+		#    ##  #    #
+		#    ##  #    #
+		#       ##    #
 		#       ##    #
 		#    ## ##    #
 		#    ##  #    #
@@ -72,10 +72,17 @@
 		<objects>
 			<object id="0">
 				<positionX>14</positionX>
-				<positionY>5</positionY>
-				<mapToName>res/maps/L0R1.xml</mapToName>
+				<positionY>1</positionY>
+				<mapToName>res/maps/L2R1.xml</mapToName>
 				<mapToX>1</mapToX>
-				<mapToY>5</mapToY>
+				<mapToY>1</mapToY>
+			</object>
+			<object id="0">
+				<positionX>3</positionX>
+				<positionY>1</positionY>
+				<mapToName>res/maps/LXRX.xml</mapToName>
+				<mapToX>2</mapToX>
+				<mapToY>2</mapToY>
 			</object>
 			<object id="7">
 				<positionX>3</positionX>
@@ -113,7 +120,7 @@
 			</trap>
 			<trap id="2">
 				<positionX>6</positionX>
-				<positionY>5</positionY>
+				<positionY>6</positionY>
 			</trap>
 			<trap id="2">
 				<positionX>1</positionX>
@@ -129,17 +136,9 @@
 				<positionX>7</positionX>
 				<positionY>13</positionY>
 			</actor>
-			<actor id="4">
-				<positionX>13</positionX>
-				<positionY>1</positionY>
-			</actor>
 			<actor id="5">
 				<positionX>6</positionX>
 				<positionY>1</positionY>
-			</actor>
-			<actor id="6">
-				<positionX>5</positionX>
-				<positionY>13</positionY>
 			</actor>
 		</actors>
 		<items>

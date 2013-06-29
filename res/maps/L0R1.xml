@@ -75,14 +75,21 @@
 				<positionY>14</positionY>
 				<mapToName>res/maps/L0R2.xml</mapToName>
 				<mapToX>3</mapToX>
-				<mapToY>0</mapToY>
+				<mapToY>1</mapToY>
 			</object>
 			<object id="0">
 				<positionX>0</positionX>
 				<positionY>5</positionY>
 				<mapToName>res/maps/L0R0.xml</mapToName>
-				<mapToX>14</mapToX>
+				<mapToX>13</mapToX>
 				<mapToY>5</mapToY>
+			</object>
+			<object id="0">
+				<positionX>8</positionX>
+				<positionY>10</positionY>
+				<mapToName>res/maps/LXRX.xml</mapToName>
+				<mapToX>2</mapToX>
+				<mapToY>2</mapToY>
 			</object>
 			<object id="7">
 				<positionX>3</positionX>

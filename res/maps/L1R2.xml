@@ -9,10 +9,10 @@
 		#           ###
 		#          ####
 		#         #   #
-		#     #  #    # 
+		#        #    #
 		#     ###    ##
 		#             #
-		#     ###    ##
+		#    ####    ##
 		#   ######    #
 		#  ########   #
 		# #############
@@ -70,16 +70,16 @@
 	</descriptions>
 	<gameobjects>
 		<objects>
-			<object id="0">
-				<positionX>14</positionX>
-				<positionY>5</positionY>
-				<mapToName>res/maps/L0R1.xml</mapToName>
-				<mapToX>1</mapToX>
-				<mapToY>5</mapToY>
-			</object>
 			<object id="7">
-				<positionX>3</positionX>
-				<positionY>13</positionY>
+				<positionX>4</positionX>
+				<positionY>1</positionY>
+			</object>
+			<object id="0">
+				<positionX>7</positionX>
+				<positionY>0</positionY>
+				<mapToName>res/maps/L1R1.xml</mapToName>
+				<mapToX>7</mapToX>
+				<mapToY>13</mapToY>
 			</object>
 		</objects>
 		<traps>
@@ -119,32 +119,28 @@
 				<positionX>1</positionX>
 				<positionY>10</positionY>
 			</trap>
-			<trap id="2">
-				<positionX>8</positionX>
-				<positionY>10</positionY>
-			</trap>
 		</traps>
 		<actors>
 			<actor id="3">
 				<positionX>7</positionX>
 				<positionY>13</positionY>
 			</actor>
+			<actor id="3">
+				<positionX>3</positionX>
+				<positionY>6</positionY>
+			</actor>
 			<actor id="4">
 				<positionX>13</positionX>
-				<positionY>1</positionY>
+				<positionY>7</positionY>
 			</actor>
 			<actor id="5">
 				<positionX>6</positionX>
 				<positionY>1</positionY>
 			</actor>
-			<actor id="6">
-				<positionX>5</positionX>
-				<positionY>13</positionY>
-			</actor>
 		</actors>
 		<items>
 			<item id="107">
-				<positionX>4</positionX>
+				<positionX>1</positionX>
 				<positionY>1</positionY>
 			</item>
 		</items>

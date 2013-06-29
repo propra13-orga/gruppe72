@@ -9,15 +9,15 @@
 		#             #
 		#             #
 		#             #
-		#             # 
+		#             #
 		#             #
 		#             #
 		#             #
 		####### #######
 		####### #######
-	    #              
-		#             #
-		#             #
+		#   #   #   ###
+		#              
+		#     ###   ###
 		###############
 	</tiles>
 	<descriptions>
@@ -70,13 +70,23 @@
 	</descriptions>
 	<gameobjects>
 		<objects>
-			<object id="7">
-				<positionX>3</positionX>
-				<positionY>13</positionY>
+			<object id="0">
+				<positionX>14</positionX>
+				<positionY>12</positionY>
+				<mapToName>res/maps/L2R1.xml</mapToName>
+				<mapToX>1</mapToX>
+				<mapToY>11</mapToY>
 			</object>
-			<object id="1">
-				<positionX>7</positionX>
-				<positionY>1</positionY>
+			<object id="0">
+				<positionX>10</positionX>
+				<positionY>11</positionY>
+				<mapToName>res/maps/LXRX.xml</mapToName>
+				<mapToX>2</mapToX>
+				<mapToY>2</mapToY>
+			</object>
+			<object id="7">
+				<positionX>10</positionX>
+				<positionY>13</positionY>
 			</object>
 		</objects>
 		<traps>
@@ -105,8 +115,48 @@
 				<positionY>3</positionY>
 			</trap>
 			<trap id="2">
-				<positionX>12</positionX>
-				<positionY>4</positionY>
+				<positionX>1</positionX>
+				<positionY>5</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>2</positionX>
+				<positionY>6</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>3</positionX>
+				<positionY>7</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>4</positionX>
+				<positionY>1</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>4</positionX>
+				<positionY>8</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>1</positionX>
+				<positionY>6</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>2</positionX>
+				<positionY>7</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>1</positionX>
+				<positionY>7</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>3</positionX>
+				<positionY>8</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>1</positionX>
+				<positionY>8</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>2</positionX>
+				<positionY>8</positionY>
 			</trap>
 			<trap id="2">
 				<positionX>6</positionX>
@@ -114,29 +164,141 @@
 			</trap>
 			<trap id="2">
 				<positionX>1</positionX>
-				<positionY>10</positionY>
+				<positionY>11</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>1</positionX>
+				<positionY>13</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>1</positionX>
+				<positionY>4</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>3</positionX>
+				<positionY>2</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>2</positionX>
+				<positionY>3</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>13</positionX>
+				<positionY>1</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>12</positionX>
+				<positionY>1</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>11</positionX>
+				<positionY>1</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>12</positionX>
+				<positionY>2</positionY>
+			</trap>		
+				<trap id="2">
+				<positionX>13</positionX>
+				<positionY>2</positionY>
+			</trap>			
+			<trap id="2">
+				<positionX>13</positionX>
+				<positionY>3</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>13</positionX>
+				<positionY>8</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>13</positionX>
+				<positionY>7</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>13</positionX>
+				<positionY>6</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>12</positionX>
+				<positionY>8</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>11</positionX>
+				<positionY>8</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>13</positionX>
+				<positionY>4</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>13</positionX>
+				<positionY>5</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>12</positionX>
+				<positionY>3</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>12</positionX>
+				<positionY>6</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>12</positionX>
+				<positionY>7</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>11</positionX>
+				<positionY>2</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>11</positionX>
+				<positionY>7</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>10</positionX>
+				<positionY>1</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>10</positionX>
+				<positionY>8</positionY>
 			</trap>
 			<trap id="2">
 				<positionX>8</positionX>
-				<positionY>10</positionY>
-			</trap>
+				<positionY>5</positionY>
+			</trap>	
 		</traps>
 		<actors>
 			<actor id="3">
-				<positionX>7</positionX>
-				<positionY>13</positionY>
+				<positionX>6</positionX>
+				<positionY>12</positionY>
+			</actor>
+			<actor id="3">
+				<positionX>5</positionX>
+				<positionY>8</positionY>
+			</actor>
+			<actor id="3">
+				<positionX>8</positionX>
+				<positionY>8</positionY>
+			</actor>
+			<actor id="3">
+				<positionX>3</positionX>
+				<positionY>5</positionY>
+			</actor>
+			<actor id="3">
+				<positionX>11</positionX>
+				<positionY>5</positionY>
 			</actor>
 			<actor id="4">
 				<positionX>7</positionX>
 				<positionY>2</positionY>
 			</actor>
 			<actor id="5">
-				<positionX>6</positionX>
-				<positionY>1</positionY>
+				<positionX>2</positionX>
+				<positionY>13</positionY>
 			</actor>
 			<actor id="6">
-				<positionX>5</positionX>
-				<positionY>13</positionY>
+				<positionX>2</positionX>
+				<positionY>11</positionY>
 			</actor>
 		</actors>
 		<items>
