@@ -5,22 +5,24 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.event.MouseInputListener;
 
 @SuppressWarnings("serial")
-public class MEPanel extends JPanel
+public class MEPanel extends JPanel implements MouseInputListener
 {
 	private MapEditor me;
 	
 	private char walls[][];
 	private Point highlight = new Point(0,0);
 	
-	private BufferedImage wall, grass;
+	private BufferedImage currentBI;
 	
 	
 	public MEPanel(MapEditor mapeditor)
@@ -28,14 +30,14 @@ public class MEPanel extends JPanel
 		super();
 		if((this.me = mapeditor) == null)
 		{
-			System.err.println("me (MapEditor Object) in MEPanel is null");
+			System.err.println("MapEditor Object in MEPanel is null");
 			System.exit(1);
 		}
 		
 		this.setPreferredSize(new Dimension(me.WIDTH*me.TILE_SIZE, me.HEIGHT*me.TILE_SIZE));
-		MEInputHandler ih = new MEInputHandler();
-		this.addMouseListener(ih);
-		this.addMouseMotionListener(ih);
+
+		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
 		
 		init();
 	}
@@ -54,34 +56,6 @@ public class MEPanel extends JPanel
 					walls[i][j] = ' ';
 			}
 		}
-		
-		try
-		{
-			wall = ImageIO.read(new File("res/wall.png"));
-			grass = ImageIO.read(new File("res/grass.png"));
-		} catch (IOException e)
-		{
-			System.err.println("Could not load images wall.png and/or grass.png");
-			System.exit(1);
-		}
-	}
-	
-	public void useMouseLocation(Point p, boolean clicked)
-	{
-		int tileX = (int)p.getX()/me.TILE_SIZE;
-		int tileY = (int)p.getY()/me.TILE_SIZE;
-		
-		highlight.setLocation(tileX*me.TILE_SIZE, tileY*me.TILE_SIZE);
-		
-		if(clicked)
-		{
-			if(walls[tileX][tileY] == ' ')
-				walls[tileX][tileY] = '#';
-			else
-				walls[tileX][tileY] = ' ';
-		}
-		
-		repaint();
 	}
 	
 	public void paintComponent(Graphics g)
@@ -95,9 +69,9 @@ public class MEPanel extends JPanel
 			for(int i=0; i<me.WIDTH; i++)
 			{
 				if(walls[i][j] == '#')
-					g2d.drawImage(wall, null, i*me.TILE_SIZE, j*me.TILE_SIZE);
+					g2d.drawImage(me.getMEToolbar().getIcon("wall"), null, i*me.TILE_SIZE, j*me.TILE_SIZE);
 				else
-					g2d.drawImage(grass, null, i*me.TILE_SIZE, j*me.TILE_SIZE);
+					g2d.drawImage(me.getMEToolbar().getIcon("grass"), null, i*me.TILE_SIZE, j*me.TILE_SIZE);
 			}
 		}
 		
@@ -111,7 +85,68 @@ public class MEPanel extends JPanel
 		for(int i=1; i<me.HEIGHT; i++)
 			g2d.drawLine(0, i*me.TILE_SIZE-1, me.WIDTH*me.TILE_SIZE, i*me.TILE_SIZE-1);
 	
+		// Draw highlighting rectangle
 		g2d.setColor(Color.RED);
 		g2d.drawRect((int)highlight.getX()-1, (int)highlight.getY()-1, me.TILE_SIZE, me.TILE_SIZE);
 	}
+
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+		int tileX = (int)e.getX()/me.TILE_SIZE;
+		int tileY = (int)e.getY()/me.TILE_SIZE;
+		
+		if(tileX<0)
+			tileX = 0;
+		else if(tileX>=me.WIDTH)
+			tileX = me.WIDTH-1;
+		
+		if(tileY<0)
+			tileY = 0;
+		else if(tileY>=me.HEIGHT)
+			tileY = me.HEIGHT-1;
+				
+		highlight.setLocation(tileX*me.TILE_SIZE, tileY*me.TILE_SIZE);
+		
+		if(me.getMEToolbar().getCurrentID() == "grass")
+			walls[tileX][tileY] = ' ';
+		else if(me.getMEToolbar().getCurrentID() == "wall")
+			walls[tileX][tileY] = '#';
+		
+		repaint();
+	}
+	
+	@Override
+	public void mouseDragged(MouseEvent e)
+	{
+		mouseClicked(e);
+	}
+	
+	@Override
+	public void mouseMoved(MouseEvent e)
+	{
+		int tileX = (int)e.getX()/me.TILE_SIZE;
+		int tileY = (int)e.getY()/me.TILE_SIZE;
+		
+		if(tileY<0)
+			tileY = 0;
+		else if(tileY>=me.HEIGHT)
+			tileY = me.HEIGHT-1;
+		
+		highlight.setLocation(tileX*me.TILE_SIZE, tileY*me.TILE_SIZE);
+		
+		repaint();
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) { }
+
+	@Override
+	public void mouseExited(MouseEvent e) { }
+
+	@Override
+	public void mousePressed(MouseEvent e) { }
+
+	@Override
+	public void mouseReleased(MouseEvent e) { }
 }
