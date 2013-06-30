@@ -76,7 +76,7 @@ public class Game extends JPanel implements Runnable
 		collision = new Collision();
 		map = new Tilemap(this, sManager, manager, collision);
 		
-		ActorDescription actDesc = new ActorDescription("res/player.png", 100, 100, new Stats(12, 8, 7, 8, 0, 8, 0), Heading.Up);
+		ActorDescription actDesc = new ActorDescription("res/player.png", 1, 0, new Stats(12, 8, 7, 8, 0, 8, 0), Heading.Up);
 
 		player = new NewPlayer(this, actDesc, PLAYER_START_POS);
 		collision.addDynamicObject(player);
@@ -91,6 +91,7 @@ public class Game extends JPanel implements Runnable
 		setGameState(GameState.InMenu);
 		((GameStateInShop)states.get(GameState.InShop)).setCurrentShop(new Shop(controller));
 		
+
 		ItemCollection.createNewInstace();
 	}
 	

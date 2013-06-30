@@ -2,6 +2,7 @@ package fart.dungeoncrawler.items;
 
 import java.util.ArrayList;
 
+import fart.dungeoncrawler.actor.ElementalDamage;
 import fart.dungeoncrawler.actor.Stats;
 
 /*
@@ -56,10 +57,10 @@ public class ItemCollection {
 		Stats ringStats = new Stats(3, 0, 0, 2, 0, 0, 0);
 		itemCollection.add(new Ring("Ring", "Ring", "res/icons/ring1.png", 5, false, ringStats));
 		
-		Stats weaponStats = new Stats(1, 1, 1, 0, 0, 4, 0);
-		itemCollection.add(new Weapon("Sword", "A twohanded Sword", "res/icons/sword.png", 20, false, weaponStats));
+		Stats weaponStats = new Stats(1, 1, 1, 0, 0, 3, 0);
+		itemCollection.add(new Weapon("Sword", "A twohanded Sword", "res/icons/sword.png", 20, false, weaponStats, new ElementalDamage(0, 0, 4), 2300));
 		Stats staffStats = new Stats(1, 0, 0, 2, 0, 2, 4);
-		itemCollection.add(new Weapon("Staff", "A twohanded Staff", "res/icons/staff.png", 20, false, staffStats));
+		itemCollection.add(new Weapon("Staff", "A twohanded Staff", "res/icons/staff.png", 20, false, staffStats, new ElementalDamage(0, 0, 0), 3300));
 	}
 	
 	public BaseItem getByID(int id) {

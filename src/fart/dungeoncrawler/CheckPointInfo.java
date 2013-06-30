@@ -15,8 +15,8 @@ public class CheckPointInfo {
 	private int id;
 	private float curHealth;
 	private float maxHealth;
-	private int curMana;
-	private int maxMana;
+	private float curMana;
+	private float maxMana;
 	private int heading;
 	private int state;
 	private Stats stats;
@@ -29,8 +29,8 @@ public class CheckPointInfo {
 	public CheckPointInfo(int id,
 			float ch, 
 			float mh, 
-			int cm, 
-			int mm, 
+			float cm, 
+			float mm, 
 			int heading, 
 			int state, 
 			Stats stats, 

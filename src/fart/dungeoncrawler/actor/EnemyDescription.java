@@ -13,17 +13,17 @@ public class EnemyDescription extends NPCDescription{
 							int aggroRange,
 							int attackRange,
 							int type,
-							int maxHealth, 
-							int maxMana, 
+							int level, 
+							int element, 
 							Stats stats, 
 							Heading heading) {
-		super(spritePath, type, maxHealth, maxMana, stats, heading);
+		super(spritePath, type, level, element, stats, heading);
 		this.isRanged = isRanged;
 		this.aggroRange = aggroRange;
 		this.attackRange = attackRange;
 	}
 	
-	public EnemyDescription(boolean isRanged,
+	/*public EnemyDescription(boolean isRanged,
 			String spritePath,
 			int aggroRange,
 			int attackRange,
@@ -32,13 +32,13 @@ public class EnemyDescription extends NPCDescription{
 		super(spritePath,
 				type,
 				(int)aDesc.health.getMaxHealth(),
-				aDesc.mana.getMaxMana(),
+				(int)aDesc.mana.getMaxMana(),
 				aDesc.getStats(),
 				aDesc.getHeading());
 		this.isRanged = isRanged;
 		this.aggroRange = aggroRange;
 		this.attackRange = attackRange;
-	}
+	}*/
 	
 	public boolean getIsRanged() { return isRanged; }
 	public int getAggroRange() { return aggroRange; }

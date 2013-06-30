@@ -1,15 +1,15 @@
 package fart.dungeoncrawler;
 
 public class Mana {
-    private int maxMana;
-    private int curMana;
+    private float maxMana;
+    private float curMana;
    
-    public Mana(int maxMana) {
+    public Mana(float maxMana) {
         this.maxMana = maxMana;
         curMana = maxMana;
     }
    
-    public Mana(int maxMana, int curMana) {
+    public Mana(float maxMana, float curMana) {
         this.maxMana = maxMana;
         this.curMana = curMana;
     }
@@ -19,27 +19,27 @@ public class Mana {
     	curMana = mana.curMana;
 	}
 
-	public int getCurrentMana() {
+	public float getCurrentMana() {
     	return curMana;
     }
    
-    public void reduceMana(int amount) {
+    public void reduceMana(float amount) {
         this.curMana -= amount;
         if(curMana < 0)
             curMana = 0;
     }
    
-    public void addMana(int amount) {
+    public void addMana(float amount) {
         curMana += amount;
         if(curMana > maxMana)
             curMana = maxMana;
     }
    
-    public void addMaxMana(int amount) {
+    public void addMaxMana(float amount) {
         maxMana += amount;
     }
    
-    public void reduceMaxMana(int amount) {
+    public void reduceMaxMana(float amount) {
         maxMana -= amount;
         if(curMana > maxMana)
             curMana = maxMana;
@@ -51,11 +51,15 @@ public class Mana {
     	return perc < percent;
     }
 
-	public int getMaxMana() {
+	public float getMaxMana() {
 		return maxMana;
 	}
 	
-	public void setMaxMana(int max) {
+	public void fillMana() {
+		curMana = maxMana;
+	}
+	
+	public void setMaxMana(float max) {
 		maxMana = max;
 		addMana(0);
 	}

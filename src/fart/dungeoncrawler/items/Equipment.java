@@ -43,6 +43,10 @@ public class Equipment implements IDrawable {
 		
 		return previous;
 	}
+	
+	public Weapon getWeapon() {
+		return (Weapon)items.get(EquipSlot.Weapon);
+	}
 
 	@Override
 	public void draw(Graphics2D graphics) {

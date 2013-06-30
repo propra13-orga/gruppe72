@@ -173,7 +173,8 @@ public class MapLoader
 						Integer.parseInt(tmp.getChildElements().get(4).getValue()),
 						Integer.parseInt(tmp.getChildElements().get(5).getValue()),
 						Integer.parseInt(tmp.getChildElements().get(6).getValue()),
-						new Stats(), Heading.Down));
+						//CHANGED STATS!
+						Stats.getMeleeStats(Integer.parseInt(tmp.getChildElements().get(5).getValue())), Heading.Down));
 				saveToA = true;
 			}
 			// Add BossEnemy EnemyDescription
@@ -187,7 +188,8 @@ public class MapLoader
 						Integer.parseInt(tmp.getChildElements().get(4).getValue()),
 						Integer.parseInt(tmp.getChildElements().get(5).getValue()),
 						Integer.parseInt(tmp.getChildElements().get(6).getValue()),
-						new Stats(), Heading.Down));
+						//CHANGED STATS!
+						Stats.getMeleeStats(Integer.parseInt(tmp.getChildElements().get(5).getValue())), Heading.Down));
 				saveToA = true;
 			}
 			else if(tmp.getAttribute(1).getValue().equals("5"))

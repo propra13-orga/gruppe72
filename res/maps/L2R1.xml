@@ -45,8 +45,8 @@
 			<aggroRange>96</aggroRange>
 			<attackRange>16</attackRange>
 			<type>3</type>
-			<maxHealth>100</maxHealth>
-			<maxMana>100</maxMana>
+			<maxHealth>3</maxHealth>
+			<maxMana>3</maxMana>
 		</actor>
 		<actor name="bossenemy" id="4">
 			<spritesheet>res/player.png</spritesheet>
@@ -54,18 +54,18 @@
 			<aggroRange>96</aggroRange>
 			<attackRange>32</attackRange>
 			<type>3</type>
-			<maxHealth>150</maxHealth>
-			<maxMana>120</maxMana>
+			<maxHealth>4</maxHealth>
+			<maxMana>3</maxMana>
 		</actor>
 		<actor name="npcshop" id="5">
 			<spritesheet>res/shop.png</spritesheet>
-			<maxHealth>100</maxHealth>
-			<maxMana>100</maxMana>
+			<maxHealth>1</maxHealth>
+			<maxMana>0</maxMana>
 		</actor>
 		<actor name="npctalking" id="6">
 			<spritesheet>res/shop.png</spritesheet>
-			<maxHealth>100</maxHealth>
-			<maxMana>100</maxMana>
+			<maxHealth>1</maxHealth>
+			<maxMana>0</maxMana>
 		</actor>
 	</descriptions>
 	<gameobjects>

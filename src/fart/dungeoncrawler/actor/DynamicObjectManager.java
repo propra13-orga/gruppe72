@@ -1,19 +1,26 @@
-package fart.dungeoncrawler;
+package fart.dungeoncrawler.actor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import Utils.DamageCalculator;
 
+import fart.dungeoncrawler.Game;
+import fart.dungeoncrawler.GameObject;
+import fart.dungeoncrawler.Health;
 import fart.dungeoncrawler.actor.*;
 import fart.dungeoncrawler.enums.DynamicObjectState;
+import fart.dungeoncrawler.enums.ElementType;
 
 public class DynamicObjectManager {
 	private ArrayList<Actor> dynamics = new ArrayList<Actor>();
 	private ArrayList<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
+	private ArrayList<Attack> attacks = new ArrayList<Attack>();
+	private HashMap<Integer, Integer> attackHits = new HashMap<Integer, Integer>();
 	private Game game;
 	
 	public DynamicObjectManager(Game game) {
@@ -24,7 +31,7 @@ public class DynamicObjectManager {
 		return game;
 	}
 	
-	public void addObject(Actor npc) {
+	public void addObject(Actor npc) {		
 		dynamics.add(npc);
 	}
 	
@@ -50,15 +57,48 @@ public class DynamicObjectManager {
 	
 	//spieler und objekte updaten
 	public void update(float elapsed) {
-		//DEBUG
-		//if(attackRects.size() != 0)
-		//	attackRects.clear();
 		
 		for(int i = 0; i < dynamics.size(); i++)
 			dynamics.get(i).update(elapsed);
 		
+		for(int i = 0; i < attacks.size(); i++) {
+			Attack a = attacks.get(i);
+			
+			//check if the attack is over
+			if(a.update(elapsed)) {
+				attacks.remove(i);
+				i -= 1;
+				a.getOwner().setState(DynamicObjectState.Idle);
+				if(a.getOwner() instanceof NewPlayer)
+					((NewPlayer)(a.getOwner())).setIdleAnim();
+				
+				continue;
+			}
+			
+			//attack has already hit a target, so we skip it
+			if(a.hasHit())
+				continue;
+			
+			int attackerID = a.getOwner().getID();
+			Rectangle rect = a.getRect();
+			for(int j = 0; j < dynamics.size(); j++) {
+				Actor defender = dynamics.get(j);
+				
+				//attacker should not hurt hisself
+				if(defender.getID() == attackerID)
+					continue;
+				
+				if(rect.intersects(defender.getCollisionRect())) {
+					a.hit();
+					float dmg = DamageCalculator.calcDamage(a.getOwner(), defender);
+					reduceHealth(dmg, a.getOwner(), defender, true);
+				}
+			}
+		}
+		
 		for(int i = 0; i < spells.size(); i++) {
 			Spell spell = spells.get(i);
+			
 			spell.update(elapsed);
 			if(!spell.isOnCooldown())
 				spells.remove(i);
@@ -69,21 +109,22 @@ public class DynamicObjectManager {
 		}
 		
 		for(int i = 0; i < projectiles.size(); i++) {
-			SpellProjectile curSpell = projectiles.get(i);
-			if(curSpell.getCollision().isCollidingStatic(curSpell)) {
+			SpellProjectile curSpellProj = projectiles.get(i);
+			Spell curSpell = curSpellProj.getSpell();
+			if(curSpellProj.getCollision().isCollidingStatic(curSpellProj)) {
 				projectiles.remove(i);
 				continue;
 			}
 				
-			int ownerID = curSpell.getOwnerID();
-			Rectangle rect = curSpell.getCollisionRect();
+			int ownerID = curSpellProj.getOwnerID();
+			Rectangle rect = curSpellProj.getCollisionRect();
 			for(Actor npc : dynamics) {
 				if(npc.getID() != ownerID && rect.intersects(npc.getCollisionRect())) {
 					Health health = npc.getHealth();
 					if(!health.isDead()) {
-						health.reduceHealth(curSpell.getDamage());
-						npc.setState(DynamicObjectState.Hit);
 						projectiles.remove(i);
+						float dmg = DamageCalculator.calcSpellDamage(curSpellProj.getDamage(), curSpell.getType(), curSpellProj.getOwner(), npc);
+						reduceHealth(dmg, curSpellProj.getOwner(), npc, true);
 						return;
 					}
 				}
@@ -91,29 +132,45 @@ public class DynamicObjectManager {
 		}
 	}
 	
-	public void handleAttack(Actor attacker, Attack attack) {
-		int id = attacker.getID();
-		Rectangle attackRect = attack.getRect(attacker.getHeading());
-		
-		for(int i = 0; i < dynamics.size(); i++) {
-			Actor defender = dynamics.get(i);
-			if(defender.getID() == id)
-				continue;
+	private void reduceHealth(float dmg, Actor attacker, Actor defender, boolean hitState) {
+		defender.getHealth().reduceHealth(dmg);
+		if(hitState)
+			defender.setState(DynamicObjectState.Hit);
+		if(defender.getHealth().isDead()) {
+			defender.terminate();
 			
-			if(defender.getCollisionRect().intersects(attackRect)) {
-				float dmg = DamageCalculator.calcDamage(attacker, defender);
-				defender.getHealth().reduceHealth(dmg);
-				defender.setState(DynamicObjectState.Hit);
-				System.out.println(defender.getHealth().getCurrentHealth());
-				if(defender.getHealth().isDead())
-					defender.terminate();
+			if(attacker instanceof NewPlayer) {
+				int exp = Level.getMobExperienceForLevel(defender.getLevel().getLevel());
+				attacker.getLevel().addExperince(exp);
+				System.out.println("Gained " + exp + " EXP.");
+				System.out.println("Player EXP: " + attacker.getLevel().getCurrentExperience() + "/" + attacker.getLevel().getExperienceForLevelUp());
 			}
 		}
 	}
 	
+	public void registerAttack(Attack attack) {
+		attacks.add(attack);
+	}
+	
 	public void spawnSpell(GameObject attacker, SpellProjectile proj, Spell spell) {
 		projectiles.add(proj);
+	}
+	
+	public void addSpellToUpdate(Spell spell) {
 		spells.add(spell);
+	}
+	
+	public void handleAreaOfEffectSpell(Actor owner, float damage, ElementType type, Rectangle area) {
+		for (int i = 0; i < dynamics.size(); i++) {
+			Actor a = dynamics.get(i);
+			if(a.equals(owner))
+				continue;
+			
+			if(a.getCollisionRect().intersects(area)) {
+				float dmg = DamageCalculator.calcSpellDamage(damage, type, owner, a);
+				reduceHealth(dmg, owner, a, false);
+			}
+		}
 	}
 	
 	public void draw(Graphics2D g2d) {
@@ -147,7 +204,7 @@ public class DynamicObjectManager {
 				float perc = (float)actor.getHealth().getCurrentHealth() / (float)actor.getHealth().getMaxHealth();
 				w *= perc;
 				
-				graphics.setColor(new Color(1.0f - perc , perc, 0.0f, 0.6f));
+				graphics.setColor(new Color(1.0f - perc , perc, 0.0f, 0.8f));
 				graphics.fillRect(startX, startY, w, h);
 			}
 		}

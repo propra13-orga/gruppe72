@@ -24,9 +24,9 @@ public abstract class StatItem extends BaseItem {
 		s.addAgility(stats.getAgility());
 		s.addWill(stats.getWill());
 		s.addArmor(stats.getArmor());
-		s.setFireResistant(stats.getFireResistance());
+		/*s.setFireResistant(stats.getFireResistance());
 		s.setWaterResistant(stats.getWaterResistance());
-		s.setEarthResistant(stats.getEarthResistance());
+		s.setEarthResistant(stats.getEarthResistance());*/
 		s.addDamage(stats.getDamage());
 		s.addSpellDamage(stats.getSpellDamage());
 	}
@@ -38,9 +38,9 @@ public abstract class StatItem extends BaseItem {
 		s.redAgility(stats.getAgility());
 		s.redWill(stats.getWill());
 		s.redArmor(stats.getArmor());
-		s.setFireResistant(stats.getFireResistance());
+		/*s.setFireResistant(stats.getFireResistance());
 		s.setWaterResistant(stats.getWaterResistance());
-		s.setEarthResistant(stats.getEarthResistance());
+		s.setEarthResistant(stats.getEarthResistance());*/
 		s.redDamage(stats.getDamage());
 		s.redSpellDamage(stats.getSpellDamage());
 	}

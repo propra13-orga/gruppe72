@@ -66,6 +66,11 @@ public class EnemyStateMachine implements IUpdateable {
 			setState(DynamicObjectState.Terminated);
 		DynamicObjectState doState = owner.getState();
 		
+		if(doState == DynamicObjectState.Attacking) {
+			curState.update(elapsed);
+			return;
+		}
+		
 		//Check if the current state needs to be switched
 		//Idle - we check if player is in range or randomly start walking
 		if(doState == DynamicObjectState.Idle) {
@@ -101,14 +106,6 @@ public class EnemyStateMachine implements IUpdateable {
 				}
 			}
 			else {
-				/*if(!owner.getSimpleSpell().isOnCooldown()) {
-					//owner.getSimpleSpell().activate();
-					owner.setAttackType(AttackType.spell);
-					owner.setAggroRange(1000);
-					setState(DynamicObjectState.Attacking);
-					//System.out.println("Spell!");
-				} else {
-					setState(DynamicObjectState.Chasing);*/
 				if(owner.getSimpleSpell() != null)
 				{
 					if(!owner.getSimpleSpell().isOnCooldown()) {

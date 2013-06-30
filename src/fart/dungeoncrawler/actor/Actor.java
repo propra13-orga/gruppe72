@@ -21,15 +21,18 @@ public abstract class Actor extends GameObject implements IUpdateable {
 	protected Inventory inventory;
 	protected Equipment equip;
 	protected Stats stats;
+	protected Level level;
 	protected ActorDescription description;
 	protected Game game;
 	
+	protected SpellManager spellManager;
+	protected ElementalDamage elementDamage;
+	
 	protected long lastReg;
 	protected static final int REG_MS = 1000;
+	protected ElementType elementType;
 	
 	public Actor(Game game, ActorDescription desc, Vector2 position) {
-		//this.health = desc.getHealth();
-		//this.mana = desc.getMana();
 		this.stats = desc.getStats();
 		health = new Health(stats.getStamina() * Stats.HEALTH_PER_STAM);
 		mana = new Mana(stats.getWill() * Stats.MANA_PER_WILL);
@@ -49,25 +52,41 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		equip = new Equipment();
 		
 		//TEST
+		level = new Level(this, desc.getLevel());
+		elementType = desc.getElement();
+		spellManager = new SpellManager(this);
+		elementDamage = new ElementalDamage(0, 0, 0);
 
 		manager.addObject(this);
 		collision.addDynamicObject(this);
 		
 		lastReg = System.currentTimeMillis();
 	}
-	
-	public ActorDescription getActorDesc() {
-		return description;
-	}
-	
+
 	protected void regenerate() {
 		long cur = System.currentTimeMillis();
 		if(cur - lastReg > REG_MS) {
 			float hpReg = stats.getHealthRegAmount();
 			health.addHealth(hpReg);
+			float manaReg = stats.getManaRegAmount();
+			mana.addMana(manaReg);
 			lastReg = cur;
 		}
 	}
+	
+	public ActorDescription getActorDesc() {
+		return description;
+	}
+	
+	public Level getLevel() {
+		return level;
+	}
+	
+	public ElementType getElementType() {
+		return elementType;
+	}
+	
+	public void levelUp() { }
 
 	/**
 	 * @return the collisionRect
@@ -135,6 +154,10 @@ public abstract class Actor extends GameObject implements IUpdateable {
 	
 	public Equipment getEquipment() {
 		return equip;
+	}
+	
+	public void setElementType(ElementType type) {
+		this.elementType = type;
 	}
 	
 	public void setHealth(Health health) {

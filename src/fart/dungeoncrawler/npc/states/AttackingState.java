@@ -18,15 +18,16 @@ public class AttackingState extends NPCState {
 		owner.setVelocity(Vector2.Zero);
 		if(owner.getAttackType() == AttackType.melee) {
 			owner.setCurrentAnimation(owner.getSimpleAttack().getAnimation(owner.getHeading()));
+			owner.getManager().registerAttack(owner.getSimpleAttack());
+			owner.getSimpleAttack().activate();
 		}
 		else
 			owner.setCurrentAnimation(DynamicObjectState.Idle);
-		//TODO: Evaluate which attack...
 	}
 
 	@Override
 	public void update(float elapsed) {
-		if(owner.getSimpleAttack().Update())
+		if(owner.getSimpleAttack().update(elapsed))
 			machine.setState(DynamicObjectState.Idle);
 	}
 

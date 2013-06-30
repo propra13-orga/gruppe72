@@ -10,30 +10,28 @@ import fart.dungeoncrawler.IUpdateable;
 import Utils.Vector2;
 
 public class SpellProjectile extends GameObject implements IUpdateable {
-	private int ownerID;
+	private Actor owner;
 	private Vector2 velocity;
 	private BufferedImage texture;
 	private Rectangle collisionRect;
 	private int damage;
 	private Collision collision;
+	private Spell spell;
 	
-	public SpellProjectile(GameObject owner, BufferedImage texture,/* Vector2 velocity,*/ int damage,/* Vector2 startPosition,*/ Collision collision) {
-		this.ownerID = owner.getID();
+	public SpellProjectile(Actor owner, BufferedImage texture, int damage, Collision collision) {
+		this.owner = owner;
 		this.texture = texture;
-		//this.velocity = velocity;
 		this.damage = damage;
 		this.collision = collision;
-		
-		//collisionRect = new Rectangle((int)startPosition.x, (int)startPosition.y, texture.getWidth(), texture.getHeight());
-		//screenPosition = startPosition;
 	}
 
-	public SpellProjectile(SpellProjectile projectile, Vector2 startPosition, Vector2 velocity) {
-		this.ownerID = projectile.ownerID;
+	public SpellProjectile(SpellProjectile projectile, Vector2 startPosition, Vector2 velocity, Spell spell) {
+		this.owner = projectile.owner;
 		this.texture = projectile.texture;
 		this.velocity = velocity;
 		this.damage = projectile.damage;
 		this.collision = projectile.collision;
+		this.spell = spell;
 		
 		collisionRect = new Rectangle((int)startPosition.x, (int)startPosition.y, texture.getWidth(), texture.getHeight());
 		screenPosition = startPosition;
@@ -43,12 +41,20 @@ public class SpellProjectile extends GameObject implements IUpdateable {
 		return damage;
 	}
 	
+	public Actor getOwner() {
+		return owner;
+	}
+	
 	public int getOwnerID() {
-		return ownerID;
+		return owner.getID();
 	}
 	
 	public Collision getCollision() {
 		return collision;
+	}
+	
+	public Spell getSpell() {
+		return spell;
 	}
 	
 	@Override

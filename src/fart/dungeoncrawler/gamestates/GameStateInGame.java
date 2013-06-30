@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
 import fart.dungeoncrawler.*;
+import fart.dungeoncrawler.actor.DynamicObjectManager;
 import fart.dungeoncrawler.actor.NewPlayer;
 import fart.dungeoncrawler.enums.GameState;
 

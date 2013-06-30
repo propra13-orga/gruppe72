@@ -4,11 +4,11 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
 import fart.dungeoncrawler.Controller;
-import fart.dungeoncrawler.DynamicObjectManager;
 import fart.dungeoncrawler.Game;
 import fart.dungeoncrawler.StaticObjectManager;
 import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.actor.Actor;
+import fart.dungeoncrawler.actor.DynamicObjectManager;
 import fart.dungeoncrawler.actor.Stats;
 import fart.dungeoncrawler.enums.GameState;
 import fart.dungeoncrawler.items.Equipment;
@@ -40,7 +40,7 @@ public class GameStateInInventory extends BaseGameState {
 
 	@Override
 	public void update(float elapsed) {
-		if(controller.justPressed(KeyEvent.VK_I))
+		if(controller.justPressed(KeyEvent.VK_I) || controller.justPressed(KeyEvent.VK_ESCAPE))
 			game.setGameState(GameState.InGame);
 		
 		inventory.update(elapsed);

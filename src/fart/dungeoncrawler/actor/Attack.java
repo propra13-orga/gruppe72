@@ -8,17 +8,25 @@ import Utils.DamageCalculator;
 
 import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.enums.Heading;
+import fart.dungeoncrawler.items.Weapon;
 
 public class Attack {
+	private static final int NO_WEAPON_DURATION = 500;
+	
 	private int damage;
 	private HashMap<Heading, Animation> anim;
 	private HashMap<Heading, HashMap<Integer, Rectangle>> attackRects;
 	private Animation curAnim;
 	private Rectangle curRect;
 	private int frameDuration;
-	private int duration;
+	private float duration;
 	private int curFrame;
 	private Actor owner;
+	private int ID;
+	private boolean hasHit = false;
+	private ElementalDamage eleDamage;
+	
+	private static int idCounter = 0;
 	
 	/**
 	 * Represents a MeleeAttack. 
@@ -36,8 +44,8 @@ public class Attack {
 		//this.attackRects = attackRects;
 		this.owner = owner;
 		this.frameDuration = frameDuration;
-		float mul = DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility());
-		duration = (int)(frameDuration * mul);
+		//float mul = DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility());
+		//duration = (int)(frameDuration * mul);
 		curFrame = 0;
 		
 		constructRectsFromList(attackRects);
@@ -57,8 +65,8 @@ public class Attack {
 		//this.attackRects = attackRects;
 		this.owner = owner;
 		this.frameDuration = frameDuration;
-		float mul = DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility());
-		duration = (int)(frameDuration * mul);
+		//float mul = DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility());
+		//duration = (int)(frameDuration * mul);
 		curFrame = 0;
 		
 		HashMap<Integer, Rectangle> attackRects = new HashMap<Integer, Rectangle>();
@@ -134,7 +142,8 @@ public class Attack {
 	 * @param heading Heading of the owner
 	 * @return CollisionRect for heading and current frame
 	 */
-	public Rectangle getRect(Heading heading) {
+	public Rectangle getRect() {
+		Heading heading = owner.getHeading();
 		int frame = curAnim.getCurrentFrame();
 		if(attackRects.get(heading).containsKey(frame)) 
 			curRect = attackRects.get(heading).get(frame);
@@ -147,18 +156,62 @@ public class Attack {
 		return ret;
 	}
 	
+	public void activate() {
+		Weapon weapon = owner.getEquipment().getWeapon();
+		if(weapon != null) {
+			eleDamage = weapon.getEleDamage();
+			frameDuration = weapon.getAttackSpeed();
+		}
+		else {
+			eleDamage = null;
+			frameDuration = NO_WEAPON_DURATION;
+		}
+		
+		frameDuration = DamageCalculator.calcAttackSpeed(owner, frameDuration);
+		
+		curFrame = 0;
+		duration = 0;
+		ID = idCounter++;
+		hasHit = false;
+		
+		if(idCounter == 10000)
+			idCounter = 0;
+	}
+	
 	/**
 	 * Updates the current attack. 
 	 * @return Returns if the attack is over. 
 	 */
-	public boolean Update() {
-		duration = (int)(frameDuration * DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility()));
+	public boolean update(float elapsed) {
+		//duration = frameDuration;//(int)(frameDuration * DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility()));
 		curFrame += 1;
-		if(curFrame == duration) {
+		duration += elapsed;
+		if(duration >= frameDuration) {
+			duration = 0;
 			curFrame = 0;
 			return true;
 		}
 		
 		return false;
+	}
+	
+	public Actor getOwner() {
+		return owner;
+	}
+	
+	public void hit() {
+		hasHit = true;
+	}
+	
+	public boolean hasHit() {
+		return hasHit;
+	}
+	
+	public int getID() {
+		return ID;
+	}
+	
+	public ElementalDamage getEleDamage() {
+		return eleDamage;
 	}
 }

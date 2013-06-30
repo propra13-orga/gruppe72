@@ -8,19 +8,22 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import fart.dungeoncrawler.*;
+import fart.dungeoncrawler.enums.ElementType;
 import fart.dungeoncrawler.enums.Heading;
 
 public class ActorDescription {
 	private BufferedImage spriteSheet;
 	protected Dimension collisionDimension;
-	protected Health health;
-	protected Mana mana;
+	//protected Health health;
+	//protected Mana mana;
+	protected int level;
+	protected int element;
 	protected Stats stats;
 	protected Heading heading;
 	
 	public ActorDescription(String spritePath, 
-			int maxHealth, 
-			int maxMana, 
+			int level, 
+			int element, 
 			Stats stats, 
 			Heading heading) {
 		
@@ -35,22 +38,22 @@ public class ActorDescription {
 	
 		this.stats = stats;
 		this.heading = heading;
-		health = new Health(maxHealth);
-		mana = new Mana(maxMana);
+		this.level = level;
+		this.element = element;
 	}
 	
 	public ActorDescription(Dimension collisionDim, 
-			int maxHealth, 
-			int curHealth,
-			int maxMana, 
-			int curMana,
+			int level, 
+			//int curHealth,
+			int element, 
+			//int curMana,
 			Stats stats, 
 			Heading heading) {
 		this.collisionDimension = collisionDim;
 		this.stats = stats;
 		this.heading = heading;
-		health = new Health(maxHealth);
-		mana = new Mana(maxMana);
+		this.level = level;
+		this.element = element;
 	}
 	
 	/**
@@ -63,15 +66,15 @@ public class ActorDescription {
 	/**
 	 * @return the health
 	 */
-	public Health getHealth() {
-		return new Health(health);
+	public int getLevel() {
+		return level;
 	}
 
 	/**
 	 * @return the mana
 	 */
-	public Mana getMana() {
-		return new Mana(mana);
+	public ElementType getElement() {
+		return ElementType.values()[element];
 	}
 
 	/**

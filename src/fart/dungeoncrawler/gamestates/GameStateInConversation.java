@@ -8,10 +8,10 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import fart.dungeoncrawler.Controller;
-import fart.dungeoncrawler.DynamicObjectManager;
 import fart.dungeoncrawler.Game;
 import fart.dungeoncrawler.StaticObjectManager;
 import fart.dungeoncrawler.Tilemap;
+import fart.dungeoncrawler.actor.DynamicObjectManager;
 import fart.dungeoncrawler.enums.GameState;
 
 public class GameStateInConversation extends BaseGameState {

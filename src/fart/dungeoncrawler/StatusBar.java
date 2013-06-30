@@ -9,24 +9,27 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import fart.dungeoncrawler.actor.Level;
 import fart.dungeoncrawler.actor.NewPlayer;
 
 public class StatusBar implements IDrawable {
 	private Health health;
 	private Mana mana;
+	private Level level;
 	private Rectangle healthRect;
 	private Rectangle manaRect;
+	private Rectangle expRect;
 	private BufferedImage barTexture;
 	
 	//zur anzeige von lebenspunkten etc
 	public StatusBar(NewPlayer player) {
 		this.health = player.getHealth();
 		this.mana = player.getMana();
+		this.level = player.getLevel();
 		
-		//bilder fehlen noch... können nicht geladen werden. rect muss etwas kleiner als healthframe sein.
 		healthRect = new Rectangle(20, 20, 93, 13);
-		//manaRect = new Rectangle(360, 20, 93, 13);
 		manaRect = new Rectangle(20, 40, 93, 13);
+		expRect = new Rectangle(20, 60, 93, 13);
 		
 		try {
 			barTexture = ImageIO.read(new File("res/emptyBar.png"));
@@ -51,8 +54,8 @@ public class StatusBar implements IDrawable {
 		
 		graphics.drawImage(barTexture, healthRect.x - 4, healthRect.y - 3, null);
 		
-		int mp = mana.getCurrentMana();
-		int maxMP = mana.getMaxMana();
+		int mp = (int)mana.getCurrentMana();
+		int maxMP = (int)mana.getMaxMana();
 		
 		percent = (float)mp/maxMP;
 		xStart = manaRect.x;
@@ -63,8 +66,18 @@ public class StatusBar implements IDrawable {
 		graphics.setColor(new Color(0.0f, 0.0f, 1.0f));
 		graphics.fillRect(xStart, yStart, xWidth, yWidth);
 		
-		//hier noch draw frame etc, aber bilder fehlen.
 		graphics.drawImage(barTexture, manaRect.x - 4, manaRect.y - 3, null);
+		
+		percent = level.getExpPercent();
+		xStart = expRect.x;
+		xWidth = (int)(expRect.width * percent);
+		yStart = expRect.y;
+		yWidth = expRect.height;
+		
+		graphics.setColor(new Color(1.0f, 1.0f, 1.0f));
+		graphics.fillRect(xStart, yStart, xWidth, yWidth);
+		
+		graphics.drawImage(barTexture, expRect.x - 4, expRect.y - 3, null);
 	}
 
 	public void setHealth(Health h) {

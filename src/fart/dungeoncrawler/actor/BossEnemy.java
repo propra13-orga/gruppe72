@@ -76,7 +76,8 @@ public class BossEnemy extends BaseEnemy {
 		g2d.setColor(new Color(0.6f, 0.1f, 0.8f));
 		g2d.fillOval(8, 8, 16, 16);
 		
-		simpleSpell = new Spell(new SpellProjectile(this, spTex, 25, collision), 25, 10, 120, 2.5f);
+		simpleSpell = new Spell(new SpellProjectile(this, spTex, 25, collision), 25, 10, 120, 2.5f, ElementType.Water);
+		spellManager.addSpell(simpleSpell);
 	}
 	
 	@Override

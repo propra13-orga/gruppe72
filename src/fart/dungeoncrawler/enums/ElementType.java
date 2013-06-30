@@ -1,6 +1,7 @@
 package fart.dungeoncrawler.enums;
 
-public enum MagicType {
+public enum ElementType {
+	None,
 	Fire,
 	Water,
 	Earth

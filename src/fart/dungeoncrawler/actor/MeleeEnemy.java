@@ -62,7 +62,7 @@ public class MeleeEnemy extends BaseEnemy {
 		simpleAttackAnim.put(Heading.Down, new Animation(iSADown, 1));
 		//HashMap<Integer, Rectangle> atRects = new HashMap<Integer, Rectangle>();
 		//atRects.put(0, new Rectangle(-16, -16, 16, 16));
-		int frameDur = 44;
+		int frameDur = 45;
 		animations.put(DynamicObjectState.Attacking, simpleAttackAnim);
 		simpleAttack = new Attack(8, simpleAttackAnim/*, atRects*/, frameDur, this);
 	}

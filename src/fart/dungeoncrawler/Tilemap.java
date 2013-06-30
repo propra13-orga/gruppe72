@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import fart.dungeoncrawler.actor.DynamicObjectManager;
+
 public class Tilemap implements IDrawable {
 	public static final int TILE_SIZE = 32;
 	

@@ -1,10 +1,13 @@
 package fart.dungeoncrawler.actor;
 
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.RadialGradientPaint;
 import java.awt.Rectangle;
 import java.awt.color.ColorSpace;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +15,7 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import Utils.DamageCalculator;
 import Utils.Vector2;
 
 import fart.dungeoncrawler.*;
@@ -31,11 +35,14 @@ public class NewPlayer extends Actor implements IUpdateable {
 	private boolean supressEnemyCollision = false;
 	public StatusBar statusbar;
 	
+	private SpellManager spellManager;
+	
 	//DEBUG
-	private int maxHitDuration = 40;
+	private int maxHitDuration = 15;
 	private int curHitDuration;
 	private BufferedImage spTex;
 	private float spSpeed = 4.0f;
+	private BufferedImage efTex;
 	
 	/**
 	 * Represents the player.
@@ -52,6 +59,11 @@ public class NewPlayer extends Actor implements IUpdateable {
 		statusbar = new StatusBar(this);
 		controller = game.getController();
 		inventory.setGold(100);
+		
+		//TEST
+		//level.addExperince(level.getExperienceForLevelUp() - 10);
+		spellManager = new SpellManager(this);
+		spellManager.addShields();
 
 		//Setup Animations
 		try {
@@ -127,7 +139,22 @@ public class NewPlayer extends Actor implements IUpdateable {
 		//DEBUG
 		System.out.println("Hold SHIFT to avoid player collision.");
 		buildSpell();
-		//
+		efTex = new BufferedImage(40, 40, BufferedImage.TYPE_INT_ARGB);
+	}
+	
+	@Override
+	public void levelUp() {
+		stats.addStamina(2);
+		stats.addAgility(1);
+		stats.addStrength(1);
+		stats.addWill(1);
+		
+		health.addMaxHealth(2 * Stats.HEALTH_PER_STAM);
+		mana.addMaxMana(1 * Stats.MANA_PER_WILL);
+		health.fillHealth();
+		mana.fillMana();
+		
+		spellManager.addShields();
 	}
 	
 	public void resetCheckpoint(CheckPointInfo info) {
@@ -148,12 +175,25 @@ public class NewPlayer extends Actor implements IUpdateable {
 	}
 
 	private void buildSpell() {
-		spTex = new BufferedImage(32, 32, ColorSpace.TYPE_RGB);
+		spTex = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = (Graphics2D)spTex.getGraphics();
-		g2d.setColor(new Color(0.6f, 0.1f, 0.8f));
+		g2d.setColor(new Color(0, 0, 0, 0));
+		g2d.fillRect(0, 0, 32, 32);
+		g2d.setColor(Color.cyan);
 		g2d.fillOval(8, 8, 16, 16);
 		
-		simpleSpell = new Spell(new SpellProjectile(this, spTex, 15, collision), 15, 15, 120, 2.5f);
+		simpleSpell = new Spell(new SpellProjectile(this, spTex, 15, collision), 30, 15, 120, 2.5f, ElementType.Fire);
+		spellManager.addSpell(simpleSpell);
+		
+		BufferedImage spTex2 = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+		g2d = (Graphics2D)spTex2.getGraphics();
+		g2d.setColor(new Color(0, 0, 0, 0));
+		g2d.fillRect(0, 0, 32, 32);
+		g2d.setColor(Color.orange);
+		g2d.fillOval(8, 8, 16, 16);
+		
+		Spell simpleSpell2 = new Spell(new SpellProjectile(this, spTex2, 15, collision), 30, 12, 90, 3.5f, ElementType.Water);
+		spellManager.addSpell(simpleSpell2);
 	}
 	
 	@Override
@@ -209,9 +249,11 @@ public class NewPlayer extends Actor implements IUpdateable {
 		
 		state = DynamicObjectState.Attacking;
 		curAnim = simpleAttack.getAnimation(heading);
+		manager.registerAttack(simpleAttack);
+		simpleAttack.activate();
 	}
 	
-	private void spellAttack() {
+	private void spellAttack(int index) {
 		if(state == DynamicObjectState.Attacking)
 			return;
 		
@@ -235,11 +277,26 @@ public class NewPlayer extends Actor implements IUpdateable {
 			startPos = new Vector2(collisionRect.x, collisionRect.y + (float)collisionRect.getHeight());
 		}
 		//manager.spawnSpell(this, new SpellProjectile(this, spTex, spVelo, spDmg, startPos, collision));
-		if(!simpleSpell.isOnCooldown() && mana.getCurrentMana() >= simpleSpell.getManaCost()) {
-			mana.reduceMana(simpleSpell.getManaCost());
-			simpleSpell.activate();
-			manager.spawnSpell(this, simpleSpell.getProjectile(startPos, heading), simpleSpell);
+		Spell curSpell = spellManager.getSpell(index);
+		if(!curSpell.isOnCooldown() && mana.getCurrentMana() >= curSpell.getManaCost()) {
+			mana.reduceMana(curSpell.getManaCost());
+			//curSpell.activate();
+			manager.spawnSpell(this, curSpell.getProjectile(startPos, heading), curSpell);
+			spellManager.activate(index);
 		}
+		/*if(index == 0) {
+			if(!simpleSpell.isOnCooldown() && mana.getCurrentMana() >= simpleSpell.getManaCost()) {
+				mana.reduceMana(simpleSpell.getManaCost());
+				simpleSpell.activate();
+				manager.spawnSpell(this, simpleSpell.getProjectile(startPos, heading), simpleSpell);
+			}
+		} else if(index == 1) {
+			if(!simpleSpell2.isOnCooldown() && mana.getCurrentMana() >= simpleSpell.getManaCost()) {
+				mana.reduceMana(simpleSpell.getManaCost());
+				simpleSpell.activate();
+				manager.spawnSpell(this, simpleSpell.getProjectile(startPos, heading), simpleSpell);
+			}
+		}*/
 	}
 	
 	/**
@@ -260,6 +317,11 @@ public class NewPlayer extends Actor implements IUpdateable {
 		}
 		
 		regenerate();
+		spellManager.update(elapsed);
+
+		ElementalShield curShield = spellManager.getCurrentShield();
+		if(curShield != null && curShield.getElementType() == ElementType.Fire)
+			manager.handleAreaOfEffectSpell(this, curShield.getDamage(), ElementType.Fire, curShield.getAOErect());
 		
 		if(state == DynamicObjectState.Terminated) {
 			game.startGame(true);
@@ -267,14 +329,16 @@ public class NewPlayer extends Actor implements IUpdateable {
 		}
 		
 		if(state == DynamicObjectState.Attacking) {
-			if(simpleAttack.Update()) {
+			/*if(simpleAttack.update()) {
 				state = DynamicObjectState.Idle;
 				curAnim = idleAnim.get(heading);
 				return;
-			}
+			}*/
 			curAnim.update(elapsed);
 			//manager.handleAttack(simpleAttack, ID);
-			manager.handleAttack(this, simpleAttack);
+			//manager.handleAttack(this, simpleAttack);
+			
+			//manager.registerAttack(this, simpleAttack);
 			
 			return;
 		}
@@ -300,19 +364,27 @@ public class NewPlayer extends Actor implements IUpdateable {
 				return;
 			}
 			curAnim.update(elapsed);*/
-			if(simpleAttack.Update()) {
+			/*if(simpleAttack.update()) {
 				state = DynamicObjectState.Idle;
 				curAnim = idleAnim.get(heading);
 				return;
-			}
+			}*/
 			curAnim.update(elapsed);
 			//manager.handleAttack(simpleAttack, ID);
-			manager.handleAttack(this, simpleAttack);
+			//manager.handleAttack(this, simpleAttack);
 			
 			return;
 		}
 		else if(controller.justPressed(KeyEvent.VK_S))
-			spellAttack();
+			spellAttack(0);
+		else if(controller.justPressed(KeyEvent.VK_D))
+			spellAttack(1);
+		else if(controller.justPressed(KeyEvent.VK_5))
+			spellManager.activateShield(ElementType.Fire);
+		else if(controller.justPressed(KeyEvent.VK_6))
+			spellManager.activateShield(ElementType.Water);
+		else if(controller.justPressed(KeyEvent.VK_7))
+			spellManager.activateShield(ElementType.Earth);
 		else if(controller.isDownPressed())
 			move(Heading.Down);
 		else if(controller.isUpPressed())
@@ -354,14 +426,41 @@ public class NewPlayer extends Actor implements IUpdateable {
 			screenPosition.y += velocity.y;
 			curAnim.update(elapsed);
 		}
-		
-		
 	}
 	
 	@Override
 	public void draw(Graphics2D graphics) {
+		ElementalShield cs = spellManager.getCurrentShield();
+		if(cs != null) {
+			Color[] c = new Color[3];
+			c[0] = new Color(0, 0, 0, 0);
+			c[1] = new Color(0, 0, 0, 0);
+			ElementType type = cs.getElementType();
+			
+			switch(type) {
+			case Earth:
+				c[2] = new Color(0.45f, 0.4f, 0.15f, 0.85f);
+				break;
+			case Fire:
+				c[2] = new Color(1.0f, 0.0f, 0.0f, 0.7f);
+				break;
+			case Water:
+				c[2] = new Color(0.3f, 0.3f, 0.8f, 0.7f);
+				break;
+			}
+			
+			//Graphics2D g = (Graphics2D)efTex.getGraphics();
+			float[] dist = { 0.0f, 0.25f, 1f };
+			RadialGradientPaint rgp = new RadialGradientPaint(new Point2D.Float((int)screenPosition.x + 16, (int)screenPosition.y + 16), 20, dist, c);
+			graphics.setPaint(rgp);
+			//graphics.setColor(c[0]);
+			graphics.fillOval((int)screenPosition.x - 4, (int)screenPosition.y - 4, 40, 40);
+			//graphics.drawim
+		}
+		
 		graphics.drawImage(getTexture(), (int)screenPosition.x, (int)screenPosition.y, null);
 		statusbar.draw(graphics);
+		spellManager.draw(graphics);
 	}
 
 	@Override

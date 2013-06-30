@@ -219,8 +219,8 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		
 		if(state == DynamicObjectState.Attacking) {
 			if(curAttackType == AttackType.melee) {
-				//manager.handleAttack(simpleAttack, ID);
-				manager.handleAttack(this, simpleAttack);
+				//manager.handleAttack(this, simpleAttack);
+				return;
 			}
 			else if(curAttackType == AttackType.spell) {
 				Vector2 spVelo = new Vector2();
@@ -245,6 +245,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 					mana.reduceMana(simpleSpell.getManaCost());
 					simpleSpell.activate();
 					manager.spawnSpell(this, simpleSpell.getProjectile(startPos, heading), simpleSpell);
+					manager.addSpellToUpdate(simpleSpell);
 					System.out.println("Spell!");
 				}
 			}
@@ -321,8 +322,5 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 			
 			setHeading();
 		}
-		
-		
 	}
-
 }

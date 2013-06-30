@@ -8,13 +8,13 @@ public class NPCDescription extends ActorDescription {
 	
 	public NPCDescription(String spritePath,
 					int type,
-					int maxHealth,
-					int maxMana,
+					int level,
+					int element,
 					Stats stats,
 					Heading heading) {
 		super(spritePath,
-					maxHealth,
-					maxMana,
+					level,
+					element,
 					stats,
 					heading);		
 		this.type = NPCType.values()[type];
@@ -24,8 +24,8 @@ public class NPCDescription extends ActorDescription {
 			int type,
 			ActorDescription aDesc) {
 		super(spritePath,
-					(int)aDesc.health.getMaxHealth(),
-					aDesc.mana.getMaxMana(),
+					aDesc.getLevel(),
+					aDesc.getElement().ordinal(),
 					aDesc.stats,
 					aDesc.heading);
 		this.type = NPCType.values()[type];

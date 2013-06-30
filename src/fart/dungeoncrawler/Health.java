@@ -81,6 +81,10 @@ public class Health {
     	addHealth(0);
     }
     
+    public void fillHealth() {
+    	curHealth = maxHealth;
+    }
+    
     public void setInvul(boolean invul) {
     	invulnerable = invul;
     }
