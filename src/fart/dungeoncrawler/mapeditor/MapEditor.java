@@ -11,6 +11,7 @@ public class MapEditor
 	public final int WIDTH = 32;
 	public final int HEIGHT = 20;
 	
+	private ImageManager imgmgr;
 	private MEPanel mepanel;
 	private METoolbar metoolbar;
 	
@@ -19,12 +20,14 @@ public class MapEditor
 		JFrame frame = new JFrame();
 		frame.setTitle("Dungeoncrawler MapEditor");
 		
+		imgmgr = new ImageManager();
+		
 		//TODO: Add setting bar to BorderLayout.NORTH
 		
-		metoolbar = new METoolbar(this);
+		metoolbar = new METoolbar(this, imgmgr);
 		frame.add(metoolbar, BorderLayout.EAST);
 		
-		mepanel = new MEPanel(this);
+		mepanel = new MEPanel(this, imgmgr);
 		frame.add(mepanel, BorderLayout.CENTER);
 		
 		frame.pack();
@@ -34,6 +37,11 @@ public class MapEditor
 		frame.setResizable(false);
 		
 		frame.setVisible(true);
+	}
+	
+	public ImageManager getImageManager()
+	{
+		return imgmgr;
 	}
 	
 	public MEPanel getMEPanel()

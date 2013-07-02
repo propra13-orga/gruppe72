@@ -7,13 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,16 +17,15 @@ import javax.swing.JPanel;
 public class METoolbar extends JPanel implements MouseListener
 {
 	private MapEditor me;
+	private ImageManager imgmgr;
 	private int width;
 	private int height;
-	
-	private ArrayList<String> objIDs = new ArrayList<String>();
-	private HashMap<String, JLabel> objects = new HashMap<String, JLabel>();
-	private String currentID;
+	private ArrayList<JLabel> tools;
+	private int curSelection;
 	
 	private Point highlight = new Point(0,0);
 	
-	public METoolbar(MapEditor mapeditor)
+	public METoolbar(MapEditor mapeditor, ImageManager imgmgr)
 	{
 		super();
 		if((this.me = mapeditor) == null)
@@ -40,8 +34,15 @@ public class METoolbar extends JPanel implements MouseListener
 			System.exit(1);
 		}
 		
+		if((this.imgmgr = imgmgr) == null)
+		{
+			System.err.println("ImageManager Object in METoolbar is null");
+			System.exit(1);
+		}
+		
 		width = 2*me.TILE_SIZE;
 		height = me.HEIGHT*me.TILE_SIZE;
+		tools = new ArrayList<JLabel>();
 		this.setPreferredSize(new Dimension(width, height));
 		this.setLayout(null);
 
@@ -50,43 +51,23 @@ public class METoolbar extends JPanel implements MouseListener
 	
 	public void init()
 	{
-		BufferedImage bi;
-		JLabel label;
-		
-		try
+		// Add Objects to ImageManager
+		imgmgr.add("grass", "res/grass.png");
+		imgmgr.add("wall", "res/wall.png");
+
+		for(int i=0; i<imgmgr.getSize(); i++)
 		{
-			// grass
-			bi = ImageIO.read(new File("res/grass.png"));
-			label = new JLabel(new ImageIcon(bi));
-			objIDs.add("grass");
-			objects.put("grass", label);
-			
-			// wall
-			bi = ImageIO.read(new File("res/wall.png"));
-			label = new JLabel(new ImageIcon(bi));
-			objIDs.add("wall");
-			objects.put("wall", label);
-			
-		} catch (IOException e)
-		{
-			System.err.println("addButtons(): Could not load all images.");
-		}
-		
-		// Add Buttons with Icons to the Panel
-		for(int i=0; i<objIDs.size(); i++)
-		{
-			JLabel tmp = objects.get(objIDs.get(i));
+			JLabel tmp = new JLabel(new ImageIcon(imgmgr.getImage(i)));
+			tmp.setLocation(this.width/2-me.TILE_SIZE/2, (me.TILE_SIZE+16)*i+16);
 			tmp.setSize(me.TILE_SIZE, me.TILE_SIZE);
-			tmp.setLocation(this.width/2-me.TILE_SIZE/2, i*(me.TILE_SIZE+10)+10);
-			if(tmp.getToolTipText() == null)
-				tmp.setToolTipText(objIDs.get(i));
-			tmp.setName(objIDs.get(i));
+			tmp.setName(imgmgr.getID(i));
 			tmp.addMouseListener(this);
 			this.add(tmp);
+			tools.add(tmp);
 		}
 		
-		highlight.setLocation(objects.get(objIDs.get(0)).getLocation());
-		currentID = objIDs.get(0);
+		curSelection = 0;
+		highlight.setLocation(tools.get(0).getLocation());
 	}
 	
 	public void paintComponent(Graphics g)
@@ -101,25 +82,15 @@ public class METoolbar extends JPanel implements MouseListener
 	
 	public String getCurrentID()
 	{
-		return currentID;
-	}
-	
-	public ArrayList<String> getObjIDs()
-	{
-		return objIDs;
-	}
-	
-	public BufferedImage getIcon(String objID)
-	{
-		BufferedImage bi = (BufferedImage)(((ImageIcon)objects.get(objID).getIcon()).getImage());
-		return bi;
+		return tools.get(curSelection).getName();
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		currentID = ((JLabel)e.getSource()).getName();
-		highlight.setLocation(objects.get(currentID).getLocation());
+		curSelection = tools.indexOf(e.getSource());
+		highlight.setLocation(tools.get(curSelection).getLocation());
+		
 		repaint();
 	}
 

@@ -6,11 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
@@ -18,19 +14,23 @@ import javax.swing.event.MouseInputListener;
 public class MEPanel extends JPanel implements MouseInputListener
 {
 	private MapEditor me;
+	private ImageManager imgmgr;
 	
 	private char walls[][];
 	private Point highlight = new Point(0,0);
 	
-	private BufferedImage currentBI;
-	
-	
-	public MEPanel(MapEditor mapeditor)
+	public MEPanel(MapEditor mapeditor, ImageManager imgmgr)
 	{
 		super();
 		if((this.me = mapeditor) == null)
 		{
 			System.err.println("MapEditor Object in MEPanel is null");
+			System.exit(1);
+		}
+		
+		if((this.imgmgr = imgmgr) == null)
+		{
+			System.err.println("ImageManager Object in MEPanel is null");
 			System.exit(1);
 		}
 		
@@ -69,9 +69,9 @@ public class MEPanel extends JPanel implements MouseInputListener
 			for(int i=0; i<me.WIDTH; i++)
 			{
 				if(walls[i][j] == '#')
-					g2d.drawImage(me.getMEToolbar().getIcon("wall"), null, i*me.TILE_SIZE, j*me.TILE_SIZE);
+					g2d.drawImage(imgmgr.getImage("wall"), null, i*me.TILE_SIZE, j*me.TILE_SIZE);
 				else
-					g2d.drawImage(me.getMEToolbar().getIcon("grass"), null, i*me.TILE_SIZE, j*me.TILE_SIZE);
+					g2d.drawImage(imgmgr.getImage("grass"), null, i*me.TILE_SIZE, j*me.TILE_SIZE);
 			}
 		}
 		
