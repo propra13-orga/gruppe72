@@ -42,7 +42,7 @@ public class MEPanel extends JPanel implements MouseInputListener
 		init();
 	}
 	
-	private void init()
+	public void init()
 	{
 		walls = new char[me.WIDTH][me.HEIGHT];
 		for(int j=0; j<me.HEIGHT; j++)
@@ -56,6 +56,8 @@ public class MEPanel extends JPanel implements MouseInputListener
 					walls[i][j] = ' ';
 			}
 		}
+		
+		repaint();
 	}
 	
 	public void paintComponent(Graphics g)
