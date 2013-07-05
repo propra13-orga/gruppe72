@@ -23,7 +23,6 @@ public class MapEditor
 		
 		imgmgr = new ImageManager();
 		
-		//TODO: Add setting bar to BorderLayout.NORTH
 		menubar = new MEMenuBar(this);
 		frame.setJMenuBar(menubar);
 		
