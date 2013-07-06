@@ -64,7 +64,7 @@ public class MEMenuBar extends JMenuBar implements ActionListener
 		}
 		else if(action.equals("save"))
 		{
-			me.getMEPanel().saveMap();
+			me.getMEPanel().saveMap("res/maps/L0R0ME.xml");
 		}
 		else if(action.equals("close"))
 		{

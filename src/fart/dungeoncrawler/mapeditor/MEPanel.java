@@ -43,7 +43,7 @@ public class MEPanel extends JPanel implements MouseInputListener
 
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
-		
+
 		init();
 	}
 	
@@ -97,7 +97,7 @@ public class MEPanel extends JPanel implements MouseInputListener
 		g2d.drawRect((int)highlight.getX()-1, (int)highlight.getY()-1, me.TILE_SIZE, me.TILE_SIZE);
 	}
 	
-	public void saveMap()
+	public void saveMap(String outputFile)
 	{
 		String mapString = "\n";
 		for(int j=0; j<walls[j].length; j++)
@@ -157,9 +157,8 @@ public class MEPanel extends JPanel implements MouseInputListener
 		
 		try
 		{
-			FileOutputStream fop = new FileOutputStream("res/maps/L0R0ME.xml");
+			FileOutputStream fop = new FileOutputStream(outputFile);
 			Serializer serializer = new Serializer(fop, "ISO-8859-1");
-			//Serializer serializer = new Serializer(System.out, "ISO-8859-1"); // DEBUG
 			serializer.setIndent(8);
 			serializer.setMaxLength(64);
 			serializer.write(doc);

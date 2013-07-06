@@ -12,14 +12,21 @@ public class ImageManager
 {
 	private ArrayList<String> objIDs;
 	private HashMap<String, BufferedImage> images;
+	
+	private ArrayList<ArrayList<String>> objCat;
+	private final int categoryCount = 4;
 
 	public ImageManager()
 	{
 		objIDs = new ArrayList<String>();
 		images = new HashMap<String, BufferedImage>();
+		objCat = new ArrayList<ArrayList<String>>(categoryCount);
+		
+		for(int i=0; i<categoryCount; i++)
+			objCat.add(new ArrayList<String>());
 	}
 	
-	public void add(String id, String imagePath)
+	public void add(String id, ObjectCategory oc, String imagePath)
 	{
 		BufferedImage bi = null;
 		
@@ -34,6 +41,15 @@ public class ImageManager
 		
 		objIDs.add(id);
 		images.put(id, bi);
+		
+		if(oc == ObjectCategory.misc)
+			objCat.get(0).add(id);
+		else if(oc == ObjectCategory.enemies)
+			objCat.get(1).add(id);
+		else if(oc == ObjectCategory.npcs)
+			objCat.get(2).add(id);
+		else if(oc == ObjectCategory.items)
+			objCat.get(3).add(id);
 	}
 	
 	public void remove(String id)
@@ -45,6 +61,15 @@ public class ImageManager
 				objIDs.remove(i);
 				images.remove(id);
 				
+				for(int j=0; j<objCat.size(); j++)
+				{
+					if(objCat.get(j).indexOf(id) != -1)
+					{
+						objCat.get(j).remove(id);
+						j = objCat.size();
+					}
+				}
+				
 				i = objIDs.size();
 			}
 		}
@@ -53,6 +78,15 @@ public class ImageManager
 	public String getID(int index)
 	{
 		return objIDs.get(index);
+	}
+	
+	public int getCategory(String id)
+	{
+		for(int i=0; i<objCat.size(); i++)
+			if(objCat.get(i).indexOf(id) != -1)
+				return i;
+		
+		return -1;
 	}
 	
 	public BufferedImage getImage(String id)
