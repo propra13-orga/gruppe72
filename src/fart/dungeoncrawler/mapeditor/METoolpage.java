@@ -48,7 +48,7 @@ public class METoolpage extends JPanel implements MouseListener
 	public void init()
 	{
 		tools = new ArrayList<JLabel>();
-		curSelection = 0;
+		curSelection = 1;
 		highlight = new Point(0,0);
 	}
 	
@@ -59,7 +59,7 @@ public class METoolpage extends JPanel implements MouseListener
 		tools.add(tool);
 		this.add(tool);
 		
-		if(tools.size() == 1)
+		if(tools.size() == 2)
 			highlight.setLocation(tool.getLocation());
 	}
 	
@@ -78,11 +78,27 @@ public class METoolpage extends JPanel implements MouseListener
 		return tools.get(curSelection).getName();
 	}
 	
+	public void setCurrentSelection(int select)
+	{
+		curSelection = select;
+		highlight.setLocation(tools.get(curSelection).getLocation());
+		repaint();
+	}
+	
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		curSelection = tools.indexOf(e.getSource());
-		highlight.setLocation(tools.get(curSelection).getLocation());
+		String name = ((JLabel) e.getSource()).getName();
+
+		if(name.substring(0, 2).equals("cV"))
+		{
+			toolbar.changeView(Integer.valueOf(name.substring(2, 3)));
+		}
+		else
+		{
+			curSelection = tools.indexOf(e.getSource());
+			highlight.setLocation(tools.get(curSelection).getLocation());
+		}
 		
 		repaint();
 	}

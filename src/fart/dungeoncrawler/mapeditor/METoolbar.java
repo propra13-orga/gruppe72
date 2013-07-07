@@ -1,6 +1,7 @@
 package fart.dungeoncrawler.mapeditor;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -59,12 +60,59 @@ public class METoolbar extends JPanel
 		toolpages.get(0).setVisible(true);
 		curPage=0;
 
+		
+		JLabel tmp;
+		// Create category page
+		// MISC Page
+		tmp = new JLabel("MISC");
+		tmp.setSize(me.TILE_SIZE, me.TILE_SIZE);
+		tmp.setFont(new Font(tmp.getFont().getName(), tmp.getFont().getStyle(), 11));
+		tmp.setName("cV1");
+		toolpages.get(0).addTool(tmp);
+		
+		// ENEMIES Page
+		tmp = new JLabel("ENEMIES");
+		tmp.setSize(me.TILE_SIZE, me.TILE_SIZE);
+		tmp.setFont(new Font(tmp.getFont().getName(), tmp.getFont().getStyle(), 6));
+		tmp.setName("cV2");
+		toolpages.get(0).addTool(tmp);
+		
+		// NPCs Page
+		tmp = new JLabel("NPCs");
+		tmp.setSize(me.TILE_SIZE, me.TILE_SIZE);
+		tmp.setFont(new Font(tmp.getFont().getName(), tmp.getFont().getStyle(), 10));
+		tmp.setName("cV3");
+		toolpages.get(0).addTool(tmp);
+		
+		// ITEMS Page
+		tmp = new JLabel("ITEMS");
+		tmp.setSize(me.TILE_SIZE, me.TILE_SIZE);
+		tmp.setFont(new Font(tmp.getFont().getName(), tmp.getFont().getStyle(), 10));
+		tmp.setName("cV4");
+		toolpages.get(0).addTool(tmp);
+		
+		toolpages.get(0).setCurrentSelection(0);
+		
+		// Put a BACK Button on every tool page
+		for(int i=1; i<5; i++)
+		{
+			tmp = new JLabel("BACK");
+			tmp.setSize(me.TILE_SIZE, me.TILE_SIZE);
+			tmp.setFont(new Font(tmp.getFont().getName(), tmp.getFont().getStyle(), 10));
+			tmp.setName("cV0");
+			toolpages.get(i).addTool(tmp);
+		}
+		
+		// Put tools on toolpages
 		for(int i=0; i<imgmgr.getSize(); i++)
 		{
-			JLabel tmp = new JLabel(new ImageIcon(imgmgr.getImage(i)));
+			tmp = new JLabel(new ImageIcon(imgmgr.getImage(i)));
 			tmp.setSize(me.TILE_SIZE, me.TILE_SIZE);
-			tmp.setName(imgmgr.getID(i));
-			toolpages.get(0).addTool(tmp);
+			
+			String id = imgmgr.getID(i);
+			tmp.setName(id);
+			
+			toolpages.get(imgmgr.getCategory(id)+1).addTool(tmp);
 		}
 	}
 	
@@ -81,5 +129,26 @@ public class METoolbar extends JPanel
 	public String getCurrentID()
 	{
 		return toolpages.get(curPage).getCurrentID();
+	}
+	
+	public void changeView(int pageNr)
+	{
+		if((pageNr >= 0) && (pageNr < toolpages.size()))
+		{
+			for(int i=0; i<toolpages.size(); i++)
+			{
+				if(i!=pageNr)
+				{
+					toolpages.get(i).setVisible(false);
+				}
+				else
+				{
+					toolpages.get(i).setVisible(true);
+					curPage = i;
+				}
+			}
+		}
+		else
+			System.err.println("toolpage "+pageNr+" does not exist!");
 	}
 }
