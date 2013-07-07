@@ -22,6 +22,7 @@ public class MEPanel extends JPanel implements MouseInputListener
 	private ImageManager imgmgr;
 	
 	private char walls[][];
+	private int objects[][];
 	private Point highlight = new Point(0,0);
 	
 	public MEPanel(MapEditor mapeditor, ImageManager imgmgr)
@@ -50,6 +51,8 @@ public class MEPanel extends JPanel implements MouseInputListener
 	public void init()
 	{
 		walls = new char[me.WIDTH][me.HEIGHT];
+		objects = new int[me.WIDTH][me.HEIGHT];
+		
 		for(int j=0; j<me.HEIGHT; j++)
 		{
 			for(int i=0; i<me.WIDTH; i++)
@@ -59,6 +62,8 @@ public class MEPanel extends JPanel implements MouseInputListener
 					walls[i][j] = '#';
 				else
 					walls[i][j] = ' ';
+				
+				objects[i][j] = -1;
 			}
 		}
 		
@@ -79,6 +84,9 @@ public class MEPanel extends JPanel implements MouseInputListener
 					g2d.drawImage(imgmgr.getImage("wall"), null, i*me.TILE_SIZE, j*me.TILE_SIZE);
 				else
 					g2d.drawImage(imgmgr.getImage("grass"), null, i*me.TILE_SIZE, j*me.TILE_SIZE);
+			
+				if(objects[i][j] != -1)
+					g2d.drawImage(imgmgr.getImage(String.valueOf(objects[i][j])), null, i*me.TILE_SIZE, j*me.TILE_SIZE);
 			}
 		}
 		
@@ -186,10 +194,36 @@ public class MEPanel extends JPanel implements MouseInputListener
 				
 		highlight.setLocation(tileX*me.TILE_SIZE, tileY*me.TILE_SIZE);
 		
-		if(me.getMEToolbar().getCurrentID() == "grass")
+		if(me.getMEToolbar().getCurrentID().equals("grass"))
+		{
 			walls[tileX][tileY] = ' ';
-		else if(me.getMEToolbar().getCurrentID() == "wall")
+			objects[tileX][tileY] = -1;
+		}
+		else if(me.getMEToolbar().getCurrentID().equals("wall"))
+		{
 			walls[tileX][tileY] = '#';
+			objects[tileX][tileY] = -1;
+		}
+		else
+		{
+			try
+			{
+				objects[tileX][tileY] = Integer.parseInt(me.getMEToolbar().getCurrentID());
+			}
+			catch(NumberFormatException ex) { }
+		}
+		
+		// DEBUG OUTPUT OF OBJECTS ARRAY
+		/*for(int j=0; j<20; j++)
+		{
+			for(int i=0; i<32; i++)
+			{
+				if(objects[i][j] != -1)
+					System.out.print(" ");
+				System.out.print(objects[i][j]);
+			}
+			System.out.println();
+		}*/
 		
 		repaint();
 	}

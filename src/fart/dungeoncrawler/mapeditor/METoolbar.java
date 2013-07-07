@@ -44,8 +44,23 @@ public class METoolbar extends JPanel
 	public void init()
 	{
 		// Add Objects to ImageManager
+		// MISC
 		imgmgr.add("grass", ObjectCategory.misc, "res/grass.png");
 		imgmgr.add("wall", ObjectCategory.misc, "res/wall.png");
+		imgmgr.add("0", ObjectCategory.misc, "res/tp.png");
+		imgmgr.add("1", ObjectCategory.misc, "res/goal.png");
+		imgmgr.add("2", ObjectCategory.misc, "res/trap.png");
+		imgmgr.add("7", ObjectCategory.misc, "res/tp2.png");
+		
+		// ENEMIES
+		imgmgr.add("3", ObjectCategory.enemies, "res/enemy1.png");
+		imgmgr.add("4", ObjectCategory.enemies, "res/enemy1.png");
+		
+		// NPCs
+		imgmgr.add("5", ObjectCategory.npcs, "res/shop.png");
+		imgmgr.add("6", ObjectCategory.npcs, "res/shop.png");
+		
+		
 		
 		// Create toolpages
 		METoolpage newPage;

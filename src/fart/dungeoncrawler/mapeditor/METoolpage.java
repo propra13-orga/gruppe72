@@ -90,7 +90,7 @@ public class METoolpage extends JPanel implements MouseListener
 	{
 		String name = ((JLabel) e.getSource()).getName();
 
-		if(name.substring(0, 2).equals("cV"))
+		if((name.length() > 2) && (name.substring(0, 2).equals("cV")))
 		{
 			toolbar.changeView(Integer.valueOf(name.substring(2, 3)));
 		}
