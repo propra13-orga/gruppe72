@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
@@ -107,6 +108,161 @@ public class MEPanel extends JPanel implements MouseInputListener
 	
 	public void saveMap(String outputFile)
 	{
+		// Descriptions
+		Element desc_width;
+		Element desc_height;
+		Element desc_passable;
+		Element desc_damage;
+		Element desc_spritesheet;
+		Element desc_isRanged;
+		Element desc_aggroRange;
+		Element desc_attackRange;
+		Element desc_type;
+		Element desc_level;
+		Element desc_element;
+		
+		
+		ArrayList<Element> desc_list = new ArrayList<Element>();
+		Element description;
+		
+		// Portal Description
+		description = new Element("object");
+		description.addAttribute(new Attribute("name", "portal"));
+		description.addAttribute(new Attribute("id", "0"));
+		desc_spritesheet = new Element("spritesheet");
+		desc_spritesheet.appendChild("res/tp.png");
+		description.appendChild(desc_spritesheet);
+		desc_width = new Element("colWidth");
+		desc_width.appendChild("32");
+		description.appendChild(desc_width);
+		desc_height = new Element("colHeight");
+		desc_height.appendChild("32");
+		description.appendChild(desc_height);
+		desc_passable = new Element("passable");
+		desc_passable.appendChild("1");
+		description.appendChild(desc_passable);
+		desc_list.add(description);
+		
+		// Goal Description
+		description = new Element("object");
+		description.addAttribute(new Attribute("name", "goal"));
+		description.addAttribute(new Attribute("id", "1"));
+		desc_spritesheet = new Element("spritesheet");
+		desc_spritesheet.appendChild("res/goal.png");
+		description.appendChild(desc_spritesheet);
+		desc_width = new Element("colWidth");
+		desc_width.appendChild("32");
+		description.appendChild(desc_width);
+		desc_height = new Element("colHeight");
+		desc_height.appendChild("32");
+		description.appendChild(desc_height);
+		desc_passable = new Element("passable");
+		desc_passable.appendChild("1");
+		description.appendChild(desc_passable);
+		desc_list.add(description);
+		
+		// Trap(fire) Description
+		description = new Element("object");
+		description.addAttribute(new Attribute("name", "fire"));
+		description.addAttribute(new Attribute("id", "2"));
+		desc_spritesheet = new Element("spritesheet");
+		desc_spritesheet.appendChild("res/trap.png");
+		description.appendChild(desc_spritesheet);
+		desc_width = new Element("colWeight");
+		desc_width.appendChild("32");
+		description.appendChild(desc_width);
+		desc_height = new Element("colHeight");
+		desc_height.appendChild("32");
+		description.appendChild(desc_height);
+		desc_damage = new Element("damage");
+		desc_damage.appendChild("1");
+		description.appendChild(desc_damage);
+		desc_list.add(description);
+		
+		// MeleeEnemy Description
+		description = new Element("actor");
+		description.addAttribute(new Attribute("name", "meleenemy"));
+		description.addAttribute(new Attribute("id", "3"));
+		desc_spritesheet = new Element("spritesheet");
+		desc_spritesheet.appendChild("res/enemy1.png");
+		description.appendChild(desc_spritesheet);
+		desc_isRanged = new Element("isRanged");
+		desc_isRanged.appendChild("0");
+		description.appendChild(desc_isRanged);
+		desc_aggroRange = new Element("aggroRange");
+		desc_aggroRange.appendChild("96");
+		description.appendChild(desc_aggroRange);
+		desc_attackRange = new Element("attackRange");
+		desc_attackRange.appendChild("16");
+		description.appendChild(desc_attackRange);
+		desc_type = new Element("type");
+		desc_type.appendChild("3");
+		description.appendChild(desc_type);
+		desc_level = new Element("level");
+		desc_level.appendChild("1");
+		description.appendChild(desc_level);
+		desc_element = new Element("element");
+		desc_element.appendChild("1");
+		description.appendChild(desc_element);
+		desc_list.add(description);
+		
+		// BossEnemy Description
+		description = new Element("actor");
+		description.addAttribute(new Attribute("name", "bossenemy"));
+		description.addAttribute(new Attribute("id", "4"));
+		desc_spritesheet = new Element("spritesheet");
+		desc_spritesheet.appendChild("res/enemy1.png");
+		description.appendChild(desc_spritesheet);
+		desc_isRanged = new Element("isRanged");
+		desc_isRanged.appendChild("0");
+		description.appendChild(desc_isRanged);
+		desc_aggroRange = new Element("aggroRange");
+		desc_aggroRange.appendChild("96");
+		description.appendChild(desc_aggroRange);
+		desc_attackRange = new Element("attackRange");
+		desc_attackRange.appendChild("32");
+		description.appendChild(desc_attackRange);
+		desc_type = new Element("type");
+		desc_type.appendChild("3");
+		description.appendChild(desc_type);
+		desc_level = new Element("level");
+		desc_level.appendChild("2");
+		description.appendChild(desc_level);
+		desc_element = new Element("element");
+		desc_element.appendChild("1");
+		description.appendChild(desc_element);
+		desc_list.add(description);
+		
+		// NPCshop Description
+		description = new Element("actor");
+		description.addAttribute(new Attribute("name", "npcshop"));
+		description.addAttribute(new Attribute("id", "5"));
+		desc_spritesheet = new Element("spritesheet");
+		desc_spritesheet.appendChild("res/shop.png");
+		description.appendChild(desc_spritesheet);
+		desc_level = new Element("level");
+		desc_level.appendChild("1");
+		description.appendChild(desc_level);
+		desc_element = new Element("element");
+		desc_element.appendChild("0");
+		description.appendChild(desc_element);
+		desc_list.add(description);
+				
+		// NPCshop Description
+		description = new Element("actor");
+		description.addAttribute(new Attribute("name", "npctalking"));
+		description.addAttribute(new Attribute("id", "6"));
+		desc_spritesheet = new Element("spritesheet");
+		desc_spritesheet.appendChild("res/shop.png");
+		description.appendChild(desc_spritesheet);
+		desc_level = new Element("level");
+		desc_level.appendChild("1");
+		description.appendChild(desc_level);
+		desc_element = new Element("element");
+		desc_element.appendChild("0");
+		description.appendChild(desc_element);
+		desc_list.add(description);
+		
 		String mapString = "\n";
 		for(int j=0; j<walls[j].length; j++)
 		{
@@ -118,6 +274,7 @@ public class MEPanel extends JPanel implements MouseInputListener
 			mapString += "\n";
 		}
 		mapString += "\t";
+		// END OF DESCRIPTIONS
 		
 		// Root Element level
 		Element map = new Element("map");
@@ -144,10 +301,8 @@ public class MEPanel extends JPanel implements MouseInputListener
 			Element descriptions = new Element("descriptions");
 			{
 				// Elements to append to descriptions
-				
-				Element platzhalter = new Element("bla");
-				platzhalter.appendChild("das hier loeschen");
-				descriptions.appendChild(platzhalter);
+				for(int i=0; i<desc_list.size(); i++)
+					descriptions.appendChild(desc_list.get(i));
 			}
 			map.appendChild(descriptions);
 			
@@ -155,9 +310,42 @@ public class MEPanel extends JPanel implements MouseInputListener
 			{
 				// Elements to append to gameobjects
 				
-				Element platzhalter = new Element("bla");
-				platzhalter.appendChild("das hier loeschen");
-				gameobjects.appendChild(platzhalter);
+				for(int j=0; j<objects[0].length; j++)
+				{
+					for(int i=0; i<objects.length; i++)
+					{
+						if(objects[i][j] != -1)
+						{
+							Element posX = new Element("positionX");
+							posX.appendChild(String.valueOf(i));
+							Element posY = new Element("positionY");
+							posY.appendChild(String.valueOf(j));
+							Element newObj;
+						
+							if(objects[i][j] == 0)
+							{
+								newObj =  new Element("object");
+								newObj.addAttribute(new Attribute("id", "0"));
+								newObj.appendChild(posX);
+								newObj.appendChild(posY);
+								// TODO: popup settings-menu
+								Element mapToName = new Element("mapToName");
+								mapToName.appendChild("res/maps/L0R1.xml");
+								newObj.appendChild(mapToName);
+								
+								Element mapToX = new Element("mapToX");
+								mapToX.appendChild("1");
+								newObj.appendChild(mapToX);
+								
+								Element mapToY = new Element("mapToY");
+								mapToY.appendChild("1");
+								newObj.appendChild(mapToY);
+								
+								gameobjects.appendChild(newObj);
+							}
+						}
+					}
+				}
 			}
 			map.appendChild(gameobjects);
 		}
@@ -209,21 +397,10 @@ public class MEPanel extends JPanel implements MouseInputListener
 			try
 			{
 				objects[tileX][tileY] = Integer.parseInt(me.getMEToolbar().getCurrentID());
+				walls[tileX][tileY] = ' ';
 			}
 			catch(NumberFormatException ex) { }
 		}
-		
-		// DEBUG OUTPUT OF OBJECTS ARRAY
-		/*for(int j=0; j<20; j++)
-		{
-			for(int i=0; i<32; i++)
-			{
-				if(objects[i][j] != -1)
-					System.out.print(" ");
-				System.out.print(objects[i][j]);
-			}
-			System.out.println();
-		}*/
 		
 		repaint();
 	}

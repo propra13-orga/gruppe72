@@ -60,6 +60,16 @@ public class METoolbar extends JPanel
 		imgmgr.add("5", ObjectCategory.npcs, "res/shop.png");
 		imgmgr.add("6", ObjectCategory.npcs, "res/shop.png");
 		
+		// Items
+		imgmgr.add("100", ObjectCategory.items, "res/icons/smallhealpotion.png");
+		imgmgr.add("101", ObjectCategory.items, "res/icons/smallmanapotion.png");
+		imgmgr.add("102", ObjectCategory.items, "res/icons/leatherarmor.png");
+		imgmgr.add("103", ObjectCategory.items, "res/icons/leathergloves.png");
+		imgmgr.add("104", ObjectCategory.items, "res/icons/leatherboots.png");
+		imgmgr.add("105", ObjectCategory.items, "res/icons/rustyhelmet.png");
+		imgmgr.add("106", ObjectCategory.items, "res/icons/ring1.png");
+		imgmgr.add("107", ObjectCategory.items, "res/icons/sword.png");
+		imgmgr.add("108", ObjectCategory.items, "res/icons/staff.png");
 		
 		
 		// Create toolpages
@@ -159,7 +169,9 @@ public class METoolbar extends JPanel
 				else
 				{
 					toolpages.get(i).setVisible(true);
-					curPage = i;
+					
+					if(i != 0)
+						curPage = i;
 				}
 			}
 		}
