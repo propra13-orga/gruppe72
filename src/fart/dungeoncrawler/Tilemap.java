@@ -18,6 +18,12 @@ public class Tilemap implements IDrawable {
 	private int actRoom[][];
 	public static final int ROOM_WIDTH = 15;
 	public static final int ROOM_HEIGHT = 15;
+	private static int width;
+	public static int getWidth() { return width; }
+	public static void setWidth(int w) { width = w; }
+	private static int height;
+	public static int getHeight() { return height; }
+	public static void setHeight(int h) { height = h; }
 	private MapLoader loader;
 	private String name;
 	public String getName() { return name; }
@@ -52,8 +58,8 @@ public class Tilemap implements IDrawable {
 	
 	@Override
 	public void draw(Graphics2D graphics) {
-		for(int j=0; j<ROOM_HEIGHT; j++)
-			for(int i=0; i<ROOM_WIDTH; i++)
+		for(int j=0; j<height; j++)
+			for(int i=0; i<width; i++)
 			{
 				if((actRoom[i][j]&1) != 0)
 					graphics.drawImage(grass, null, i*TILE_SIZE, j*TILE_SIZE);

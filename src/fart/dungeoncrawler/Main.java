@@ -12,7 +12,7 @@ public class Main
 		JFrame frame = new JFrame();
 		frame.setTitle("Dungeon Crawler");
 		
-		Game mainpanel = new Game();
+		Game mainpanel = new Game((byte)0, 1, false);
 		mainpanel.setPreferredSize(new Dimension(32 * 32,20 * 32));
 		frame.add(mainpanel);
 		

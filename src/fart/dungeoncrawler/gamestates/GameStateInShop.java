@@ -67,6 +67,7 @@ public class GameStateInShop extends BaseGameState {
 			game.setGameState(GameState.InGame);
 		
 		shop.update(elapsed);
+		dManager.update(elapsed);
 	}
 
 	@Override

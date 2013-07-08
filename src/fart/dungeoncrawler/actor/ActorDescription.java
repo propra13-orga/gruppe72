@@ -7,15 +7,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import fart.dungeoncrawler.*;
 import fart.dungeoncrawler.enums.ElementType;
 import fart.dungeoncrawler.enums.Heading;
 
 public class ActorDescription {
 	private BufferedImage spriteSheet;
 	protected Dimension collisionDimension;
-	//protected Health health;
-	//protected Mana mana;
 	protected int level;
 	protected int element;
 	protected Stats stats;
@@ -44,9 +41,7 @@ public class ActorDescription {
 	
 	public ActorDescription(Dimension collisionDim, 
 			int level, 
-			//int curHealth,
 			int element, 
-			//int curMana,
 			Stats stats, 
 			Heading heading) {
 		this.collisionDimension = collisionDim;

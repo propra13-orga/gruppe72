@@ -12,6 +12,8 @@ import Utils.*;
 
 import fart.dungeoncrawler.*;
 import fart.dungeoncrawler.enums.*;
+import fart.dungeoncrawler.network.Server;
+import fart.dungeoncrawler.network.messages.game.GamePositionMessage;
 
 public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	protected Animation curAnim;
@@ -207,10 +209,50 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		return curAttackType;
 	}
 	
+	public void updateLogic(float elapsed) {
+		machine.update(elapsed);
+	}
+	
+	public void spell() {
+		if(!simpleSpell.isOnCooldown() && mana.getCurrentMana() >= simpleSpell.getManaCost()) {
+			
+			Vector2 spVelo = new Vector2();
+			Vector2 startPos = new Vector2();
+			if(heading == Heading.Right) {
+				spVelo.x = spSpeed;
+				startPos = new Vector2(collisionRect.x + collisionRect.width, collisionRect.y);
+			}
+			else if(heading == Heading.Left) {
+				spVelo.x = -spSpeed;
+				startPos = new Vector2(collisionRect.x - spTex.getWidth(), collisionRect.y);
+			}
+			else if(heading == Heading.Up) {
+				spVelo.y = -spSpeed;
+				startPos = new Vector2(collisionRect.x, collisionRect.y - spTex.getHeight());
+			} else {
+				spVelo.y = spSpeed;
+				startPos = new Vector2(collisionRect.x, collisionRect.y + (float)collisionRect.getHeight());
+			}
+			
+			mana.reduceMana(simpleSpell.getManaCost());
+			simpleSpell.activate();
+			manager.spawnSpell(this, simpleSpell.getProjectile(startPos, heading), simpleSpell);
+			manager.addSpellToUpdate(simpleSpell);
+			System.out.println("Spell!");
+		}
+	}
+	
+	public void attack() {
+		setCurrentAnimation(simpleAttack.getAnimation(heading));
+		manager.registerAttack(simpleAttack);
+		simpleAttack.activate();
+	}
+	
 	@Override
 	public void update(float elapsed) {
-		machine.update(elapsed);
+		//machine.update(elapsed);
 		state = machine.getState();
+		Vector2 sVelo = new Vector2(getVelocity());
 
 		if(state == DynamicObjectState.Terminated) {
 			return;
@@ -223,7 +265,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 				return;
 			}
 			else if(curAttackType == AttackType.spell) {
-				Vector2 spVelo = new Vector2();
+				/*Vector2 spVelo = new Vector2();
 				Vector2 startPos = new Vector2();
 				if(heading == Heading.Right) {
 					spVelo.x = spSpeed;
@@ -247,7 +289,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 					manager.spawnSpell(this, simpleSpell.getProjectile(startPos, heading), simpleSpell);
 					manager.addSpellToUpdate(simpleSpell);
 					System.out.println("Spell!");
-				}
+				}*/
 			}
 		}
 		
@@ -272,7 +314,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 					collisionRect.y = (int)screenPosition.y;
 					
 					//calculate new velocity. direction will be changed. 
-					GameObject player = machine.getPlayer();
+					GameObject player = machine.getNearestPlayer();
 					setVelocity(getAvoidanceVelocity(player.getPosition().sub(screenPosition)));
 					
 					//test again if movement is now possible
@@ -295,7 +337,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 					collisionRect.y = (int)screenPosition.y;
 					
 					//calculate new velocity. direction will be changed. 
-					GameObject player = machine.getPlayer();
+					GameObject player = machine.getNearestPlayer();
 					setVelocity(getAvoidanceVelocity(player.getPosition().sub(screenPosition)));
 					setVelocity(getVelocity().mul(-1));
 					
@@ -321,6 +363,10 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 			}
 			
 			setHeading();
+			
+			if(Server.isOnline() && sVelo != getVelocity()) {
+				Server.getInstance().broadcastMessage(new GamePositionMessage(this));
+			}
 		}
 	}
 }

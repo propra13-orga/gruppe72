@@ -20,7 +20,6 @@ public class Attack {
 	private Rectangle curRect;
 	private int frameDuration;
 	private float duration;
-	private int curFrame;
 	private Actor owner;
 	private int ID;
 	private boolean hasHit = false;
@@ -41,12 +40,8 @@ public class Attack {
 	public Attack(int damage, HashMap<Heading, Animation> anim, HashMap<Integer, Rectangle> attackRects, int frameDuration, Actor owner) {
 		this.damage = damage;
 		this.anim = anim;
-		//this.attackRects = attackRects;
 		this.owner = owner;
 		this.frameDuration = frameDuration;
-		//float mul = DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility());
-		//duration = (int)(frameDuration * mul);
-		curFrame = 0;
 		
 		constructRectsFromList(attackRects);
 	}
@@ -62,12 +57,8 @@ public class Attack {
 	public Attack(int damage, HashMap<Heading, Animation> anim, int frameDuration, Actor owner) {
 		this.damage = damage;
 		this.anim = anim;
-		//this.attackRects = attackRects;
 		this.owner = owner;
 		this.frameDuration = frameDuration;
-		//float mul = DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility());
-		//duration = (int)(frameDuration * mul);
-		curFrame = 0;
 		
 		HashMap<Integer, Rectangle> attackRects = new HashMap<Integer, Rectangle>();
 		attackRects.put(0, new Rectangle(-16, 0, 16, 32));
@@ -169,7 +160,6 @@ public class Attack {
 		
 		frameDuration = DamageCalculator.calcAttackSpeed(owner, frameDuration);
 		
-		curFrame = 0;
 		duration = 0;
 		ID = idCounter++;
 		hasHit = false;
@@ -183,12 +173,9 @@ public class Attack {
 	 * @return Returns if the attack is over. 
 	 */
 	public boolean update(float elapsed) {
-		//duration = frameDuration;//(int)(frameDuration * DamageCalculator.calcInvMultiplyer(owner.getStats().getAgility()));
-		curFrame += 1;
 		duration += elapsed;
 		if(duration >= frameDuration) {
 			duration = 0;
-			curFrame = 0;
 			return true;
 		}
 		

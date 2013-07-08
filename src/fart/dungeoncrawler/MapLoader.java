@@ -97,8 +97,10 @@ public class MapLoader
 		// Read width and height of map and create an array
 		current = map.getRootElement().getChildElements("width").get(0);
 		width = Integer.parseInt(current.getChild(0).getValue());
+		Tilemap.setWidth(width);
 		current = map.getRootElement().getChildElements("height").get(0);
 		height = Integer.parseInt(current.getChild(0).getValue());
+		Tilemap.setHeight(height);
 		output = new int[width][height];
 		
 		String tiles = map.getRootElement().getChildElements("tiles").get(0).getValue();
@@ -222,10 +224,10 @@ public class MapLoader
 		}
 		
 		//DEBUG
-		System.out.println("descLoc:");
+		/*System.out.println("descLoc:");
 		for(i=0; i<descLoc.length; i++)
 			System.out.println(descLoc[i][0]+", "+descLoc[i][1]);
-		System.out.println("descLoc END");
+		System.out.println("descLoc END");*/
 
 		current = map.getRootElement().getChildElements("gameobjects").get(0);
 		for(i=0; i<current.getChildElements().size(); i++)
@@ -307,7 +309,7 @@ public class MapLoader
 						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
 						
 						MeleeEnemy me = new MeleeEnemy(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE), ed);
-						EnemyStateMachine machine = new EnemyStateMachine(me, game.getPlayer());
+						EnemyStateMachine machine = new EnemyStateMachine(me, game.getAllPlayers());
 						me.setMachine(machine);
 						
 						//dManager.addObject(me);
@@ -331,7 +333,7 @@ public class MapLoader
 						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
 						
 						BossEnemy be = new BossEnemy(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE), ed);
-						EnemyStateMachine machine = new EnemyStateMachine(be, game.getPlayer());
+						EnemyStateMachine machine = new EnemyStateMachine(be, game.getAllPlayers());
 						be.setMachine(machine);
 						
 						//dManager.addObject(be);

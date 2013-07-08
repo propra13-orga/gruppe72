@@ -12,7 +12,6 @@ import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.Heading;
 
 public class CheckPointInfo {
-	private int id;
 	private float curHealth;
 	private float maxHealth;
 	private float curMana;
@@ -26,7 +25,7 @@ public class CheckPointInfo {
 	private EnemyDescription enemyDesc;
 	private boolean isBoss;
 	
-	public CheckPointInfo(int id,
+	public CheckPointInfo(
 			float ch, 
 			float mh, 
 			float cm, 
@@ -39,7 +38,6 @@ public class CheckPointInfo {
 			NPCDescription npcDesc, 
 			EnemyDescription enemyDesc,
 			boolean isBoss) {
-		this.id = id;
 		this.curHealth = ch;
 		this.maxHealth = mh;
 		this.curMana = cm;

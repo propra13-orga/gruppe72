@@ -1,12 +1,12 @@
 package fart.dungeoncrawler.npc.states;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
 import Utils.Vector2;
 
-import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.actor.BaseEnemy;
 import fart.dungeoncrawler.actor.NewPlayer;
@@ -17,7 +17,8 @@ public class EnemyStateMachine implements IUpdateable {
 	private HashMap<DynamicObjectState, NPCState> states;
 	private NPCState curState;
 	private BaseEnemy owner;
-	private NewPlayer player;
+	//private NewPlayer player;
+	private ArrayList<NewPlayer> allPlayers;
 	private Random random;
 	
 	/**
@@ -25,9 +26,10 @@ public class EnemyStateMachine implements IUpdateable {
 	 * @param owner The enemy this machine belongs to.
 	 * @param player The Player. 
 	 */
-	public EnemyStateMachine(BaseEnemy owner, NewPlayer player) {
+	public EnemyStateMachine(BaseEnemy owner, ArrayList<NewPlayer> allPlayers/*NewPlayer player*/) {
 		this.owner = owner;
-		this.player = player;
+		//this.player = player;
+		this.allPlayers = allPlayers;
 		
 		random = new Random();
 		
@@ -38,9 +40,9 @@ public class EnemyStateMachine implements IUpdateable {
 	 * Gets the Player.
 	 * @return The Player. 
 	 */
-	public GameObject getPlayer() {
+	/*public GameObject getPlayer() {
 		return player;
-	}
+	}*/
 	
 	/**
 	 * Creates and initializes all states and puts them in the state-hashmap.
@@ -65,6 +67,7 @@ public class EnemyStateMachine implements IUpdateable {
 		if(owner.getHealth().isDead())
 			setState(DynamicObjectState.Terminated);
 		DynamicObjectState doState = owner.getState();
+		NewPlayer player = getNearestPlayer();
 		
 		if(doState == DynamicObjectState.Attacking) {
 			curState.update(elapsed);
@@ -74,7 +77,7 @@ public class EnemyStateMachine implements IUpdateable {
 		//Check if the current state needs to be switched
 		//Idle - we check if player is in range or randomly start walking
 		if(doState == DynamicObjectState.Idle) {
-			if(checkPlayerInAggroRange())
+			if(checkPlayerInAggroRange(player))
 				return;
 			
 			double d = random.nextDouble();
@@ -83,20 +86,17 @@ public class EnemyStateMachine implements IUpdateable {
 		}
 		//Walking - we check if player is in range
 		if(doState == DynamicObjectState.Walking) {
-			if(checkPlayerInAggroRange())
+			if(checkPlayerInAggroRange(player))
 				return;
 		}
 		//Alerted - player is in range, so we start heading towards him. If our 
 		//health is below a certain threshold we start fleeing
 		if(doState == DynamicObjectState.Alerted) {
-			//Vector2 dirToPlayer = player.getPosition().sub(owner.getPosition());
-			//float distanceToPlayer = dirToPlayer.length();
-			
 			if(owner.getHealth().lowerThan(0.15f)) {
 				//HP is lower than 15%, we start to flee
 				setState(DynamicObjectState.Fleeing);
 				((FleeingState)curState).setThreat(player);
-			} else if(checkPlayerInAttackRange()) {
+			} else if(checkPlayerInAttackRange(player)) {
 				//TODO: Check if enemy is facing the player...
 				double d = random.nextDouble();
 				if(d < 0.02) {
@@ -124,7 +124,7 @@ public class EnemyStateMachine implements IUpdateable {
 				//HP is lower than 15%, we start to flee
 				setState(DynamicObjectState.Fleeing);
 				((FleeingState)curState).setThreat(player);
-			} else if(checkPlayerInAttackRange()) {
+			} else if(checkPlayerInAttackRange(player)) {
 				//TODO: Check if enemy is facing the player...
 				double d = random.nextDouble();
 				if(d < 0.02) {
@@ -150,6 +150,8 @@ public class EnemyStateMachine implements IUpdateable {
 		}
 		
 		curState.update(elapsed);
+		
+		//Server.getInstance().broadcastMessage(new GamePositionMessage(owner));
 	}
 	
 	/**
@@ -172,7 +174,7 @@ public class EnemyStateMachine implements IUpdateable {
 		curState.activate();
 		
 		if(state == DynamicObjectState.Chasing)
-			((ChasingState)curState).setGoal(player);
+			((ChasingState)curState).setGoal(getNearestPlayer());
 		
 		owner.setState(state);
 		owner.setCurrentAnimation(state);
@@ -192,24 +194,23 @@ public class EnemyStateMachine implements IUpdateable {
 	 * @return If the player is in range.
 	 */ 
 	@Deprecated
-	public boolean isPlayerInAggroRange() {
+	/*public boolean isPlayerInAggroRange() {
 		Vector2 dirToPlayer = player.getPosition().sub(owner.getPosition());
 		float distanceToPlayer = dirToPlayer.length();
 		
 		return distanceToPlayer < owner.getAggroRange();
-	}
+	}*/
 	
 	/**
 	 * Checks if the player is in aggroRange. If so, the state is switched to alerted.
 	 * @return Is the Player is in aggroRange. 
 	 */
-	public boolean checkPlayerInAggroRange() {
+	public boolean checkPlayerInAggroRange(NewPlayer player) {
 		Vector2 dirToPlayer = player.getPosition().sub(owner.getPosition());
 		float distanceToPlayer = dirToPlayer.length();
 		
 		if(distanceToPlayer < owner.getAggroRange()) {
 			setState(DynamicObjectState.Alerted);
-			((AlertState)curState).setGoal(player);
 			
 			return true;
 		}
@@ -221,7 +222,7 @@ public class EnemyStateMachine implements IUpdateable {
 	 * Checks if the player is in attackRange. 
 	 * @return If the player is in range. 
 	 */
-	public boolean checkPlayerInAttackRange() {
+	public boolean checkPlayerInAttackRange(NewPlayer player) {
 		Rectangle collisionRect = new Rectangle(owner.getCollisionRect());
 		int range = owner.getAttackRange();
 		
@@ -231,5 +232,24 @@ public class EnemyStateMachine implements IUpdateable {
 		collisionRect.height += (range * 2);
 		
 		return player.getCollisionRect().intersects(collisionRect);
+	}
+	
+	public NewPlayer getNearestPlayer() {
+		if(allPlayers.size() == 0)
+			return allPlayers.get(0);
+		
+		Vector2 pos = owner.getPosition();
+		int minIndex = 9999;
+		float minDis = 9999;
+		
+		for(int i = 0; i < allPlayers.size(); i++) {
+			float dis = allPlayers.get(i).getPosition().distance(pos);
+			if(dis < minDis) {
+				minIndex = i;
+				minDis = dis;
+			}
+		}
+		
+		return allPlayers.get(minIndex);
 	}
 }

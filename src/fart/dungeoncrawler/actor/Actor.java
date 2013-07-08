@@ -8,8 +8,12 @@ import fart.dungeoncrawler.*;
 import fart.dungeoncrawler.enums.*;
 import fart.dungeoncrawler.items.Equipment;
 import fart.dungeoncrawler.items.Inventory;
+import fart.dungeoncrawler.network.NetworkManager;
 
 public abstract class Actor extends GameObject implements IUpdateable {
+	private static int serverActorCounter = 0;
+	private static int clientActorCounter = 0;
+	
 	protected Rectangle collisionRect;
 	protected DynamicObjectState state;
 	protected Vector2 velocity;
@@ -24,6 +28,7 @@ public abstract class Actor extends GameObject implements IUpdateable {
 	protected Level level;
 	protected ActorDescription description;
 	protected Game game;
+	protected int actorID;
 	
 	protected SpellManager spellManager;
 	protected ElementalDamage elementDamage;
@@ -31,6 +36,9 @@ public abstract class Actor extends GameObject implements IUpdateable {
 	protected long lastReg;
 	protected static final int REG_MS = 1000;
 	protected ElementType elementType;
+	
+	protected boolean isInNetwork;
+	protected NetworkManager netManager;
 	
 	public Actor(Game game, ActorDescription desc, Vector2 position) {
 		this.stats = desc.getStats();
@@ -40,6 +48,15 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		this.screenPosition = position;
 		this.description = desc;
 		this.game = game;
+		this.isInNetwork = game.isInNetwork();
+		
+		if(game.isServer()) {
+			actorID = serverActorCounter;
+			serverActorCounter += 1;
+		} else {
+			actorID = clientActorCounter;
+			clientActorCounter += 1;
+		}
 		
 		Dimension dim = desc.getCollisionDimension();
 		collisionRect = new Rectangle((int)position.x, (int)position.y, dim.width, dim.height);
@@ -61,6 +78,10 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		collision.addDynamicObject(this);
 		
 		lastReg = System.currentTimeMillis();
+	}
+	
+	public int getActorID() {
+		return actorID;
 	}
 
 	protected void regenerate() {
@@ -198,5 +219,14 @@ public abstract class Actor extends GameObject implements IUpdateable {
 	
 	public void setVelocity(Vector2 v) {
 		this.velocity = new Vector2(v);
+		
+		if(velocity.x > 0.01f)
+			setHeading(Heading.Right);
+		else if(velocity.x < -0.01f)
+			setHeading(Heading.Left);
+		else if(velocity.y > 0.01f)
+			setHeading(Heading.Down);
+		else if(velocity.y < -0.01f)
+			setHeading(Heading.Up);
 	}
 }

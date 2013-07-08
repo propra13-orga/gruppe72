@@ -1,6 +1,10 @@
 package Utils;
 
-public class Vector2 {
+import java.io.Serializable;
+
+public class Vector2 implements Serializable {
+	private static final long serialVersionUID = 43525026928431765L;
+	
 	public float x;
 	public float y;
 	
@@ -50,8 +54,19 @@ public class Vector2 {
 		return (float)(Math.sqrt(x * x + y * y));
 	}
 	
+	public float lengthSquared() {
+		return x * x + y * y;
+	}
+	
 	public float dot(Vector2 v) {
 		return v.x * x + v.y * y;
+	}
+	
+	public float distance(Vector2 v) {
+		float dx = v.x - x;
+		float dy = v.y - y;
+		
+		return (float)Math.sqrt(dx * dx + dy * dy);
 	}
 	
 	@Override

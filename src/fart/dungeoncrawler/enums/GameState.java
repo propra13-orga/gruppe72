@@ -5,5 +5,7 @@ public enum GameState {
 	InGame,
 	InConversation,
 	InShop,
-	InInventory
+	InInventory,
+	InLobby,
+	InNetworkGame
 }

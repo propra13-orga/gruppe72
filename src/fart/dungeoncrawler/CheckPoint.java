@@ -80,7 +80,7 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 			//Save player
 			else if (a instanceof NewPlayer) {
 				NewPlayer p = (NewPlayer)a;
-				playerInfo = new CheckPointInfo(p.getID(),
+				playerInfo = new CheckPointInfo(
 									p.getHealth().getCurrentHealth(),
 									p.getHealth().getMaxHealth(),
 									p.getMana().getCurrentMana(),
@@ -100,7 +100,7 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 				
 			}
 			
-			CheckPointInfo info = new CheckPointInfo(a.getID(),
+			CheckPointInfo info = new CheckPointInfo(
 								a.getHealth().getCurrentHealth(),
 								a.getHealth().getMaxHealth(),
 								a.getMana().getCurrentMana(),
@@ -136,11 +136,11 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 				if(!eDesc.getIsRanged()) {
 					if(i.isBoss()) {
 						BossEnemy b = new BossEnemy(game, i);
-						b.setMachine(new EnemyStateMachine(b, game.getPlayer()));
+						b.setMachine(new EnemyStateMachine(b, game.getAllPlayers()));
 						continue;
 					}
 					MeleeEnemy e = new MeleeEnemy(game, i);
-					e.setMachine(new EnemyStateMachine(e, game.getPlayer()));
+					e.setMachine(new EnemyStateMachine(e, game.getAllPlayers()));
 					continue;
 				}
 			} else if(nDesc != null) {

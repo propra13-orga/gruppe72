@@ -35,8 +35,8 @@ public class Collision {
 		
 		int[][] map = loader.getMap();
 		
-		for(int i=0; i<Tilemap.ROOM_WIDTH; i++) {
-			for(int j=0; j<Tilemap.ROOM_HEIGHT; j++){
+		for(int i=0; i<Tilemap.getWidth(); i++) {
+			for(int j=0; j<Tilemap.getHeight(); j++){
 				if((map[i][j]&2) != 0) {
 					staticObjects.add(new Rectangle(i * Tilemap.TILE_SIZE, j * Tilemap.TILE_SIZE, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE));
 				}

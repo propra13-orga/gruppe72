@@ -35,6 +35,7 @@ public class SpellManager implements IDrawable, IUpdateable {
 		shieldCooldown = 0;
 	}
 	
+	@SuppressWarnings("incomplete-switch")
 	public void activateShield(ElementType type) {
 		if(shieldCooldown > 0)
 			return;

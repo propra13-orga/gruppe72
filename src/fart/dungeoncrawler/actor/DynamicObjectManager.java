@@ -4,35 +4,42 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import Utils.DamageCalculator;
+import Utils.Vector2;
 
 import fart.dungeoncrawler.Game;
 import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.Health;
-import fart.dungeoncrawler.actor.*;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.ElementType;
+import fart.dungeoncrawler.network.Server;
+import fart.dungeoncrawler.network.messages.game.GameHitMessage;
 
 public class DynamicObjectManager {
 	private ArrayList<Actor> dynamics = new ArrayList<Actor>();
 	private ArrayList<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
 	private ArrayList<Spell> spells = new ArrayList<Spell>();
 	private ArrayList<Attack> attacks = new ArrayList<Attack>();
-	private HashMap<Integer, Integer> attackHits = new HashMap<Integer, Integer>();
 	private Game game;
+	private boolean updateLogic = true;
 	
-	public DynamicObjectManager(Game game) {
+	public DynamicObjectManager(Game game, boolean updateLogic) {
 		this.game = game;
-	}
-	
-	public Game getGame() {
-		return game;
+		this.updateLogic = updateLogic;
 	}
 	
 	public void addObject(Actor npc) {		
 		dynamics.add(npc);
+	}
+	
+	public Actor getActorByID(int actorID) {
+		for(Actor a : dynamics) {
+			if(a.getActorID() == actorID)
+				return a;
+		}
+		
+		return null;
 	}
 	
 	//objekt entfernen
@@ -57,9 +64,14 @@ public class DynamicObjectManager {
 	
 	//spieler und objekte updaten
 	public void update(float elapsed) {
-		
-		for(int i = 0; i < dynamics.size(); i++)
-			dynamics.get(i).update(elapsed);
+		for(int i = 0; i < dynamics.size(); i++) {
+			Actor a = dynamics.get(i);
+			if(updateLogic)
+				if(a instanceof BaseEnemy)
+					((BaseEnemy)a).updateLogic(elapsed);
+			
+			a.update(elapsed);
+		}
 		
 		for(int i = 0; i < attacks.size(); i++) {
 			Attack a = attacks.get(i);
@@ -79,18 +91,20 @@ public class DynamicObjectManager {
 			if(a.hasHit())
 				continue;
 			
-			int attackerID = a.getOwner().getID();
+			int attackerID = a.getOwner().getActorID();
 			Rectangle rect = a.getRect();
 			for(int j = 0; j < dynamics.size(); j++) {
 				Actor defender = dynamics.get(j);
 				
 				//attacker should not hurt hisself
-				if(defender.getID() == attackerID)
+				if(defender.getActorID() == attackerID)
 					continue;
 				
 				if(rect.intersects(defender.getCollisionRect())) {
 					a.hit();
 					float dmg = DamageCalculator.calcDamage(a.getOwner(), defender);
+					if(Server.isOnline())
+						Server.getInstance().broadcastMessage(new GameHitMessage(defender, dmg, false));
 					reduceHealth(dmg, a.getOwner(), defender, true);
 				}
 			}
@@ -116,24 +130,49 @@ public class DynamicObjectManager {
 				continue;
 			}
 				
-			int ownerID = curSpellProj.getOwnerID();
-			Rectangle rect = curSpellProj.getCollisionRect();
-			for(Actor npc : dynamics) {
+			if(!game.isInNetwork() || game.isServer()) {
+				int ownerID = curSpellProj.getOwnerID();
+				Rectangle rect = curSpellProj.getCollisionRect();
+				for(Actor npc : dynamics) {
 				if(npc.getID() != ownerID && rect.intersects(npc.getCollisionRect())) {
-					Health health = npc.getHealth();
-					if(!health.isDead()) {
-						projectiles.remove(i);
-						float dmg = DamageCalculator.calcSpellDamage(curSpellProj.getDamage(), curSpell.getType(), curSpellProj.getOwner(), npc);
-						reduceHealth(dmg, curSpellProj.getOwner(), npc, true);
-						return;
+						Health health = npc.getHealth();
+						if(!health.isDead()) {
+							projectiles.remove(i);
+							float dmg = DamageCalculator.calcSpellDamage(curSpellProj.getDamage(), curSpell.getType(), curSpellProj.getOwner(), npc);
+							reduceHealth(dmg, curSpellProj.getOwner(), npc, true);
+							if(Server.isOnline())
+								Server.getInstance().broadcastMessage(new GameHitMessage(npc, dmg, true));
+							return;
+						}
 					}
 				}
 			}
+			
 		}
+	}
+	
+	public void removeProjectileInNetwork(NewPlayer a) {
+		float minDis = 9999;
+		int minIndex = 9999;
+		Vector2 pos = a.getPosition();
+		for(int i = 0; i < projectiles.size(); i++) {
+			float d = pos.distance(projectiles.get(i).getPosition());
+			if(d < minDis) {
+				minDis = d;
+				minIndex = i;
+			}
+		}
+		
+		if(minIndex != 9999)
+			projectiles.remove(minIndex);
 	}
 	
 	private void reduceHealth(float dmg, Actor attacker, Actor defender, boolean hitState) {
 		defender.getHealth().reduceHealth(dmg);
+		
+		/*if(Server.isOnline())
+			Server.getInstance().broadcastMessage(new GameSpellHitMessage(defender, dmg));*/
+		
 		if(hitState)
 			defender.setState(DynamicObjectState.Hit);
 		if(defender.getHealth().isDead()) {
@@ -194,7 +233,8 @@ public class DynamicObjectManager {
 
 		for(int i = 0; i < dynamics.size(); i++) {
 			Actor actor = dynamics.get(i);
-			if((actor instanceof BaseEnemy) && actor.getHealth().getCurrentHealth() < actor.getHealth().getMaxHealth()) {
+			if(((actor instanceof BaseEnemy) && actor.getHealth().getCurrentHealth() < actor.getHealth().getMaxHealth()) ||
+					game.isInNetwork()) {
 				
 				Rectangle rect = actor.getCollisionRect();
 				startX = (int)rect.x;
@@ -217,5 +257,9 @@ public class DynamicObjectManager {
 			Rectangle r = projectiles.get(i).getCollisionRect();
 			graphics.drawRect(r.x, r.y, (int)r.getWidth(), (int)r.getHeight());
 		}
+	}
+
+	public void setUpdateLogic(boolean updateLogic) {
+		this.updateLogic = updateLogic;
 	}
 }

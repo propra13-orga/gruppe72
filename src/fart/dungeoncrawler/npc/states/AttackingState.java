@@ -16,13 +16,14 @@ public class AttackingState extends NPCState {
 	public void activate() {
 		owner.setState(DO_STATE);
 		owner.setVelocity(Vector2.Zero);
+		
 		if(owner.getAttackType() == AttackType.melee) {
-			owner.setCurrentAnimation(owner.getSimpleAttack().getAnimation(owner.getHeading()));
-			owner.getManager().registerAttack(owner.getSimpleAttack());
-			owner.getSimpleAttack().activate();
+			owner.attack();
 		}
-		else
+		else {
 			owner.setCurrentAnimation(DynamicObjectState.Idle);
+			owner.spell();
+		}
 	}
 
 	@Override

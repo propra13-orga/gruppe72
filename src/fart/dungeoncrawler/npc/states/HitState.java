@@ -19,7 +19,7 @@ public class HitState extends NPCState {
 	public void activate() {
 		//Health h = owner.getHealth();
 		//h.setInvul(true);
-		owner.getHealth().setInvul(true);
+		//owner.getHealth().setInvul(true);
 		owner.setVelocity(new Vector2());
 		frameDuration = 45;
 	}

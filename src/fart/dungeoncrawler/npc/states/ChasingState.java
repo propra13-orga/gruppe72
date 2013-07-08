@@ -43,7 +43,6 @@ public class ChasingState extends NPCState {
 
 	@Override
 	public void exit() {
-		// TODO Auto-generated method stub
 
 	}
 

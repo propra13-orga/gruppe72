@@ -44,6 +44,7 @@ public class GameStateInInventory extends BaseGameState {
 			game.setGameState(GameState.InGame);
 		
 		inventory.update(elapsed);
+		dManager.update(elapsed);
 	}
 
 	@Override

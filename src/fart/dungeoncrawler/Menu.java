@@ -64,9 +64,11 @@ public class Menu implements IDrawable, IUpdateable{
 		
 		if(controller.justPressed(KeyEvent.VK_ENTER)) {
 			if(cursorPosition == 0) {
-				game.setGameState(GameState.InGame);
+				game.setInNetwork(false);
+				game.createPlayers((byte) 0, 1);
 				game.startGame(true);
 				isGameStarted = true;
+				game.setGameState(GameState.InGame);
 			} else if(cursorPosition == 1){
 				System.exit(0);
 			}

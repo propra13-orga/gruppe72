@@ -1,7 +1,6 @@
 package fart.dungeoncrawler.actor;
 
 import java.awt.Graphics2D;
-import java.beans.Expression;
 
 import fart.dungeoncrawler.IDrawable;
 

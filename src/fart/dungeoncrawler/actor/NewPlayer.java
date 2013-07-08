@@ -1,11 +1,6 @@
 package fart.dungeoncrawler.actor;
 
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
-import java.awt.RadialGradientPaint;
-import java.awt.Rectangle;
-import java.awt.color.ColorSpace;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -15,11 +10,11 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import Utils.DamageCalculator;
 import Utils.Vector2;
 
 import fart.dungeoncrawler.*;
 import fart.dungeoncrawler.enums.*;
+import fart.dungeoncrawler.network.NetworkManager;
 
 public class NewPlayer extends Actor implements IUpdateable {
 	private HashMap<Heading, Animation> walkAnim;
@@ -42,7 +37,9 @@ public class NewPlayer extends Actor implements IUpdateable {
 	private int curHitDuration;
 	private BufferedImage spTex;
 	private float spSpeed = 4.0f;
-	private BufferedImage efTex;
+	//private BufferedImage efTex;
+	private boolean controllerActive;
+	private PositionState posState;
 	
 	/**
 	 * Represents the player.
@@ -50,7 +47,7 @@ public class NewPlayer extends Actor implements IUpdateable {
 	 * @param Position Startposition in tiles
 	 * @param game Current instance of the game
 	 */
-	public NewPlayer(Game game, ActorDescription desc, Vector2 position) {
+	public NewPlayer(Game game, ActorDescription desc, Vector2 position, boolean controllerActive) {
 		super(game, desc, position);
 		
 		this.state = DynamicObjectState.Idle;
@@ -137,9 +134,14 @@ public class NewPlayer extends Actor implements IUpdateable {
 		}
 		
 		//DEBUG
-		System.out.println("Hold SHIFT to avoid player collision.");
 		buildSpell();
-		efTex = new BufferedImage(40, 40, BufferedImage.TYPE_INT_ARGB);
+		this.controllerActive = controllerActive;
+		isInNetwork = game.isInNetwork();
+		posState = new PositionState(this);
+	}
+	
+	public void setInNetwork(boolean isInNetwork) {
+		this.isInNetwork = isInNetwork;
 	}
 	
 	@Override
@@ -196,6 +198,13 @@ public class NewPlayer extends Actor implements IUpdateable {
 		spellManager.addSpell(simpleSpell2);
 	}
 	
+	public void setAnimation(DynamicObjectState state) {
+		if(state == DynamicObjectState.Idle)
+			setIdleAnim();
+		if(state == DynamicObjectState.Walking)
+			curAnim = walkAnim.get(heading);
+	}
+	
 	@Override
 	public void terminate() {
 		System.out.println("Player is dead!");
@@ -238,12 +247,16 @@ public class NewPlayer extends Actor implements IUpdateable {
 			velocity.y = +1;
 			break;
 		}
+		
+		/*if(isInNetwork && controllerActive) {
+			sendPositionMessage();
+		}*/
 	}
 	
 	/**
 	 * The player will perform a simple MeleeAttack. Mostly debugpurpose. 
 	 */
-	private void simpleAttack() {
+	public void simpleAttack() {
 		if(state == DynamicObjectState.Attacking)
 			return;
 		
@@ -251,13 +264,16 @@ public class NewPlayer extends Actor implements IUpdateable {
 		curAnim = simpleAttack.getAnimation(heading);
 		manager.registerAttack(simpleAttack);
 		simpleAttack.activate();
+		
+		if(isInNetwork && controllerActive) {
+			NetworkManager.sendAttackMessage(this);
+		}
 	}
 	
-	private void spellAttack(int index) {
+	public void spellAttack(int index) {
 		if(state == DynamicObjectState.Attacking)
 			return;
 		
-		//state = DynamicObjectState.Attacking;
 		curAnim = idleAnim.get(heading);
 		Vector2 spVelo = new Vector2();
 		Vector2 startPos = new Vector2();
@@ -276,27 +292,16 @@ public class NewPlayer extends Actor implements IUpdateable {
 			spVelo.y = spSpeed;
 			startPos = new Vector2(collisionRect.x, collisionRect.y + (float)collisionRect.getHeight());
 		}
-		//manager.spawnSpell(this, new SpellProjectile(this, spTex, spVelo, spDmg, startPos, collision));
+
 		Spell curSpell = spellManager.getSpell(index);
 		if(!curSpell.isOnCooldown() && mana.getCurrentMana() >= curSpell.getManaCost()) {
 			mana.reduceMana(curSpell.getManaCost());
-			//curSpell.activate();
 			manager.spawnSpell(this, curSpell.getProjectile(startPos, heading), curSpell);
 			spellManager.activate(index);
+			if(isInNetwork && controllerActive) {
+				NetworkManager.sendSpellMessage(this, index);
+			}
 		}
-		/*if(index == 0) {
-			if(!simpleSpell.isOnCooldown() && mana.getCurrentMana() >= simpleSpell.getManaCost()) {
-				mana.reduceMana(simpleSpell.getManaCost());
-				simpleSpell.activate();
-				manager.spawnSpell(this, simpleSpell.getProjectile(startPos, heading), simpleSpell);
-			}
-		} else if(index == 1) {
-			if(!simpleSpell2.isOnCooldown() && mana.getCurrentMana() >= simpleSpell.getManaCost()) {
-				mana.reduceMana(simpleSpell.getManaCost());
-				simpleSpell.activate();
-				manager.spawnSpell(this, simpleSpell.getProjectile(startPos, heading), simpleSpell);
-			}
-		}*/
 	}
 	
 	/**
@@ -307,6 +312,46 @@ public class NewPlayer extends Actor implements IUpdateable {
 		this.velocity.y = 0;
 		this.curAnim = idleAnim.get(heading);
 		state = DynamicObjectState.Idle;
+		
+		/*if(isInNetwork && controllerActive)
+			sendPositionMessage();*/
+	}
+	
+	private void handleControllerInput(float elapsed) {
+		if(controllerActive) {
+			if(controller.justPressed(KeyEvent.VK_A)) {
+				simpleAttack();
+			}
+			if(state == DynamicObjectState.Attacking) {
+				curAnim.update(elapsed);
+				return;
+			}
+			else if(controller.justPressed(KeyEvent.VK_S))
+				spellAttack(0);
+			else if(controller.justPressed(KeyEvent.VK_D))
+				spellAttack(1);
+			else if(controller.justPressed(KeyEvent.VK_5))
+				spellManager.activateShield(ElementType.Fire);
+			else if(controller.justPressed(KeyEvent.VK_6))
+				spellManager.activateShield(ElementType.Water);
+			else if(controller.justPressed(KeyEvent.VK_7))
+				spellManager.activateShield(ElementType.Earth);
+			else if(controller.isDownPressed())
+				move(Heading.Down);
+			else if(controller.isUpPressed())
+				move(Heading.Up);
+			else if(controller.isLeftPressed())
+				move(Heading.Left);
+			else if(controller.isRightPressed())
+				move(Heading.Right);
+			else if(controller.justReleased(KeyEvent.VK_LEFT) || 
+					controller.justReleased(KeyEvent.VK_RIGHT) || 
+					controller.justReleased(KeyEvent.VK_UP) || 
+					controller.justReleased(KeyEvent.VK_DOWN))
+				stopMovement();
+			else if(controller.justPressed(KeyEvent.VK_ENTER))
+				collision.checkOnKeyTriggers(this);
+		}
 	}
 
 	@Override
@@ -323,23 +368,8 @@ public class NewPlayer extends Actor implements IUpdateable {
 		if(curShield != null && curShield.getElementType() == ElementType.Fire)
 			manager.handleAreaOfEffectSpell(this, curShield.getDamage(), ElementType.Fire, curShield.getAOErect());
 		
-		if(state == DynamicObjectState.Terminated) {
-			game.startGame(true);
-			return;
-		}
-		
 		if(state == DynamicObjectState.Attacking) {
-			/*if(simpleAttack.update()) {
-				state = DynamicObjectState.Idle;
-				curAnim = idleAnim.get(heading);
-				return;
-			}*/
 			curAnim.update(elapsed);
-			//manager.handleAttack(simpleAttack, ID);
-			//manager.handleAttack(this, simpleAttack);
-			
-			//manager.registerAttack(this, simpleAttack);
-			
 			return;
 		}
 		
@@ -355,79 +385,45 @@ public class NewPlayer extends Actor implements IUpdateable {
 			return;
 		}
 		
-		if(controller.justPressed(KeyEvent.VK_A)) {
-			simpleAttack();
-		}
-		if(state == DynamicObjectState.Attacking) {
-			/*if(simpleAttack.Update()) {
-				state = DynamicObjectState.Idle;
-				return;
-			}
-			curAnim.update(elapsed);*/
-			/*if(simpleAttack.update()) {
-				state = DynamicObjectState.Idle;
-				curAnim = idleAnim.get(heading);
-				return;
-			}*/
-			curAnim.update(elapsed);
-			//manager.handleAttack(simpleAttack, ID);
-			//manager.handleAttack(this, simpleAttack);
-			
-			return;
-		}
-		else if(controller.justPressed(KeyEvent.VK_S))
-			spellAttack(0);
-		else if(controller.justPressed(KeyEvent.VK_D))
-			spellAttack(1);
-		else if(controller.justPressed(KeyEvent.VK_5))
-			spellManager.activateShield(ElementType.Fire);
-		else if(controller.justPressed(KeyEvent.VK_6))
-			spellManager.activateShield(ElementType.Water);
-		else if(controller.justPressed(KeyEvent.VK_7))
-			spellManager.activateShield(ElementType.Earth);
-		else if(controller.isDownPressed())
-			move(Heading.Down);
-		else if(controller.isUpPressed())
-			move(Heading.Up);
-		else if(controller.isLeftPressed())
-			move(Heading.Left);
-		else if(controller.isRightPressed())
-			move(Heading.Right);
-		else if(controller.justReleased(KeyEvent.VK_LEFT) || 
-				controller.justReleased(KeyEvent.VK_RIGHT) || 
-				controller.justReleased(KeyEvent.VK_UP) || 
-				controller.justReleased(KeyEvent.VK_DOWN))
-			stopMovement();
-		else if(controller.justPressed(KeyEvent.VK_ENTER))
-			collision.checkOnKeyTriggers(this);
+		if(controllerActive)
+			handleControllerInput(elapsed);
 		
 		//DEBUG PURPOSE
-		if(controller.isPressed(KeyEvent.VK_SHIFT))
-			supressEnemyCollision = true;
-		else
-			supressEnemyCollision = false;
+		if(controllerActive) {
+			if(controller.isPressed(KeyEvent.VK_SHIFT))
+				supressEnemyCollision = true;
+			else
+				supressEnemyCollision = false;
+		}
 		//-------------
 		
-		collisionRect.x += velocity.x;
-		collisionRect.y += velocity.y;
+		if(velocity.x > 0.01f || velocity.x < -0.01f || velocity.y > 0.01f || velocity.y < -0.01f) {
+			collisionRect.x += velocity.x;
+			collisionRect.y += velocity.y;
+			
+			boolean collidingStatic = collision.isCollidingStatic(this);
+			boolean collidingDynamic = false;
+			if(!supressEnemyCollision)
+				collidingDynamic = collision.isCollidingDynamic(this);
+			
+			if(collidingStatic || collidingDynamic) {
+				collisionRect.x -= velocity.x;
+				collisionRect.y -= velocity.y;
+				stopMovement();
+			} else {
+				collision.checkTriggers(this);
+				screenPosition.x += velocity.x;
+				screenPosition.y += velocity.y;
+				curAnim.update(elapsed);
+			}
+		}
 		
-		boolean collidingStatic = collision.isCollidingStatic(this);
-		boolean collidingDynamic = false;
-		if(!supressEnemyCollision)
-			collidingDynamic = collision.isCollidingDynamic(this);
-		
-		if(collidingStatic || collidingDynamic) {
-			collisionRect.x -= velocity.x;
-			collisionRect.y -= velocity.y;
-			stopMovement();
-		} else {
-			collision.checkTriggers(this);
-			screenPosition.x += velocity.x;
-			screenPosition.y += velocity.y;
-			curAnim.update(elapsed);
+		if(isInNetwork && controllerActive) {
+			sendPositionMessage();
 		}
 	}
 	
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void draw(Graphics2D graphics) {
 		ElementalShield cs = spellManager.getCurrentShield();
@@ -449,22 +445,58 @@ public class NewPlayer extends Actor implements IUpdateable {
 				break;
 			}
 			
-			//Graphics2D g = (Graphics2D)efTex.getGraphics();
 			float[] dist = { 0.0f, 0.25f, 1f };
 			RadialGradientPaint rgp = new RadialGradientPaint(new Point2D.Float((int)screenPosition.x + 16, (int)screenPosition.y + 16), 20, dist, c);
 			graphics.setPaint(rgp);
-			//graphics.setColor(c[0]);
 			graphics.fillOval((int)screenPosition.x - 4, (int)screenPosition.y - 4, 40, 40);
-			//graphics.drawim
 		}
 		
 		graphics.drawImage(getTexture(), (int)screenPosition.x, (int)screenPosition.y, null);
-		statusbar.draw(graphics);
-		spellManager.draw(graphics);
+		if(controllerActive) {
+			statusbar.draw(graphics);
+			spellManager.draw(graphics);
+		}
 	}
 
 	@Override
 	protected BufferedImage getTexture() {
 		return curAnim.getTexture();
+	}
+	
+	private void sendPositionMessage() {
+		if(posState.equals(this))
+			return;
+		
+		posState.update(this);
+		NetworkManager.sendPositionMessage(this);
+	}
+	
+	class PositionState {
+		//public int posX;
+		//public int posY;
+		public int veloX;
+		public int veloY;
+		
+		public PositionState(NewPlayer p) {
+			//posX = (int)p.screenPosition.x;
+			//posY = (int)p.screenPosition.y;
+			veloX = (int)p.getVelocity().x;
+			veloY = (int)p.getVelocity().y;
+		}
+		
+		public void update(NewPlayer p) {
+			//posX = (int)p.screenPosition.x;
+			//posY = (int)p.screenPosition.y;
+			veloX = (int)p.getVelocity().x;
+			veloY = (int)p.getVelocity().y;
+		}
+		
+		public boolean equals(NewPlayer p) {
+			return 
+				//posX == (int)p.screenPosition.x &&
+				//posY == (int)p.screenPosition.y &&
+				veloX == (int)p.getVelocity().x &&
+				veloY == (int)p.getVelocity().y;
+		}
 	}
 }
