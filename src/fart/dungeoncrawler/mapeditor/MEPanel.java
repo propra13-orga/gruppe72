@@ -309,6 +309,10 @@ public class MEPanel extends JPanel implements MouseInputListener
 			Element gameobjects = new Element("gameobjects");
 			{
 				// Elements to append to gameobjects
+				Element elObjects = new Element("objects");
+				Element elTraps = new Element("traps");
+				Element elActors = new Element("actors");
+				Element elItems = new Element("items");
 				
 				for(int j=0; j<objects[0].length; j++)
 				{
@@ -341,11 +345,95 @@ public class MEPanel extends JPanel implements MouseInputListener
 								mapToY.appendChild("1");
 								newObj.appendChild(mapToY);
 								
-								gameobjects.appendChild(newObj);
+								elObjects.appendChild(newObj);
+							}
+							
+							else if(objects[i][j] == 1)
+							{
+								newObj =  new Element("object");
+								newObj.addAttribute(new Attribute("id", "1"));
+								newObj.appendChild(posX);
+								newObj.appendChild(posY);
+								
+								elObjects.appendChild(newObj);
+							}
+							
+							else if(objects[i][j] == 2)
+							{
+								newObj =  new Element("trap");
+								newObj.addAttribute(new Attribute("id", "2"));
+								newObj.appendChild(posX);
+								newObj.appendChild(posY);
+								
+								elTraps.appendChild(newObj);
+							}
+							
+							else if(objects[i][j] == 3)
+							{
+								newObj =  new Element("actor");
+								newObj.addAttribute(new Attribute("id", "3"));
+								newObj.appendChild(posX);
+								newObj.appendChild(posY);
+								
+								elActors.appendChild(newObj);
+							}
+							
+							else if(objects[i][j] == 4)
+							{
+								newObj =  new Element("actor");
+								newObj.addAttribute(new Attribute("id", "4"));
+								newObj.appendChild(posX);
+								newObj.appendChild(posY);
+								
+								elActors.appendChild(newObj);
+							}
+							
+							else if(objects[i][j] == 5)
+							{
+								newObj =  new Element("actor");
+								newObj.addAttribute(new Attribute("id", "5"));
+								newObj.appendChild(posX);
+								newObj.appendChild(posY);
+								
+								elActors.appendChild(newObj);
+							}
+							
+							else if(objects[i][j] == 6)
+							{
+								newObj =  new Element("actor");
+								newObj.addAttribute(new Attribute("id", "6"));
+								newObj.appendChild(posX);
+								newObj.appendChild(posY);
+								
+								elActors.appendChild(newObj);
+							}
+							
+							else if(objects[i][j] == 7)
+							{
+								newObj =  new Element("object");
+								newObj.addAttribute(new Attribute("id", "7"));
+								newObj.appendChild(posX);
+								newObj.appendChild(posY);
+								
+								elObjects.appendChild(newObj);
+							}
+							
+							else if(objects[i][j] >= 100)
+							{
+								newObj = new Element("item");
+								newObj.addAttribute(new Attribute("id", String.valueOf(objects[i][j])));
+								newObj.appendChild(posX);
+								newObj.appendChild(posY);
+								
+								elItems.appendChild(newObj);
 							}
 						}
 					}
 				}
+				gameobjects.appendChild(elObjects);
+				gameobjects.appendChild(elTraps);
+				gameobjects.appendChild(elActors);
+				gameobjects.appendChild(elItems);
 			}
 			map.appendChild(gameobjects);
 		}
