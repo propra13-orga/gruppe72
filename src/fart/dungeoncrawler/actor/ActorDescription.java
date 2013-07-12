@@ -26,7 +26,8 @@ public class ActorDescription {
 		
 		try {
 			spriteSheet = ImageIO.read(new File(spritePath));
-			this.collisionDimension = new Dimension(spriteSheet.getWidth(), spriteSheet.getHeight());
+			//this.collisionDimension = new Dimension(spriteSheet.getWidth(), spriteSheet.getHeight());
+			this.collisionDimension = new Dimension(32, 32);
 		} catch (IOException e) {
 			System.err.println("Could not load image.");
 			e.printStackTrace();

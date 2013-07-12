@@ -5,7 +5,8 @@ import fart.dungeoncrawler.enums.*;
 import fart.dungeoncrawler.network.messages.game.*;
 
 /**
- * A Singleton-class
+ * A Singleton-class. Clients use this manager to handle all incoming messages and send
+ * messages to the server. 
  * @author Felix
  *
  */
@@ -18,6 +19,8 @@ public class NetworkManager {
 	private NetworkManager(Client client, DynamicObjectManager dManager) {
 		this.dManager = dManager;
 		this.client = client;
+
+		DeathMatchStatistics.createInstance(client.getAllClients());
 	}
 	
 	public static void createInstance(Client client, DynamicObjectManager dManager) {
@@ -54,12 +57,14 @@ public class NetworkManager {
 		else if(bm.type == GameMessage.GAME_ATTACK_MESSAGE)
 			handleAttackMessage((GameAttackMessage)bm);
 		else if(bm.type == GameMessage.GAME_HIT_MESSAGE)
-			handleSpellHitMessage((GameHitMessage)bm);
+			handleHitMessage((GameHitMessage)bm);
+		else if(bm.type == GameMessage.GAME_KILLED_MESSAGE)
+			handlePlayerKilledMessage((GamePlayerKilledMessage)bm);
 	}
 	
 	private void handleAttackMessage(GameAttackMessage msg) {
 		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
-		a.simpleAttack();
+		a.receivedAttackMsg();
 	}
 
 	private void handleGamePositionMessage(GamePositionMessage msg) {
@@ -77,11 +82,23 @@ public class NetworkManager {
 		a.spellAttack(msg.spellIndex);
 	}
 	
-	private void handleSpellHitMessage(GameHitMessage msg) {
+	private void handleHitMessage(GameHitMessage msg) {
 		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
-		a.getHealth().reduceHealth(msg.damage);
+		a.getHealth().setHealth(msg.health);
 		
 		if(msg.isSpell)
 			dManager.removeProjectileInNetwork(a);
+	}
+	
+	private void handlePlayerKilledMessage(GamePlayerKilledMessage msg) {
+		//Terminate the killed player
+		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.deadID);
+		a.terminate();
+		DeathMatchStatistics.getInstance().killed(msg.ID, msg.deadID);
+		
+		//Let the killer gain experience
+		NewPlayer b = (NewPlayer)dManager.getActorByID(msg.ID);
+		int exp = Level.getMobExperienceForLevel(a.getLevel().getLevel()) * 2;
+		b.getLevel().addExperince(exp);
 	}
 }

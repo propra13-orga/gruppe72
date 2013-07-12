@@ -14,6 +14,7 @@ import Utils.Vector2;
 
 import fart.dungeoncrawler.*;
 import fart.dungeoncrawler.enums.*;
+import fart.dungeoncrawler.network.DeathMatchStatistics;
 import fart.dungeoncrawler.network.NetworkManager;
 
 public class NewPlayer extends Actor implements IUpdateable {
@@ -31,6 +32,7 @@ public class NewPlayer extends Actor implements IUpdateable {
 	public StatusBar statusbar;
 	
 	private SpellManager spellManager;
+	private SkillTree skillTree;
 	
 	//DEBUG
 	private int maxHitDuration = 15;
@@ -62,79 +64,38 @@ public class NewPlayer extends Actor implements IUpdateable {
 		spellManager = new SpellManager(this);
 		spellManager.addShields();
 
-		//Setup Animations
-		try {
-			BufferedImage wl, wr, wu, wd;
-			wl = ImageIO.read(new File("res/plWleft.png"));
-			wr = ImageIO.read(new File("res/plWright.png"));
-			wd = ImageIO.read(new File("res/plWdown.png"));
-			wu = ImageIO.read(new File("res/plWup.png"));
-			
-			int frameDuration = 150;
-			Animation aWalkLeft = Animation.createWalkingAnimation(wl, frameDuration);
-			Animation aWalkRight = Animation.createWalkingAnimation(wr, frameDuration);
-			Animation aWalkDown = Animation.createWalkingAnimation(wd, frameDuration);
-			Animation aWalkUp = Animation.createWalkingAnimation(wu, frameDuration);
-			
-			walkAnim = new HashMap<Heading, Animation>();
-			walkAnim.put(Heading.Left, aWalkLeft);
-			walkAnim.put(Heading.Right, aWalkRight);
-			walkAnim.put(Heading.Down, aWalkDown);
-			walkAnim.put(Heading.Up, aWalkUp);
-			
-			BufferedImage[] iLeft = { aWalkLeft.getTextureByFrame(1) };
-			BufferedImage[] iRight = { aWalkRight.getTextureByFrame(1) };
-			BufferedImage[] iDown = { aWalkDown.getTextureByFrame(1) };
-			BufferedImage[] iUp = { aWalkUp.getTextureByFrame(1) };
-			
-			idleAnim = new HashMap<Heading, Animation>();
-			idleAnim.put(Heading.Left, new Animation(iLeft, 1));
-			idleAnim.put(Heading.Right, new Animation(iRight, 1));
-			idleAnim.put(Heading.Down, new Animation(iDown, 1));
-			idleAnim.put(Heading.Up, new Animation(iUp, 1));
-			
-			//Only for debugging.
-			simpleAttackAnim = new HashMap<Heading, Animation>();
-			BufferedImage[] iSALeft = new BufferedImage[1];
-			iSALeft[0] = new BufferedImage(32, 32, iLeft[0].getType());
-			Graphics2D g2 = (Graphics2D)iSALeft[0].getGraphics();
-			g2.setColor(new Color(0.0f, 0.0f, 1.0f));
-			g2.fillRect(0, 0, 32, 32);
-			simpleAttackAnim.put(Heading.Left, new Animation(iSALeft, 1));
-			
-			BufferedImage[] iSARight = new BufferedImage[1];
-			iSARight[0] = new BufferedImage(32, 32, iLeft[0].getType());
-			g2 = (Graphics2D)iSARight[0].getGraphics();
-			g2.setColor(new Color(1.0f, 0.0f, 0.0f));
-			g2.fillRect(0, 0, 32, 32);
-			simpleAttackAnim.put(Heading.Right, new Animation(iSARight, 1));
-			
-			BufferedImage[] iSAUp = new BufferedImage[1];
-			iSAUp[0] = new BufferedImage(32, 32, iLeft[0].getType());
-			g2 = (Graphics2D)iSAUp[0].getGraphics();
-			g2.setColor(new Color(0.0f, 1.0f, 0.0f));
-			g2.fillRect(0, 0, 32, 32);
-			simpleAttackAnim.put(Heading.Up, new Animation(iSAUp, 1));
-			
-			BufferedImage[] iSADown = new BufferedImage[1];
-			iSADown[0] = new BufferedImage(32, 32, iLeft[0].getType());
-			g2 = (Graphics2D)iSADown[0].getGraphics();
-			g2.setColor(new Color(1.0f, 0.0f, 1.0f));
-			g2.fillRect(0, 0, 32, 32);
-			simpleAttackAnim.put(Heading.Down, new Animation(iSADown, 1));
-			HashMap<Integer, Rectangle> atRects = new HashMap<Integer, Rectangle>();
-			atRects.put(0, new Rectangle(-16, 0, 16, 32));
-			int frameDur = 44;
-			simpleAttack = new Attack(15, simpleAttackAnim, atRects, frameDur, this);
-			
-			curAnim = idleAnim.get(heading);
-		} catch (IOException e) {
-			System.err.print("Couldn't load Players texture!");
-			System.exit(1);
-		}
+		initAnimations();
 		
 		//DEBUG
 		buildSpell();
+		skillTree = new SkillTree(this, controller, collision);
+		this.controllerActive = controllerActive;
+		isInNetwork = game.isInNetwork();
+		posState = new PositionState(this);
+	}
+	
+	public NewPlayer(Game game, ActorDescription desc, Vector2 position, boolean controllerActive, int actID) {
+		super(game, desc, position);
+		
+		this.actorID = actID;
+		
+		this.state = DynamicObjectState.Idle;
+		this.velocity = new Vector2(0, 0);
+		this.game = game;
+		statusbar = new StatusBar(this);
+		controller = game.getController();
+		inventory.setGold(100);
+		
+		//TEST
+		//level.addExperince(level.getExperienceForLevelUp() - 10);
+		spellManager = new SpellManager(this);
+		spellManager.addShields();
+
+		initAnimations();
+		
+		//DEBUG
+		buildSpell();
+		skillTree = new SkillTree(this, controller, collision);
 		this.controllerActive = controllerActive;
 		isInNetwork = game.isInNetwork();
 		posState = new PositionState(this);
@@ -184,7 +145,7 @@ public class NewPlayer extends Actor implements IUpdateable {
 		g2d.setColor(Color.cyan);
 		g2d.fillOval(8, 8, 16, 16);
 		
-		simpleSpell = new Spell(new SpellProjectile(this, spTex, 15, collision), 30, 15, 120, 2.5f, ElementType.Fire);
+		simpleSpell = new SpellFireBold(null, new SpellProjectile(this, spTex, collision));
 		spellManager.addSpell(simpleSpell);
 		
 		BufferedImage spTex2 = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
@@ -194,8 +155,81 @@ public class NewPlayer extends Actor implements IUpdateable {
 		g2d.setColor(Color.orange);
 		g2d.fillOval(8, 8, 16, 16);
 		
-		Spell simpleSpell2 = new Spell(new SpellProjectile(this, spTex2, 15, collision), 30, 12, 90, 3.5f, ElementType.Water);
+		Spell simpleSpell2 = new SpellWaterBold(null, new SpellProjectile(this, spTex2, collision));
 		spellManager.addSpell(simpleSpell2);
+	}
+	
+	private void initAnimations() {
+		//Setup Animations
+				try {
+					BufferedImage wl, wr, wu, wd;
+					wl = ImageIO.read(new File("res/plWleft.png"));
+					wr = ImageIO.read(new File("res/plWright.png"));
+					wd = ImageIO.read(new File("res/plWdown.png"));
+					wu = ImageIO.read(new File("res/plWup.png"));
+					
+					int frameDuration = 150;
+					Animation aWalkLeft = Animation.createWalkingAnimation(wl, frameDuration);
+					Animation aWalkRight = Animation.createWalkingAnimation(wr, frameDuration);
+					Animation aWalkDown = Animation.createWalkingAnimation(wd, frameDuration);
+					Animation aWalkUp = Animation.createWalkingAnimation(wu, frameDuration);
+					
+					walkAnim = new HashMap<Heading, Animation>();
+					walkAnim.put(Heading.Left, aWalkLeft);
+					walkAnim.put(Heading.Right, aWalkRight);
+					walkAnim.put(Heading.Down, aWalkDown);
+					walkAnim.put(Heading.Up, aWalkUp);
+					
+					BufferedImage[] iLeft = { aWalkLeft.getTextureByFrame(1) };
+					BufferedImage[] iRight = { aWalkRight.getTextureByFrame(1) };
+					BufferedImage[] iDown = { aWalkDown.getTextureByFrame(1) };
+					BufferedImage[] iUp = { aWalkUp.getTextureByFrame(1) };
+					
+					idleAnim = new HashMap<Heading, Animation>();
+					idleAnim.put(Heading.Left, new Animation(iLeft, 1));
+					idleAnim.put(Heading.Right, new Animation(iRight, 1));
+					idleAnim.put(Heading.Down, new Animation(iDown, 1));
+					idleAnim.put(Heading.Up, new Animation(iUp, 1));
+					
+					//Only for debugging.
+					simpleAttackAnim = new HashMap<Heading, Animation>();
+					BufferedImage[] iSALeft = new BufferedImage[1];
+					iSALeft[0] = new BufferedImage(32, 32, iLeft[0].getType());
+					Graphics2D g2 = (Graphics2D)iSALeft[0].getGraphics();
+					g2.setColor(new Color(0.0f, 0.0f, 1.0f));
+					g2.fillRect(0, 0, 32, 32);
+					simpleAttackAnim.put(Heading.Left, new Animation(iSALeft, 1));
+					
+					BufferedImage[] iSARight = new BufferedImage[1];
+					iSARight[0] = new BufferedImage(32, 32, iLeft[0].getType());
+					g2 = (Graphics2D)iSARight[0].getGraphics();
+					g2.setColor(new Color(1.0f, 0.0f, 0.0f));
+					g2.fillRect(0, 0, 32, 32);
+					simpleAttackAnim.put(Heading.Right, new Animation(iSARight, 1));
+					
+					BufferedImage[] iSAUp = new BufferedImage[1];
+					iSAUp[0] = new BufferedImage(32, 32, iLeft[0].getType());
+					g2 = (Graphics2D)iSAUp[0].getGraphics();
+					g2.setColor(new Color(0.0f, 1.0f, 0.0f));
+					g2.fillRect(0, 0, 32, 32);
+					simpleAttackAnim.put(Heading.Up, new Animation(iSAUp, 1));
+					
+					BufferedImage[] iSADown = new BufferedImage[1];
+					iSADown[0] = new BufferedImage(32, 32, iLeft[0].getType());
+					g2 = (Graphics2D)iSADown[0].getGraphics();
+					g2.setColor(new Color(1.0f, 0.0f, 1.0f));
+					g2.fillRect(0, 0, 32, 32);
+					simpleAttackAnim.put(Heading.Down, new Animation(iSADown, 1));
+					HashMap<Integer, Rectangle> atRects = new HashMap<Integer, Rectangle>();
+					atRects.put(0, new Rectangle(-16, 0, 16, 32));
+					int frameDur = 44;
+					simpleAttack = new Attack(15, simpleAttackAnim, atRects, frameDur, this);
+					
+					curAnim = idleAnim.get(heading);
+				} catch (IOException e) {
+					System.err.print("Couldn't load Players texture!");
+					System.exit(1);
+				}
 	}
 	
 	public void setAnimation(DynamicObjectState state) {
@@ -207,9 +241,15 @@ public class NewPlayer extends Actor implements IUpdateable {
 	
 	@Override
 	public void terminate() {
-		System.out.println("Player is dead!");
-		state = DynamicObjectState.Terminated;
-		game.playerDead();
+		if(!isInNetwork) {
+			System.out.println("Player is dead!");
+			state = DynamicObjectState.Terminated;
+			game.playerDead();
+		} else {
+			game.playerDeadInNetwork(actorID);
+			/*if(controllerActive)
+				NetworkManager.sendPositionMessage(this);*/
+		}
 	}
 	
 	/**
@@ -261,13 +301,21 @@ public class NewPlayer extends Actor implements IUpdateable {
 			return;
 		
 		state = DynamicObjectState.Attacking;
+		
+		if(!isInNetwork) {
+			curAnim = simpleAttack.getAnimation(heading);
+			manager.registerAttack(simpleAttack);
+			simpleAttack.activate();
+		} else {
+			NetworkManager.sendAttackMessage(this);
+		}
+	}
+	
+	public void receivedAttackMsg() {
+		state = DynamicObjectState.Attacking;
 		curAnim = simpleAttack.getAnimation(heading);
 		manager.registerAttack(simpleAttack);
 		simpleAttack.activate();
-		
-		if(isInNetwork && controllerActive) {
-			NetworkManager.sendAttackMessage(this);
-		}
 	}
 	
 	public void spellAttack(int index) {
@@ -356,7 +404,7 @@ public class NewPlayer extends Actor implements IUpdateable {
 
 	@Override
 	public void update(float elapsed) {
-		if(health.isDead()) {
+		if(!isInNetwork && health.isDead()) {
 			terminate();
 			return;
 		}
@@ -455,6 +503,13 @@ public class NewPlayer extends Actor implements IUpdateable {
 		if(controllerActive) {
 			statusbar.draw(graphics);
 			spellManager.draw(graphics);
+		}
+		
+		if(controller.isPressed(KeyEvent.VK_P))
+			skillTree.draw(graphics);
+		if(isInNetwork && controllerActive) {
+			if(controller.isPressed(KeyEvent.VK_T))
+				DeathMatchStatistics.getInstance().draw(graphics);
 		}
 	}
 

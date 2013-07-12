@@ -60,7 +60,7 @@ public class ServerGameLogic extends Thread {
 		a.setVelocity(msg.velocity);
 		a.setState(DynamicObjectState.values()[msg.state]);
 		
-		System.out.println("**Server: [" + msg.ID + "] moved to (" + msg.position.x + "/" + msg.position.y + ").");
+		//System.out.println("**Server: [" + msg.ID + "] moved to (" + msg.position.x + "/" + msg.position.y + ").");
 		
 		server.broadcastMessage(msg);
 	}

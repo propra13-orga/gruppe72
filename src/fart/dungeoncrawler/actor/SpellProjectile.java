@@ -18,10 +18,9 @@ public class SpellProjectile extends GameObject implements IUpdateable {
 	private Collision collision;
 	private Spell spell;
 	
-	public SpellProjectile(Actor owner, BufferedImage texture, int damage, Collision collision) {
+	public SpellProjectile(Actor owner, BufferedImage texture, Collision collision) {
 		this.owner = owner;
 		this.texture = texture;
-		this.damage = damage;
 		this.collision = collision;
 	}
 
@@ -29,7 +28,7 @@ public class SpellProjectile extends GameObject implements IUpdateable {
 		this.owner = projectile.owner;
 		this.texture = projectile.texture;
 		this.velocity = velocity;
-		this.damage = projectile.damage;
+		this.damage = spell.damage;
 		this.collision = projectile.collision;
 		this.spell = spell;
 		

@@ -15,7 +15,7 @@ public class SpellManager implements IDrawable, IUpdateable {
 	private static final Vector2 START_POS = new Vector2(1 * Tilemap.TILE_SIZE, 15 * Tilemap.TILE_SIZE + 8);
 	private static int BORDER = 16;
 	private static final int GLOBAL_COOLDOWN = 90;
-	private static final int SHILED_COOLDOWN = 5 * 60;
+	private static final int SHIELD_COOLDOWN = 5 * 60;
 	
 	private Actor owner;
 	private ArrayList<Spell> spells;
@@ -56,7 +56,7 @@ public class SpellManager implements IDrawable, IUpdateable {
 		}
 		
 		currentShield.activate();
-		shieldCooldown = SHILED_COOLDOWN;
+		shieldCooldown = SHIELD_COOLDOWN;
 	}
 	
 	public void addSpell(Spell spell) {

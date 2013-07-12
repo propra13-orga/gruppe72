@@ -12,17 +12,16 @@ import fart.dungeoncrawler.network.messages.lobby.LobbyStartGameRequest;
 
 public class GameStateInLobby extends BaseGameState {
 	private boolean isServer;
-	public static Font font;
-	public static Color fontColor;
+
+	public static Color bgColor = new Color(0.4f, 0.4f, 0.8f);
+	public static Font font = new Font("Arial", 0x1, 16);
+	public static Color fontColor = new Color(0.1f, 0.1f, 0.35f);
 	
 	private Lobby lobby;
 	private Controller controller;
 
 	public GameStateInLobby(Game game) {
 		super(game);
-
-		font = new Font("Arial", 0x1, 12);
-		fontColor = Color.black;
 		
 		controller = game.getController();
 	}
@@ -47,7 +46,7 @@ public class GameStateInLobby extends BaseGameState {
 
 	@Override
 	public void draw(Graphics2D graphics) {
-		graphics.setColor(Color.LIGHT_GRAY);
+		graphics.setColor(bgColor);
 		graphics.fillRect(0, 0, game.getWidth(), game.getHeight());
 		
 		lobby.draw(graphics);
@@ -55,14 +54,10 @@ public class GameStateInLobby extends BaseGameState {
 
 	@Override
 	public void activate() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void exit() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

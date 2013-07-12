@@ -29,20 +29,13 @@ public class Client extends Thread{
 	private boolean ready;
 	private Game game;
 	
-	public Client(Lobby lobby, Game game) {
+	public Client(Lobby lobby, Game game, String ip, String name) {
 		this.lobby = lobby;
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		ready = false;
 		this.game = game;
 		
 		try {
-			System.out.println("Enter your name: ");
-			name = reader.readLine();
-			
-			System.out.println("Enter the server-IP: ");
-			String ip = reader.readLine();
 			InetAddress adr = InetAddress.getByName(ip);
-			//InetAddress adr = InetAddress.getLocalHost();
 			
 			server = new Socket(adr, Server.PORT);
 			server.setTcpNoDelay(true);
@@ -114,6 +107,10 @@ public class Client extends Thread{
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public ArrayList<ClientInfo> getAllClients() {
+		return allClients;
 	}
 	
 	public boolean isReady() {

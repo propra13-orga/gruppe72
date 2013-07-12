@@ -40,6 +40,10 @@ public class Health {
     public boolean isInvul() {
     	return invulnerable;
     }
+    
+    public void setHealth(float health) {
+    	this.curHealth = health;
+    }
    
     public void reduceHealth(float dmg) {
     	if(invulnerable)

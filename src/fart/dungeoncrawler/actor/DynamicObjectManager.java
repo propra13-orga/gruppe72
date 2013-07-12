@@ -13,8 +13,10 @@ import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.Health;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.ElementType;
+import fart.dungeoncrawler.network.DeathMatchStatistics;
 import fart.dungeoncrawler.network.Server;
 import fart.dungeoncrawler.network.messages.game.GameHitMessage;
+import fart.dungeoncrawler.network.messages.game.GamePlayerKilledMessage;
 
 public class DynamicObjectManager {
 	private ArrayList<Actor> dynamics = new ArrayList<Actor>();
@@ -87,6 +89,9 @@ public class DynamicObjectManager {
 				continue;
 			}
 			
+			if(game.isInNetwork() && !Server.isOnline())
+				continue;
+			
 			//attack has already hit a target, so we skip it
 			if(a.hasHit())
 				continue;
@@ -103,9 +108,12 @@ public class DynamicObjectManager {
 				if(rect.intersects(defender.getCollisionRect())) {
 					a.hit();
 					float dmg = DamageCalculator.calcDamage(a.getOwner(), defender);
-					if(Server.isOnline())
-						Server.getInstance().broadcastMessage(new GameHitMessage(defender, dmg, false));
-					reduceHealth(dmg, a.getOwner(), defender, true);
+					if(Server.isOnline()) {
+						reduceHealth(dmg, a.getOwner(), defender, true);
+						Server.getInstance().broadcastMessage(new GameHitMessage(defender, defender.getHealth().getCurrentHealth(), false));
+					} else if (!game.isInNetwork()) {
+						reduceHealth(dmg, a.getOwner(), defender, true);
+					}
 				}
 			}
 		}
@@ -141,7 +149,7 @@ public class DynamicObjectManager {
 							float dmg = DamageCalculator.calcSpellDamage(curSpellProj.getDamage(), curSpell.getType(), curSpellProj.getOwner(), npc);
 							reduceHealth(dmg, curSpellProj.getOwner(), npc, true);
 							if(Server.isOnline())
-								Server.getInstance().broadcastMessage(new GameHitMessage(npc, dmg, true));
+								Server.getInstance().broadcastMessage(new GameHitMessage(npc, npc.getHealth().getCurrentHealth(), true));
 							return;
 						}
 					}
@@ -170,19 +178,26 @@ public class DynamicObjectManager {
 	private void reduceHealth(float dmg, Actor attacker, Actor defender, boolean hitState) {
 		defender.getHealth().reduceHealth(dmg);
 		
-		/*if(Server.isOnline())
-			Server.getInstance().broadcastMessage(new GameSpellHitMessage(defender, dmg));*/
-		
 		if(hitState)
 			defender.setState(DynamicObjectState.Hit);
 		if(defender.getHealth().isDead()) {
-			defender.terminate();
+			if(Server.isOnline()) {
+				System.out.println("**SERVER: Terminating player " + defender.actorID);
+				defender.terminate();
+				game.playerDeadInNetwork(defender.actorID);
+				Server.getInstance().broadcastMessage(new GamePlayerKilledMessage((byte)attacker.getActorID(), (byte)defender.getActorID()));
+			} else {
+				System.out.println("**CLIENT: Terminating player " + defender.actorID);
+				defender.terminate();
+			}
 			
-			if(attacker instanceof NewPlayer) {
-				int exp = Level.getMobExperienceForLevel(defender.getLevel().getLevel());
-				attacker.getLevel().addExperince(exp);
-				System.out.println("Gained " + exp + " EXP.");
-				System.out.println("Player EXP: " + attacker.getLevel().getCurrentExperience() + "/" + attacker.getLevel().getExperienceForLevelUp());
+			if(!game.isInNetwork()) {
+				if(attacker instanceof NewPlayer) {
+					int exp = Level.getMobExperienceForLevel(defender.getLevel().getLevel());
+					attacker.getLevel().addExperince(exp);
+					System.out.println("Gained " + exp + " EXP.");
+					System.out.println("Player EXP: " + attacker.getLevel().getCurrentExperience() + "/" + attacker.getLevel().getExperienceForLevelUp());
+				}
 			}
 		}
 	}

@@ -66,7 +66,7 @@ public class Lobby implements IDrawable {
 			else
 				ready = "not ready";
 			
-			graphics.drawString(ready, 32 * 4, 32 + i * 16);
+			graphics.drawString(ready, 32 * 6, 32 + i * 16);
 		}
 	}
 }

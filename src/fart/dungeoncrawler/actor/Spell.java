@@ -7,30 +7,19 @@ import fart.dungeoncrawler.enums.Heading;
 import fart.dungeoncrawler.enums.ElementType;
 import Utils.Vector2;
 
-public class Spell implements IUpdateable {
+public abstract class Spell extends BaseSpell implements IUpdateable {
 	private SpellProjectile projectile;
-	private int damage;
-	private int manaCost;
-	private int cooldown;
-	private int currentCooldown;
+	protected int damage;
 	private float speed;
-	private BufferedImage icon;
-	private ElementType type;
 	
-	public Spell(SpellProjectile projectile, int damage, int manaCost, int cooldown, float speed, ElementType type) {
+	public Spell(int manaCost, int cooldown, ElementType type, BufferedImage icon, SpellProjectile projectile, int damage, float speed) {
+		super(manaCost, cooldown, icon, type);
 		this.projectile = projectile;
 		this.damage = damage;
-		this.manaCost = manaCost;
-		this.cooldown = cooldown;
 		this.speed = speed;
-		this.type = type;
 		currentCooldown = 0;
 	}
 	
-	public BufferedImage getIcon() {
-		return icon;
-	}
-
 	public SpellProjectile getProjectile(Vector2 position, Heading heading) {
 		Vector2 velocity = Vector2.Zero;
 		
@@ -56,28 +45,8 @@ public class Spell implements IUpdateable {
 		return damage;
 	}
 
-	public int getManaCost() {
-		return manaCost;
-	}
-
-	public int getCooldown() {
-		return cooldown;
-	}
-	
-	public int getCurrentCooldown() {
-		return currentCooldown;
-	}
-	
-	public void setCurrentCooldown(int cooldown) {
-		this.currentCooldown = cooldown;
-	}
-	
 	public void activate() {
 		currentCooldown = cooldown;
-	}
-	
-	public ElementType getType() {
-		return type;
 	}
 	
 	@Override
@@ -85,9 +54,5 @@ public class Spell implements IUpdateable {
 		currentCooldown -= 1;
 		if(currentCooldown < 0)
 			currentCooldown = 0;
-	}
-
-	public boolean isOnCooldown() {
-		return currentCooldown > 0;
 	}
 }

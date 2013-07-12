@@ -13,6 +13,8 @@ import fart.dungeoncrawler.actor.*;
 import fart.dungeoncrawler.enums.*;
 import fart.dungeoncrawler.gamestates.*;
 import fart.dungeoncrawler.items.*;
+import fart.dungeoncrawler.network.Server;
+import fart.dungeoncrawler.network.messages.game.GamePositionMessage;
 
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable
@@ -57,6 +59,7 @@ public class Game extends JPanel implements Runnable
 	private boolean isServer;
 	private byte playerID;
 	private int numPlayers;
+	private Vector2[] startPositions;
 	
 	//DEBUG
 	private static final Vector2 PLAYER_START_POS = new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE);
@@ -141,27 +144,35 @@ public class Game extends JPanel implements Runnable
 		((GameStateInShop)states.get(GameState.InShop)).setCurrentShop(new Shop(controller));
 
 		ItemCollection.createNewInstace();
+		
+		startPositions = new Vector2[4];
+		startPositions[0] = new Vector2(27 * 32, 16 * 32);
+		//startPositions[1] = new Vector2(27 * 32, 4 * 32);
+		startPositions[1] = new Vector2(27 * 32, 13 * 32);
+		startPositions[2] = new Vector2(4 * 32, 4 * 32);
+		startPositions[3] = new Vector2(4 * 32, 16 * 32);
 	}
 	
 	public void createPlayers() {
-		Vector2[] startPositions = new Vector2[4];
-		startPositions[0] = new Vector2(27 * 32, 16 * 32);
-		startPositions[1] = new Vector2(27 * 32, 4 * 32);
-		startPositions[2] = new Vector2(4 * 32, 4 * 32);
-		startPositions[3] = new Vector2(4 * 32, 16 * 32);
+		allPlayers = new ArrayList<NewPlayer>();
 		
 		for(int i = 0; i < numPlayers; i++) {
 			ActorDescription actDesc = new ActorDescription("res/player.png", 1, 0, new Stats(12, 8, 7, 8, 0, 8, 0), Heading.Up);
 			Vector2 plPos = new Vector2(PLAYER_START_POS.x + i * 32 + i, PLAYER_START_POS.y);
 			if(isInNetwork)
-				plPos = startPositions[i];
+				plPos = new Vector2(startPositions[i]);
 			
 			if(!isServer && playerID == i) {
-				player = new NewPlayer(this, actDesc, plPos, true);
+				if(isInNetwork)
+					player = new NewPlayer(this, actDesc, plPos, true, playerID);
+				else
+					player = new NewPlayer(this, actDesc, plPos, true);
+				allPlayers.add(player);
 				continue;
 			}
 			
-			NewPlayer p = new NewPlayer(this, actDesc, plPos, false);
+			NewPlayer p = new NewPlayer(this, actDesc, plPos, false, i);
+			allPlayers.add(p);
 			otherPlayers.add(p);
 		}
 	}
@@ -237,20 +248,37 @@ public class Game extends JPanel implements Runnable
 		resetPlayer();
 	}
 	
+	public void playerDeadInNetwork(int actorID) {
+		if(isServer) 
+			System.out.println("**SERVER: playerDeadInNetwork " + actorID);
+		else
+			System.out.println("**CLIENT: playerDeadInNetwork " + actorID);
+		NewPlayer a = allPlayers.get(actorID);
+		a.getHealth().fillHealth();
+		a.getMana().fillMana();
+		a.setScreenPosition(new Vector2(startPositions[actorID]));
+		while(collision.isCollidingDynamic(a))
+			a.setScreenPosition(new Vector2(a.getPosition().x + 1, a.getPosition().y));
+		a.setState(DynamicObjectState.Idle);
+		
+		if(isServer) {
+			Server.getInstance().broadcastMessage(new GamePositionMessage(a));
+		}
+	}
+	
 	private void resetPlayer() {
-		Vector2[] startPositions = new Vector2[4];
-		startPositions[0] = new Vector2(27 * 32, 16 * 32);
+		/*startPositions[0] = new Vector2(27 * 32, 16 * 32);
 		startPositions[1] = new Vector2(27 * 32, 4 * 32);
 		startPositions[2] = new Vector2(4 * 32, 4 * 32);
-		startPositions[3] = new Vector2(4 * 32, 16 * 32);
+		startPositions[3] = new Vector2(4 * 32, 16 * 32);*/
 		
 		Vector2 plPos = new Vector2(PLAYER_START_POS.x + playerID * Tilemap.TILE_SIZE + playerID, PLAYER_START_POS.y);
 		if(isInNetwork)
-			plPos = startPositions[playerID];
+			plPos = new Vector2(startPositions[playerID]);
 		
 		player.setScreenPosition(plPos);
-		player.getHealth().addHealth(10000);
-		player.getMana().addMana(10000);
+		player.getHealth().fillHealth();
+		player.getMana().fillMana();
 		player.setState(DynamicObjectState.Idle);
 		player.setHeading(Heading.Up);
 		player.setVelocity(Vector2.Zero);
