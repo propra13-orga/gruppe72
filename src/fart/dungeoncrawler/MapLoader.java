@@ -49,23 +49,17 @@ public class MapLoader
 	private Collision collision;
 	
 	public MapLoader(Game game,
-					/*String fileName,*/
 					StaticObjectManager sManager,
 					DynamicObjectManager dManager,
 					Collision collision)
 	{
-		//loadMap(game, fileName, sManager, dManager, collision);
 		this.game = game;
 		this.sManager = sManager;
 		this.dManager = dManager;
 		this.collision = collision;
 	}
 	
-	public void loadMap(Tilemap tilemap,
-					String fileName/*,
-					StaticObjectManager sManager,
-					DynamicObjectManager dManager,
-					Collision collision*/)
+	public void loadMap(Tilemap tilemap, String fileName)
 	{
 		File source = new File(fileName);
 		
@@ -175,7 +169,6 @@ public class MapLoader
 						Integer.parseInt(tmp.getChildElements().get(4).getValue()),
 						Integer.parseInt(tmp.getChildElements().get(5).getValue()),
 						Integer.parseInt(tmp.getChildElements().get(6).getValue()),
-						//CHANGED STATS!
 						Stats.getMeleeStats(Integer.parseInt(tmp.getChildElements().get(5).getValue())), Heading.Down));
 				saveToA = true;
 			}
@@ -190,7 +183,6 @@ public class MapLoader
 						Integer.parseInt(tmp.getChildElements().get(4).getValue()),
 						Integer.parseInt(tmp.getChildElements().get(5).getValue()),
 						Integer.parseInt(tmp.getChildElements().get(6).getValue()),
-						//CHANGED STATS!
 						Stats.getMeleeStats(Integer.parseInt(tmp.getChildElements().get(5).getValue())), Heading.Down));
 				saveToA = true;
 			}
@@ -222,12 +214,6 @@ public class MapLoader
 			else
 				descLoc[i][1] = String.valueOf(bDescriptions.size()-1);
 		}
-		
-		//DEBUG
-		/*System.out.println("descLoc:");
-		for(i=0; i<descLoc.length; i++)
-			System.out.println(descLoc[i][0]+", "+descLoc[i][1]);
-		System.out.println("descLoc END");*/
 
 		current = map.getRootElement().getChildElements("gameobjects").get(0);
 		for(i=0; i<current.getChildElements().size(); i++)
@@ -311,8 +297,6 @@ public class MapLoader
 						MeleeEnemy me = new MeleeEnemy(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE), ed);
 						EnemyStateMachine machine = new EnemyStateMachine(me, game.getAllPlayers());
 						me.setMachine(machine);
-						
-						//dManager.addObject(me);
 					}
 					else
 					{
@@ -335,8 +319,6 @@ public class MapLoader
 						BossEnemy be = new BossEnemy(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE), ed);
 						EnemyStateMachine machine = new EnemyStateMachine(be, game.getAllPlayers());
 						be.setMachine(machine);
-						
-						//dManager.addObject(be);
 					}
 					else
 					{
@@ -409,7 +391,7 @@ public class MapLoader
 					{
 						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
 						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
-						/*MapItem mp = */new MapItem(game, itemID, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE));
+						new MapItem(game, itemID, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE));
 					}
 					else
 					{

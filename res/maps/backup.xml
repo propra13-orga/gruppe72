@@ -75,7 +75,7 @@
 				<positionY>5</positionY>
 				<mapToName>res/maps/L0R1.xml</mapToName>
 				<mapToX>1</mapToX>
-				<mapToY>5</mapToY>
+				<mapToY>10</mapToY>
 			</object>
 			<object id="0">
 				<positionX>1</positionX>

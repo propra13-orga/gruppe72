@@ -505,6 +505,11 @@ public class MEPanel extends JPanel implements MouseInputListener
 		int tileX = (int)e.getX()/me.TILE_SIZE;
 		int tileY = (int)e.getY()/me.TILE_SIZE;
 		
+		if(tileX<0)
+			tileX = 0;
+		else if(tileX>=me.WIDTH)
+			tileX = me.WIDTH-1;
+		
 		if(tileY<0)
 			tileY = 0;
 		else if(tileY>=me.HEIGHT)
