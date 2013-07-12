@@ -141,7 +141,7 @@ public class Menu implements IDrawable, IUpdateable{
 	
 	private void startServer() {
 		Server.createInstance();
-		Lobby lobby = new Lobby();
+		Lobby lobby = new Lobby(controller, Server.isOnline());
 		Client client = new Client(enteredName, lobby, game);
 		client.start();
 		lobby.setSelfClient(client);
@@ -150,7 +150,7 @@ public class Menu implements IDrawable, IUpdateable{
 	}
 	
 	private void startClient() {
-		Lobby lobby = new Lobby();
+		Lobby lobby = new Lobby(controller, Server.isOnline());
 		Client client = new Client(lobby, game, enteredIP, enteredName);
 		lobby.setSelfClient(client);
 		client.start();

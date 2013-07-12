@@ -7,3 +7,4 @@ tmp/**/*
 .loadpath
 *.launch
 *~
+/bin

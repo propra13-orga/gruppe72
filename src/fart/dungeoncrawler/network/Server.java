@@ -135,6 +135,10 @@ public class Server {
 				startNewGame();
 			}
 		}
+		//PLAYER WRITES A MESSAGE
+		else if(bm.messageType == LobbyMessage.LOBBY_CHAT_MESSAGE) {
+			broadcastMessage((LobbyChatMessage)bm);
+		}
 	}
 	
 	public void processMessage(GameMessage msg) {

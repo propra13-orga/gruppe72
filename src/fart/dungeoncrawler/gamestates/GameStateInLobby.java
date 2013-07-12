@@ -33,15 +33,7 @@ public class GameStateInLobby extends BaseGameState {
 
 	@Override
 	public void update(float elapsed) {
-		if(controller.justPressed(KeyEvent.VK_R)) {
-			lobby.changeReady();
-		}
-		
-		if(isServer) {
-			if(controller.justPressed(KeyEvent.VK_S)) {
-				lobby.getSelfClient().sendMessage(new LobbyStartGameRequest());
-			}
-		}
+		lobby.update();
 	}
 
 	@Override

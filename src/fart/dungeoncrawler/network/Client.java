@@ -185,6 +185,12 @@ public class Client extends Thread{
 			LobbyTextMessage msg = (LobbyTextMessage)bm;
 			System.out.println(Lobby.LOBBY_SAYS + msg.text);
 		} 
+		//LOBBY CHATMESSAGE
+		else if(type == LobbyMessage.LOBBY_CHAT_MESSAGE) {
+			LobbyChatMessage msg = (LobbyChatMessage)bm;
+			lobby.MessageReceived(msg);
+			System.out.println();
+		}
 		//LOBBY SENDS LIST OF ALL CLIENTS
 		else if(type == LobbyMessage.LOBBY_CLIENT_LIST) {
 			LobbyClientListMessage clMsg = (LobbyClientListMessage)bm;
