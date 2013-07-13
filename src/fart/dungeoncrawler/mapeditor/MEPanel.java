@@ -37,7 +37,7 @@ import fart.dungeoncrawler.actor.Stats;
 import fart.dungeoncrawler.enums.Heading;
 import fart.dungeoncrawler.enums.NPCType;
 import fart.dungeoncrawler.items.ItemCollection;
-import fart.dungeoncrawler.npc.states.EnemyStateMachine;
+import fart.dungeoncrawler.actor.states.EnemyStateMachine;
 
 import nu.xom.*;
 
