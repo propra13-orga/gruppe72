@@ -4,8 +4,8 @@ import java.awt.image.BufferedImage;
 
 import Utils.Vector2;
 import fart.dungeoncrawler.*;
+import fart.dungeoncrawler.actor.states.EnemyStateMachine;
 import fart.dungeoncrawler.enums.*;
-import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
 public class BaseNPC extends Actor implements IUpdateable {
 	protected EnemyStateMachine machine;

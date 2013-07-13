@@ -2,11 +2,8 @@ package fart.dungeoncrawler.items;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-
 import Utils.Vector2;
 
 import fart.dungeoncrawler.Controller;
@@ -23,16 +20,12 @@ public class Inventory implements IDrawable, IUpdateable {
 	public static final int MAX_ITEMS = ROWS * COLUMNS;
 	public static final int BORDER_SIZE = 8;
 	public static final Vector2 START_POS = new Vector2(860, 474);
-	private static final Color ttBgColor = new Color(0.3f, 0.3f, 0.3f);
 	private static final Font fontBig = new Font("Arial", 0x1, 16);
-	private static final Font fontSmall = new Font("Arial", 0x0, 13);
-	private static final Color fontColor = new Color(1.0f, 1.0f, 1.0f);
 	private BaseItem[] items;
 	private int gold;
 	private Controller controller;
 	private IconController iconController;
 	private Actor owner;
-	//private static Font font;
 	private boolean drawTooltip;
 	
 	public Inventory(Controller controller, Actor owner) {
@@ -41,7 +34,6 @@ public class Inventory implements IDrawable, IUpdateable {
 		iconController = new IconController(controller, START_POS, BORDER_SIZE, COLUMNS, ROWS);
 		items[0] = ItemCollection.getInstance().getByID(0);
 		this.owner = owner;
-		//font = new Font("Arial", 0x1, 12);
 	}
 	
 	public void setDrawTooltip(boolean draw) {

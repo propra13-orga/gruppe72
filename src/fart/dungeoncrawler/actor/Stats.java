@@ -18,7 +18,6 @@ public class Stats implements IDrawable, Serializable {
 	public static final float MANA_REG_PER_STAM = 0.125f;
 	public static final float SPELL_DMG_PER_WILL = 0.25f;
 	
-	@SuppressWarnings("unused")
 	public static final int STATS_PER_LEVEL = 5;
 	private static final Stats MELEE_BASE_STATS = new Stats(5, 6, 5, 3, 10, 6, 0);
 	private static final Stats CASTER_BASE_STATS = new Stats(4, 4, 4, 7, 4, 2, 0);

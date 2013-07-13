@@ -22,7 +22,6 @@ public class NewPlayer extends Actor implements IUpdateable {
 	private HashMap<Heading, Animation> idleAnim;
 	private HashMap<Heading, Animation> simpleAttackAnim;
 	private Attack simpleAttack;
-	private Spell simpleSpell;
 	private Animation curAnim;
 	
 	private Controller controller;
@@ -39,7 +38,6 @@ public class NewPlayer extends Actor implements IUpdateable {
 	private int curHitDuration;
 	private BufferedImage spTex;
 	private float spSpeed = 4.0f;
-	//private BufferedImage efTex;
 	private boolean controllerActive;
 	private boolean controlled;
 	private PositionState posState;
@@ -61,11 +59,11 @@ public class NewPlayer extends Actor implements IUpdateable {
 		
 		controller = game.getController();
 		statsMenu = new StatsMenu(stats, controller, this);
+		questLog = new QuestLog(this);
 		statusbar = new StatusBar(this, game);
 		inventory.setGold(25);
 		
 		//TEST
-		//level.addExperince(level.getExperienceForLevelUp() - 10);
 		spellManager = new SpellManager(this);
 		spellManager.addShields();
 
@@ -78,7 +76,6 @@ public class NewPlayer extends Actor implements IUpdateable {
 		controlled = controllerActive;
 		isInNetwork = game.isInNetwork();
 		posState = new PositionState(this);
-		questLog = new QuestLog(this);
 	}
 	
 	public NewPlayer(Game game, ActorDescription desc, Vector2 position, boolean controllerActive, int actID) {
@@ -92,11 +89,11 @@ public class NewPlayer extends Actor implements IUpdateable {
 		
 		controller = game.getController();
 		statsMenu = new StatsMenu(stats, controller, this);
+		//questLog = new QuestLog(this);
 		statusbar = new StatusBar(this, game);
 		inventory.setGold(25);
 		
 		//TEST
-		//level.addExperince(level.getExperienceForLevelUp() - 10);
 		spellManager = new SpellManager(this);
 		spellManager.addShields();
 
@@ -327,11 +324,11 @@ public class NewPlayer extends Actor implements IUpdateable {
 		}
 		else if(heading == Heading.Left) {
 			spVelo.x = -spSpeed;
-			startPos = new Vector2(collisionRect.x - spTex.getWidth(), collisionRect.y);
+			startPos = new Vector2(collisionRect.x - 32, collisionRect.y);
 		}
 		else if(heading == Heading.Up) {
 			spVelo.y = -spSpeed;
-			startPos = new Vector2(collisionRect.x, collisionRect.y - spTex.getHeight());
+			startPos = new Vector2(collisionRect.x, collisionRect.y - 32);
 		} else {
 			spVelo.y = spSpeed;
 			startPos = new Vector2(collisionRect.x, collisionRect.y + (float)collisionRect.getHeight());
@@ -515,10 +512,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 			if(controller.isPressed(KeyEvent.VK_T))
 				DeathMatchStatistics.getInstance().draw(graphics);
 		}
-		if(!isInNetwork) {
+		/*if(!isInNetwork) {
 			if(controllerActive && controller.isPressed(KeyEvent.VK_T))
 				questLog.draw(graphics);
-		}
+		}*/
 	}
 
 	@Override

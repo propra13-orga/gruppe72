@@ -142,6 +142,7 @@ public class Game extends JPanel implements Runnable
 		states.put(GameState.InLobby, new GameStateInLobby(this));
 		states.put(GameState.InNetworkGame, new GameStateInGame(this));
 		states.put(GameState.InStatsMenu, new GameStateInStatsMenu(this));
+		states.put(GameState.InQuestLog, new GameStateInQuestLog(this));
 		
 		setGameState(GameState.InMenu);
 		((GameStateInShop)states.get(GameState.InShop)).setCurrentShop(new Shop(controller));
