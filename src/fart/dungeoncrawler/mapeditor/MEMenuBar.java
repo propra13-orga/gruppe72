@@ -60,7 +60,7 @@ public class MEMenuBar extends JMenuBar implements ActionListener
 		}
 		else if(action.equals("load"))
 		{
-			
+			me.getMEPanel().loadMap("res/maps/L0R0ME.xml");
 		}
 		else if(action.equals("save"))
 		{
