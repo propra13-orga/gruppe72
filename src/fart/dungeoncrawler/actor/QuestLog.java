@@ -12,18 +12,20 @@ import fart.dungeoncrawler.enums.QuestObjectiveType;
 
 public class QuestLog implements IDrawable {
 	private static Color bgColor = new Color(0.8f, 0.8f, 0.4f);
+	private static Font fontHeader = new Font("Arial", 0x1, 24);
 	private static Font font = new Font("Arial", 0x1, 12);
 	private static Color fontColor = new Color(0.1f, 0.1f, 0.35f);
 	private static Vector2 startPos = new Vector2(18 * 32, 2 * 32);
 	
 	private NewPlayer owner;
 	private ArrayList<Quest> quests;
+	private boolean containsNew;
 	
 	public QuestLog(NewPlayer owner) {
 		this.owner = owner;
 		quests = new ArrayList<Quest>();
 		
-		QuestObjKill qok = new QuestObjKill(2, "MapEditorSave");
+		/*QuestObjKill qok = new QuestObjKill(2, "MapEditorSave");
 		ArrayList<QuestObjective> qosk = new ArrayList<QuestObjective>();
 		qosk.add(qok);
 		Quest qk = new Quest("KillMobs", 50, 50, qosk);
@@ -41,7 +43,7 @@ public class QuestLog implements IDrawable {
 		ArrayList<QuestObjective> qosAll = new ArrayList<QuestObjective>();
 		qosAll.add(qokb);
 		qosAll.add(qoc);
-		Quest qAll = new Quest("Together", 10, 10, qosAll);
+		Quest qAll = new Quest("Together", 10, 10, qosAll);*/
 		
 		/*addQuest(qAll);
 		addQuest(qk);
@@ -50,9 +52,18 @@ public class QuestLog implements IDrawable {
 		
 	}
 	
+	public boolean containsNew() {
+		return containsNew;
+	}
+	
+	public void setContainsNew(boolean containsNew) {
+		this.containsNew = containsNew;
+	}
+	
 	public void addQuest(Quest quest) {
 		quests.add(quest);
 		quest.setQuestLog(this);
+		containsNew = true;
 	}
 	
 	public boolean contains(Quest q) {
@@ -107,8 +118,14 @@ public class QuestLog implements IDrawable {
 
 	@Override
 	public void draw(Graphics2D graphics) {
+		containsNew = false;
+		
 		graphics.setColor(bgColor);
 		graphics.fillRect((int)startPos.x, (int)startPos.y, 15 * 32, 16 * 32);
+		
+		graphics.setColor(fontColor);
+		graphics.setFont(fontHeader);
+		graphics.drawString("QuestLog", startPos.x + 64, startPos.y + 32);
 		
 		graphics.setColor(fontColor);
 		graphics.setFont(font);

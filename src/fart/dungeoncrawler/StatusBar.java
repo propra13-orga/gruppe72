@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import fart.dungeoncrawler.actor.Level;
 import fart.dungeoncrawler.actor.NewPlayer;
+import fart.dungeoncrawler.actor.QuestLog;
 import fart.dungeoncrawler.actor.StatsMenu;
 
 public class StatusBar implements IDrawable {
@@ -24,6 +25,7 @@ public class StatusBar implements IDrawable {
 	private BufferedImage barTexture;
 	private Game game;
 	private StatsMenu stats;
+	private QuestLog qLog;
 	
 	private static Font fontHpMp = new Font("Arial", 0x1, 10);
 	private static Font fontStats = new Font("Arial", 0x0, 12);
@@ -36,6 +38,7 @@ public class StatusBar implements IDrawable {
 		this.level = player.getLevel();
 		this.game = game;
 		this.stats = player.getStatsMenu();
+		this.qLog = player.getQuestLog();
 		
 		healthRect = new Rectangle(5 * 32, 32 * 20 + 7, 93, 13);
 		manaRect = new Rectangle(5 * 32, 32 * 20 + 24, 93, 13);
@@ -101,6 +104,15 @@ public class StatusBar implements IDrawable {
 		graphics.fillRect(xStart, yStart, xWidth, yWidth);
 		
 		graphics.drawImage(barTexture, expRect.x - 4, expRect.y - 3, null);
+		
+		if(qLog != null && qLog.containsNew()) {
+			graphics.setColor(new Color(0.8f, 0.8f, 0.4f));
+			graphics.fillRect(26 * 32 + 16, 20 * 32 + 12, 32, 32);
+			
+			graphics.setFont(fontStats);
+			graphics.setColor(Color.white);
+			graphics.drawString("T", 26 * 32 + 20, 20 * 32 + 24);
+		}
 		
 		if(stats.pointsRemaining()) {
 			graphics.setColor(new Color(0.7f, 0.7f, 0.7f));

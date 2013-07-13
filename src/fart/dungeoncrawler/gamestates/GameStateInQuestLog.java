@@ -10,18 +10,18 @@ import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.actor.Actor;
 import fart.dungeoncrawler.actor.DynamicObjectManager;
 import fart.dungeoncrawler.actor.NewPlayer;
-import fart.dungeoncrawler.actor.StatsMenu;
+import fart.dungeoncrawler.actor.QuestLog;
 import fart.dungeoncrawler.enums.GameState;
 
-public class GameStateInStatsMenu extends BaseGameState {
-	private StatsMenu stats;
+public class GameStateInQuestLog extends BaseGameState {
+	private QuestLog log;
 	private StaticObjectManager sManager;
 	private DynamicObjectManager dManager;
 	private Tilemap map;
 	private Controller controller;
 	private NewPlayer player;
 
-	public GameStateInStatsMenu(Game game) {
+	public GameStateInQuestLog(Game game) {
 		super(game);
 
 		sManager = game.getStaticManager();
@@ -33,21 +33,18 @@ public class GameStateInStatsMenu extends BaseGameState {
 	public void setCurrentActor(Actor actor) {
 		if(actor instanceof NewPlayer) {
 			player = (NewPlayer)actor;
-			this.stats = player.getStatsMenu();
+			this.log = player.getQuestLog();
 		}
 	}
 
 	@Override
 	public void update(float elapsed) {
-		if(controller.justPressed(KeyEvent.VK_O) || controller.justPressed(KeyEvent.VK_ESCAPE)) {
-			player.setControllerActive(true);
+		if(controller.justPressed(KeyEvent.VK_T) || controller.justPressed(KeyEvent.VK_ESCAPE)) {
 			game.setGameState(GameState.InGame);
 			return;
 		}
 		
-		player.setControllerActive(false);
 		dManager.update(elapsed);
-		stats.update();
 	}
 
 	@Override
@@ -55,7 +52,7 @@ public class GameStateInStatsMenu extends BaseGameState {
 		map.draw(graphics);
 		sManager.draw(graphics);
 		dManager.draw(graphics);
-		stats.drawMenu(graphics);
+		log.draw(graphics);
 	}
 
 	@Override
@@ -65,7 +62,6 @@ public class GameStateInStatsMenu extends BaseGameState {
 
 	@Override
 	public void exit() {
-		player.setControllerActive(true);
 	}
 
 	

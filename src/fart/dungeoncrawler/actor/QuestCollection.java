@@ -22,7 +22,7 @@ public class QuestCollection {
 		Quest q2 = new Quest("First Weapon", 30, 0, q2o1);
 		quests.add(q2);
 		
-		QuestObjKill q3o1 = new QuestObjKill(5, "MapEditorSave");
+		//QuestObjKill q3o1 = new QuestObjKill(5, "MapEditorSave");
 	}
 	
 	public static QuestCollection getInstance() {

@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import fart.dungeoncrawler.actor.*;
+import fart.dungeoncrawler.actor.states.EnemyStateMachine;
 import fart.dungeoncrawler.enums.Heading;
 import fart.dungeoncrawler.enums.NPCType;
 import fart.dungeoncrawler.items.ItemCollection;
-import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
 import Utils.Vector2;
 

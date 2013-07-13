@@ -13,7 +13,6 @@ import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.Health;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.ElementType;
-import fart.dungeoncrawler.network.DeathMatchStatistics;
 import fart.dungeoncrawler.network.Server;
 import fart.dungeoncrawler.network.messages.game.GameHitMessage;
 import fart.dungeoncrawler.network.messages.game.GamePlayerKilledMessage;

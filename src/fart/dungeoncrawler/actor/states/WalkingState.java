@@ -1,4 +1,4 @@
-package fart.dungeoncrawler.npc.states;
+package fart.dungeoncrawler.actor.states;
 
 import java.util.Random;
 

@@ -11,8 +11,8 @@ import javax.imageio.ImageIO;
 import Utils.Vector2;
 
 import fart.dungeoncrawler.actor.*;
+import fart.dungeoncrawler.actor.states.EnemyStateMachine;
 import fart.dungeoncrawler.enums.NPCType;
-import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
 public class CheckPoint extends GameObject implements ITriggerableOnKey {
 	private static final int MAX_LOADS_PER_CP = 2;

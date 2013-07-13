@@ -1,4 +1,4 @@
-package fart.dungeoncrawler.npc.states;
+package fart.dungeoncrawler.actor.states;
 
 import Utils.Vector2;
 import fart.dungeoncrawler.GameObject;

@@ -8,5 +8,6 @@ public enum GameState {
 	InInventory,
 	InLobby,
 	InNetworkGame,
-	InStatsMenu
+	InStatsMenu,
+	InQuestLog
 }
