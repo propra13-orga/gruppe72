@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import Utils.Vector2;
 
 import fart.dungeoncrawler.actor.Actor;
+import fart.dungeoncrawler.actor.NewPlayer;
 import fart.dungeoncrawler.items.BaseItem;
 import fart.dungeoncrawler.items.ItemCollection;
 
@@ -14,6 +15,7 @@ public class MapItem extends GameObject implements ITriggerableOnKey {
 	private Rectangle colRect;
 	private StaticObjectManager sManager;
 	private Collision collision;
+	private Game game;
 	
 	public MapItem(Game game, int itemID, Vector2 position) {
 		screenPosition = position;
@@ -23,12 +25,18 @@ public class MapItem extends GameObject implements ITriggerableOnKey {
 		sManager.addObject(this);
 		collision = game.getCollision();
 		collision.addTriggerOnKey(this);
+		this.game = game;
 	}
 
 	@Override
 	public void trigger(Actor actor) {
-		actor.getInventory().addItem(item);
-		terminate();
+		if(actor.getInventory().addItem(item)) {
+			if(actor instanceof NewPlayer && !game.isInNetwork()) {
+				NewPlayer p = (NewPlayer)actor;
+				p.getQuestLog().itemCollected(item.getIndex());
+			}
+			terminate();
+		}
 	}
 
 	@Override

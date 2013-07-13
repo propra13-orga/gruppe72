@@ -47,6 +47,7 @@ public class MapLoader
 	private StaticObjectManager sManager;
 	private DynamicObjectManager dManager;
 	private Collision collision;
+	private String mapName;
 	
 	public MapLoader(Game game,
 					StaticObjectManager sManager,
@@ -88,6 +89,8 @@ public class MapLoader
 		
 		Element current;
 		
+		current = map.getRootElement().getChildElements("name").get(0);
+		mapName = current.getChild(0).getValue();
 		// Read width and height of map and create an array
 		current = map.getRootElement().getChildElements("width").get(0);
 		width = Integer.parseInt(current.getChild(0).getValue());
@@ -405,5 +408,9 @@ public class MapLoader
 	public int[][] getMap()
 	{
 		return output;
+	}
+	
+	public String getMapName() {
+		return mapName;
 	}
 }

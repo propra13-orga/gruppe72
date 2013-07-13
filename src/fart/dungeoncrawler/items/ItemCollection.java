@@ -30,7 +30,8 @@ public class ItemCollection {
 	}
 	
 	public static void createNewInstace() {
-		instance = new ItemCollection();
+		if(instance == null)
+			instance = new ItemCollection();
 	}
 	
 	public static ItemCollection getInstance() {

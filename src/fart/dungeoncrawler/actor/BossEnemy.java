@@ -92,7 +92,7 @@ public class BossEnemy extends BaseEnemy {
 			new GoldItem(game, screenPosition, amount);
 		}
 		
-		String mapTo = new String(game.getMapName());
+		String mapTo = new String(game.getMapPath());
 		if (mapTo.equals("res/maps/L2R2.xml")) {
 			Goal g = new Goal(new Vector2(screenPosition.x / Tilemap.TILE_SIZE, screenPosition.y / Tilemap.TILE_SIZE), game);
 			game.getStaticManager().addObject(g);

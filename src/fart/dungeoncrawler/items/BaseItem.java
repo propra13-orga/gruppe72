@@ -37,7 +37,7 @@ public abstract class BaseItem implements IDrawable {
 		}
 		
 		index = numItems;
-		index++;
+		numItems++;
 	}
 	
 	@Override

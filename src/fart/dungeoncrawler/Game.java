@@ -53,7 +53,7 @@ public class Game extends JPanel implements Runnable
 	public BaseGameState getGameState() { return currentGameState; }
 	
 	private CheckPoint checkPoint = null;
-	private String currentMap;
+	private String currentMapPath;
 	
 	private boolean isInNetwork;
 	private boolean isServer;
@@ -201,7 +201,7 @@ public class Game extends JPanel implements Runnable
 		startGame(newGame, "res/maps/L0R0.xml");
 	}
 	
-	public void startGame(boolean newGame, String mapName) {
+	public void startGame(boolean newGame, String mapPath) {
 		manager.clearObjects();
 		sManager.clearObjects();
 		collision.clearDynamicObjects();
@@ -213,8 +213,8 @@ public class Game extends JPanel implements Runnable
 			resetPlayer();
 		}
 		
-		map.loadMap(mapName);
-		currentMap = mapName;
+		map.loadMap(mapPath);
+		currentMapPath = mapPath;
 		
 		if(player != null) {
 			collision.addDynamicObject(player);
@@ -232,7 +232,7 @@ public class Game extends JPanel implements Runnable
 		if(checkPoint != null) {
 			if(checkPoint.load()) {
 				saveCheckPoint(checkPoint);
-				currentMap = checkPoint.getMapName();
+				currentMapPath = checkPoint.getMapName();
 				collision.addDynamicObject(player);
 			}
 			else {
@@ -299,11 +299,15 @@ public class Game extends JPanel implements Runnable
 		player.setScreenPosition(new Vector2(position));
 		manager.addObject(player);
 		collision.addDynamicObject(player);
-		currentMap = mapTo;
+		currentMapPath = mapTo;
+	}
+	
+	public String getMapPath() {
+		return currentMapPath;
 	}
 	
 	public String getMapName() {
-		return currentMap;
+		return map.getName();
 	}
 	
 	public void startGameLoop() {

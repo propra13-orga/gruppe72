@@ -42,6 +42,7 @@ public class NewPlayer extends Actor implements IUpdateable {
 	//private BufferedImage efTex;
 	private boolean controllerActive;
 	private PositionState posState;
+	private QuestLog questLog;
 	
 	/**
 	 * Represents the player.
@@ -72,6 +73,7 @@ public class NewPlayer extends Actor implements IUpdateable {
 		this.controllerActive = controllerActive;
 		isInNetwork = game.isInNetwork();
 		posState = new PositionState(this);
+		questLog = new QuestLog(this);
 	}
 	
 	public NewPlayer(Game game, ActorDescription desc, Vector2 position, boolean controllerActive, int actID) {
@@ -118,6 +120,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 		mana.fillMana();
 		
 		spellManager.addShields();
+	}
+	
+	public QuestLog getQuestLog() {
+		return questLog;
 	}
 	
 	public void resetCheckpoint(CheckPointInfo info) {
@@ -510,6 +516,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 		if(isInNetwork && controllerActive) {
 			if(controller.isPressed(KeyEvent.VK_T))
 				DeathMatchStatistics.getInstance().draw(graphics);
+		}
+		if(!isInNetwork) {
+			if(controller.isPressed(KeyEvent.VK_T))
+				questLog.draw(graphics);
 		}
 	}
 

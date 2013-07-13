@@ -25,6 +25,8 @@ public class Tilemap implements IDrawable {
 	public static int getHeight() { return height; }
 	public static void setHeight(int h) { height = h; }
 	private MapLoader loader;
+	private String path;
+	public String getPath() { return path; }
 	private String name;
 	public String getName() { return name; }
 	
@@ -50,10 +52,11 @@ public class Tilemap implements IDrawable {
 		return actRoom;
 	}
 	
-	public void loadMap(String mapname) {
-		loader.loadMap(this, mapname);
+	public void loadMap(String mapPath) {
+		loader.loadMap(this, mapPath);
 		actRoom = loader.getMap();
-		name = mapname;
+		name = loader.getMapName();
+		path = mapPath;
 	}
 	
 	@Override

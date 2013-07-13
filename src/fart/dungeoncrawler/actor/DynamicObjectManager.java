@@ -197,6 +197,15 @@ public class DynamicObjectManager {
 					attacker.getLevel().addExperince(exp);
 					System.out.println("Gained " + exp + " EXP.");
 					System.out.println("Player EXP: " + attacker.getLevel().getCurrentExperience() + "/" + attacker.getLevel().getExperienceForLevelUp());
+					
+					NewPlayer p = (NewPlayer)attacker;
+					if(defender instanceof MeleeEnemy)
+						p.getQuestLog().mobKilled(game.getMapName());
+					else if(defender instanceof BossEnemy) {
+						//p.getQuestLog().mobKilled(game.getMapName());
+						p.getQuestLog().bossKilled(game.getMapName());
+					}
+						
 				}
 			}
 		}
