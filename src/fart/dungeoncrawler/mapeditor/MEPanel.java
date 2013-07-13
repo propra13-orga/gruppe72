@@ -5,7 +5,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +15,29 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import javax.xml.XMLConstants;
+
+import Utils.Vector2;
+import fart.dungeoncrawler.CheckPoint;
+import fart.dungeoncrawler.Goal;
+import fart.dungeoncrawler.MapItem;
+import fart.dungeoncrawler.Portal;
+import fart.dungeoncrawler.PortalDescription;
+import fart.dungeoncrawler.Tilemap;
+import fart.dungeoncrawler.Trap;
+import fart.dungeoncrawler.TrapDescription;
+import fart.dungeoncrawler.actor.ActorDescription;
+import fart.dungeoncrawler.actor.BaseDescription;
+import fart.dungeoncrawler.actor.BossEnemy;
+import fart.dungeoncrawler.actor.EnemyDescription;
+import fart.dungeoncrawler.actor.MeleeEnemy;
+import fart.dungeoncrawler.actor.NPCDescription;
+import fart.dungeoncrawler.actor.NPCShop;
+import fart.dungeoncrawler.actor.NPCTalking;
+import fart.dungeoncrawler.actor.Stats;
+import fart.dungeoncrawler.enums.Heading;
+import fart.dungeoncrawler.enums.NPCType;
+import fart.dungeoncrawler.items.ItemCollection;
+import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
 import nu.xom.*;
 
@@ -451,6 +476,99 @@ public class MEPanel extends JPanel implements MouseInputListener
 			System.err.println("Could not save map");
 		}
 	}
+	
+	public void loadMap(String inputFile)
+	{
+File source = new File(inputFile);
+		
+		// Loads the XML File into "map"
+		Document map = null;
+		try
+		{
+			Builder builder = new Builder(true);
+			map = builder.build(source);
+		}
+		catch (ValidityException ex)
+		{
+			map = ex.getDocument();
+		}
+		catch (ParsingException ex)
+		{
+			System.err.println("This file is not well-formed.");
+			ex.printStackTrace();
+			System.exit(1);
+		}
+		catch (IOException ex)
+		{
+			System.err.println("Could not read file " + inputFile);
+			System.exit(1);
+		}
+		
+		Element current;
+		
+		current = map.getRootElement().getChildElements("name").get(0);
+		//TODO: mapName = current.getChild(0).getValue();
+		
+		this.init();
+		
+		String tiles = map.getRootElement().getChildElements("tiles").get(0).getValue();
+		int i=0, j=0;
+		char curChar;
+	
+		// go through tiles string
+		for(int k=0; k<tiles.length(); k++)
+		{
+			curChar = tiles.charAt(k);
+			
+			// If read character is a new line and we filled a line,
+			// go into next line
+			if(curChar == '\n' && i==32)
+			{
+				j++;
+				i=0;
+			}
+			// If read character is neither a new line nor a tab,
+			// fill character into array
+			else if(curChar == ' ')
+			{
+				walls[i][j] = ' ';
+				i++;
+			}
+			else if(curChar == '#')
+			{
+				walls[i][j] = '#';
+				i++;
+			}
+		}
+
+		current = map.getRootElement().getChildElements("gameobjects").get(0);
+		for(i=0; i<current.getChildElements().size(); i++)
+		{
+			Element tmp = current.getChildElements().get(i);
+			for(j=0; j<tmp.getChildElements().size(); j++)
+			{
+				Element tmp2 = tmp.getChildElements().get(j);
+				
+				int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+				int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+				objects[posX][posY] = Integer.parseInt(tmp2.getAttribute(0).getValue());
+				
+				// Load ALL the portals
+				/*if(tmp2.getAttribute(0).getValue().equals("0"))
+				{
+					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+					String mapToName = tmp2.getChildElements().get(2).getValue();
+					int mapToX = Integer.parseInt(tmp2.getChildElements().get(3).getValue());
+					int mapToY = Integer.parseInt(tmp2.getChildElements().get(4).getValue());
+					
+					Portal portal = new Portal(game, pd.getSpritePath(), mapToName, new Vector2(posX,posY), new Vector2(mapToX,mapToY));
+					sManager.addObject(portal);
+					collision.addTrigger(portal);
+				}*/
+			}
+		}
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e)
@@ -472,8 +590,11 @@ public class MEPanel extends JPanel implements MouseInputListener
 		
 		if(me.getMEToolbar().getCurrentID().equals("grass"))
 		{
-			walls[tileX][tileY] = ' ';
-			objects[tileX][tileY] = -1;
+			if((tileX!=0) && (tileX!=me.WIDTH-1) && (tileY!=0) && (tileY!=me.HEIGHT-1))
+			{
+				walls[tileX][tileY] = ' ';
+				objects[tileX][tileY] = -1;
+			}
 		}
 		else if(me.getMEToolbar().getCurrentID().equals("wall"))
 		{
@@ -484,8 +605,20 @@ public class MEPanel extends JPanel implements MouseInputListener
 		{
 			try
 			{
-				objects[tileX][tileY] = Integer.parseInt(me.getMEToolbar().getCurrentID());
-				walls[tileX][tileY] = ' ';
+				int getID = Integer.parseInt(me.getMEToolbar().getCurrentID());
+				
+				// only overwrite value, if it's not the border of the map
+				if((tileX!=0) && (tileX!=me.WIDTH-1) && (tileY!=0) && (tileY!=me.HEIGHT-1))
+				{
+					objects[tileX][tileY] = getID;
+					walls[tileX][tileY] = ' ';
+				}
+				// except for portals, they are allowed everywhere
+				else if(getID == 0)
+				{
+					objects[tileX][tileY] = getID;
+					walls[tileX][tileY] = ' ';
+				}
 			}
 			catch(NumberFormatException ex) { }
 		}
