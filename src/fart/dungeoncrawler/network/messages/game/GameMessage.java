@@ -10,6 +10,7 @@ public class GameMessage implements Serializable {
 	public static final byte GAME_ATTACK_MESSAGE = 0x3;
 	public static final byte GAME_HIT_MESSAGE = 0x4;
 	public static final byte GAME_KILLED_MESSAGE = 0x5;
+	public static final byte GAME_STATS_UPDATE = 0x6;
 	
 	public byte ID;
 	public byte type;

@@ -41,8 +41,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 	private float spSpeed = 4.0f;
 	//private BufferedImage efTex;
 	private boolean controllerActive;
+	private boolean controlled;
 	private PositionState posState;
 	private QuestLog questLog;
+	private StatsMenu statsMenu;
 	
 	/**
 	 * Represents the player.
@@ -56,9 +58,11 @@ public class NewPlayer extends Actor implements IUpdateable {
 		this.state = DynamicObjectState.Idle;
 		this.velocity = new Vector2(0, 0);
 		this.game = game;
-		statusbar = new StatusBar(this);
+		
 		controller = game.getController();
-		inventory.setGold(100);
+		statsMenu = new StatsMenu(stats, controller, this);
+		statusbar = new StatusBar(this, game);
+		inventory.setGold(25);
 		
 		//TEST
 		//level.addExperince(level.getExperienceForLevelUp() - 10);
@@ -68,9 +72,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 		initAnimations();
 		
 		//DEBUG
-		buildSpell();
 		skillTree = new SkillTree(this, controller, collision);
+		buildSpell();
 		this.controllerActive = controllerActive;
+		controlled = controllerActive;
 		isInNetwork = game.isInNetwork();
 		posState = new PositionState(this);
 		questLog = new QuestLog(this);
@@ -84,9 +89,11 @@ public class NewPlayer extends Actor implements IUpdateable {
 		this.state = DynamicObjectState.Idle;
 		this.velocity = new Vector2(0, 0);
 		this.game = game;
-		statusbar = new StatusBar(this);
+		
 		controller = game.getController();
-		inventory.setGold(100);
+		statsMenu = new StatsMenu(stats, controller, this);
+		statusbar = new StatusBar(this, game);
+		inventory.setGold(25);
 		
 		//TEST
 		//level.addExperince(level.getExperienceForLevelUp() - 10);
@@ -96,9 +103,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 		initAnimations();
 		
 		//DEBUG
-		buildSpell();
 		skillTree = new SkillTree(this, controller, collision);
+		buildSpell();
 		this.controllerActive = controllerActive;
+		controlled = controllerActive;
 		isInNetwork = game.isInNetwork();
 		posState = new PositionState(this);
 	}
@@ -109,17 +117,15 @@ public class NewPlayer extends Actor implements IUpdateable {
 	
 	@Override
 	public void levelUp() {
-		stats.addStamina(2);
-		stats.addAgility(1);
-		stats.addStrength(1);
-		stats.addWill(1);
-		
-		health.addMaxHealth(2 * Stats.HEALTH_PER_STAM);
-		mana.addMaxMana(1 * Stats.MANA_PER_WILL);
 		health.fillHealth();
 		mana.fillMana();
-		
+		statsMenu.leveledUp();
 		spellManager.addShields();
+	}
+	
+	public void renewHealthMana() {
+		health.setMaxHealh(stats.getStamina() * Stats.HEALTH_PER_STAM);
+		mana.setMaxMana(stats.getWill() * Stats.MANA_PER_WILL);
 	}
 	
 	public QuestLog getQuestLog() {
@@ -144,25 +150,9 @@ public class NewPlayer extends Actor implements IUpdateable {
 	}
 
 	private void buildSpell() {
-		spTex = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = (Graphics2D)spTex.getGraphics();
-		g2d.setColor(new Color(0, 0, 0, 0));
-		g2d.fillRect(0, 0, 32, 32);
-		g2d.setColor(Color.cyan);
-		g2d.fillOval(8, 8, 16, 16);
-		
-		simpleSpell = new SpellFireBold(null, new SpellProjectile(this, spTex, collision));
-		spellManager.addSpell(simpleSpell);
-		
-		BufferedImage spTex2 = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
-		g2d = (Graphics2D)spTex2.getGraphics();
-		g2d.setColor(new Color(0, 0, 0, 0));
-		g2d.fillRect(0, 0, 32, 32);
-		g2d.setColor(Color.orange);
-		g2d.fillOval(8, 8, 16, 16);
-		
-		Spell simpleSpell2 = new SpellWaterBold(null, new SpellProjectile(this, spTex2, collision));
-		spellManager.addSpell(simpleSpell2);
+		spellManager.addSpell(skillTree.getFireSkills().get(0).getSpell());
+		spellManager.addSpell(skillTree.getWaterSkills().get(0).getSpell());
+		spellManager.addSpell(skillTree.getEarthSkills().get(0).getSpell());
 	}
 	
 	private void initAnimations() {
@@ -384,6 +374,8 @@ public class NewPlayer extends Actor implements IUpdateable {
 				spellAttack(0);
 			else if(controller.justPressed(KeyEvent.VK_D))
 				spellAttack(1);
+			else if(controller.justPressed(KeyEvent.VK_F))
+				spellAttack(2);
 			else if(controller.justPressed(KeyEvent.VK_5))
 				spellManager.activateShield(ElementType.Fire);
 			else if(controller.justPressed(KeyEvent.VK_6))
@@ -405,7 +397,13 @@ public class NewPlayer extends Actor implements IUpdateable {
 				stopMovement();
 			else if(controller.justPressed(KeyEvent.VK_ENTER))
 				collision.checkOnKeyTriggers(this);
+			else if(controller.justPressed(KeyEvent.VK_L))
+				level.addExperince(Level.getExperienceForLevel(level.getLevel()) - level.getCurrentExperience());
 		}
+	}
+	
+	public StatsMenu getStatsMenu() {
+		return statsMenu;
 	}
 
 	@Override
@@ -506,9 +504,9 @@ public class NewPlayer extends Actor implements IUpdateable {
 		}
 		
 		graphics.drawImage(getTexture(), (int)screenPosition.x, (int)screenPosition.y, null);
-		if(controllerActive) {
-			statusbar.draw(graphics);
+		if(controlled) {
 			spellManager.draw(graphics);
+			statusbar.draw(graphics);
 		}
 		
 		if(controller.isPressed(KeyEvent.VK_P))
@@ -518,7 +516,7 @@ public class NewPlayer extends Actor implements IUpdateable {
 				DeathMatchStatistics.getInstance().draw(graphics);
 		}
 		if(!isInNetwork) {
-			if(controller.isPressed(KeyEvent.VK_T))
+			if(controllerActive && controller.isPressed(KeyEvent.VK_T))
 				questLog.draw(graphics);
 		}
 	}
@@ -526,6 +524,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 	@Override
 	protected BufferedImage getTexture() {
 		return curAnim.getTexture();
+	}
+	
+	public void setControllerActive(boolean b) {
+		controllerActive = b;
 	}
 	
 	private void sendPositionMessage() {

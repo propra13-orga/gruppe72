@@ -237,8 +237,8 @@ public class DynamicObjectManager {
 	}
 	
 	public void draw(Graphics2D g2d) {
-		for(Actor npc : dynamics)
-			npc.draw(g2d);
+		for(int i = 0; i < dynamics.size(); i++)
+			dynamics.get(i).draw(g2d);
 		
 		for(SpellProjectile projectile : projectiles)
 			projectile.draw(g2d);

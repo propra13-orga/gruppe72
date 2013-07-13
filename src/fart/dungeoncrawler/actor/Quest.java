@@ -13,6 +13,14 @@ public class Quest{
 	private int goldAmount;
 	private ArrayList<QuestObjective> objectives;
 	
+	public Quest(String name, int exp, int gold, QuestObjective obj) {
+		this.name = name;
+		this.expAmount = exp;
+		this.goldAmount = gold;
+		this.objectives = new ArrayList<QuestObjective>();
+		objectives.add(obj);
+	}
+	
 	public Quest(String name, int exp, int gold, ArrayList<QuestObjective> objs) {
 		this.name = name;
 		this.expAmount = exp;
@@ -72,16 +80,17 @@ public class Quest{
 		collectObjective.collected(index);
 	}
 	
-	public void checkQuestDone(NewPlayer player) {
+	public boolean checkQuestDone(NewPlayer player) {
 		for(QuestObjective q : objectives)
 			if(!q.fulfilled())
-				return;
+				return false;
 		
 		player.getInventory().addGold(goldAmount);
 		player.getLevel().addExperince(expAmount);
 		
 		qLog.removeQuest(this);
 		System.out.println("Quest done!");
+		return true;
 	}
 	
 	public ArrayList<QuestObjective> getObjectives() {

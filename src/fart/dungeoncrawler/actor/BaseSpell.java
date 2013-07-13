@@ -48,6 +48,10 @@ public abstract class BaseSpell implements IUpdateable {
 		return type;
 	}
 	
+	public BufferedImage getIcon() {
+		return icon;
+	}
+	
 	@Override
 	public void update(float elapsed) {
 		currentCooldown -= 1;

@@ -84,6 +84,10 @@ public class SkillTree implements IDrawable, IUpdateable {
 		earthSkills.add(earthBoldSkill);
 	}
 	
+	public ArrayList<Skill> getFireSkills() { return fireSkills; }
+	public ArrayList<Skill> getWaterSkills() { return waterSkills; }
+	public ArrayList<Skill> getEarthSkills() { return earthSkills; }
+	
 	@Override
 	public void update(float elapsed) {
 		
@@ -131,6 +135,8 @@ public class SkillTree implements IDrawable, IUpdateable {
 		public boolean skillable(int level) {
 			return level >= levelReq && prevLearned;
 		}
+		
+		public Spell getSpell() { return spell; }
 	}
 }
 

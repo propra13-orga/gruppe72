@@ -45,6 +45,10 @@ public class NetworkManager {
 		sendMessage(new GameAttackMessage(a));
 	}
 	
+	public static void sendStatsMessage(NewPlayer a) {
+		sendMessage(new GameStatsUpdateMessage(a));
+	}
+	
 	private static void sendMessage(GameMessage msg) {
 		instance.client.sendMessage(msg);
 	}
@@ -60,8 +64,15 @@ public class NetworkManager {
 			handleHitMessage((GameHitMessage)bm);
 		else if(bm.type == GameMessage.GAME_KILLED_MESSAGE)
 			handlePlayerKilledMessage((GamePlayerKilledMessage)bm);
+		else if(bm.type == GameMessage.GAME_STATS_UPDATE)
+			handleStatsUpdate((GameStatsUpdateMessage)bm);
 	}
 	
+	private void handleStatsUpdate(GameStatsUpdateMessage msg) {
+		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
+		a.setStats(msg.newStats);
+	}
+
 	private void handleAttackMessage(GameAttackMessage msg) {
 		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
 		a.receivedAttackMsg();

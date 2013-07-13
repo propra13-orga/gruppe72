@@ -217,6 +217,15 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		collisionRect.y = (int)screenPosition.y;
 	}
 	
+	public void setStats(Stats newStats) {
+		this.stats = newStats;
+		
+		float cHealth = health.getCurrentHealth();
+		float cMana = mana.getCurrentMana();
+		health = new Health(stats.getStamina() * Stats.HEALTH_PER_STAM, cHealth);
+		mana = new Mana(stats.getWill() * Stats.MANA_PER_WILL, cMana);
+	}
+	
 	public void setVelocity(Vector2 v) {
 		this.velocity = new Vector2(v);
 		

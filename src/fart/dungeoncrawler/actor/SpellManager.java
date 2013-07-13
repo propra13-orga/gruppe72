@@ -1,6 +1,7 @@
 package fart.dungeoncrawler.actor;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
@@ -12,10 +13,13 @@ import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.enums.ElementType;
 
 public class SpellManager implements IDrawable, IUpdateable {
-	private static final Vector2 START_POS = new Vector2(1 * Tilemap.TILE_SIZE, 15 * Tilemap.TILE_SIZE + 8);
+	private static final Vector2 START_POS = new Vector2(8 * Tilemap.TILE_SIZE - 20, 20 * Tilemap.TILE_SIZE + 16);
 	private static int BORDER = 16;
 	private static final int GLOBAL_COOLDOWN = 90;
 	private static final int SHIELD_COOLDOWN = 5 * 60;
+	private static final Color bgColor = new Color(0.4f, 0.4f, 0.4f);
+	private static final Font font = new Font("Arial", 0x0, 12);
+	private static final Color fontColor = new Color(1f, 1f, 1f);
 	
 	private Actor owner;
 	private ArrayList<Spell> spells;
@@ -32,7 +36,7 @@ public class SpellManager implements IDrawable, IUpdateable {
 		shields[0] = ElementalShield.getFireShield(owner);
 		shields[1] = ElementalShield.getWaterShield(owner);
 		shields[2] = ElementalShield.getEarthShield(owner);
-		shieldCooldown = 0;
+		//shieldCooldown = 0;
 	}
 	
 	@SuppressWarnings("incomplete-switch")
@@ -57,6 +61,9 @@ public class SpellManager implements IDrawable, IUpdateable {
 		
 		currentShield.activate();
 		shieldCooldown = SHIELD_COOLDOWN;
+		
+		if(owner instanceof NewPlayer)
+			((NewPlayer)owner).renewHealthMana();
 	}
 	
 	public void addSpell(Spell spell) {
@@ -71,11 +78,27 @@ public class SpellManager implements IDrawable, IUpdateable {
 	public void draw(Graphics2D graphics) {
 		int x = (int)START_POS.x;
 		int y = (int)START_POS.y;
+		
+		graphics.setColor(bgColor);
+		graphics.fillRect(0, y - 16, 32 * 32, 32 * 2);
+		
+		graphics.setFont(font);
+		
 		for(int i = 0; i < spells.size(); i++) {
-			x += i * BORDER + i * Tilemap.TILE_SIZE;
+			x += BORDER + Tilemap.TILE_SIZE;
 			
-			graphics.setColor(Color.cyan);
-			graphics.fillRect(x, y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
+			graphics.drawImage(spells.get(i).getIcon(), x, y, null);
+			
+			graphics.setColor(fontColor);
+			String n = "";
+			if(i == 0)
+				n = "S";
+			else if(i == 1)
+				n = "D";
+			else if(i == 2)
+				n = "F";
+			
+			graphics.drawString(n, x + 4, y + 12);
 			
 			if(spells.get(i).isOnCooldown()) {
 				graphics.setColor(new Color(0.3f, 0.3f, 0.3f, 0.5f));
@@ -88,6 +111,8 @@ public class SpellManager implements IDrawable, IUpdateable {
 			y = (int)START_POS.y;
 			graphics.setColor(new Color(1f, 0.6f, 0.0f));
 			graphics.fillRect(x, y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
+			graphics.setColor(fontColor);
+			graphics.drawString("5", x + 4, y + 12);
 			if(shieldCooldown > 0) {
 				graphics.setColor(new Color(0.3f, 0.3f, 0.3f, 0.5f));
 				graphics.fillRect(x, y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
@@ -99,6 +124,8 @@ public class SpellManager implements IDrawable, IUpdateable {
 			y = (int)START_POS.y;
 			graphics.setColor(new Color(0.4f, 0.4f, 1.0f));
 			graphics.fillRect(x, y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
+			graphics.setColor(fontColor);
+			graphics.drawString("6", x + 4, y + 12);
 			if(shieldCooldown > 0) {
 				graphics.setColor(new Color(0.3f, 0.3f, 0.3f, 0.5f));
 				graphics.fillRect(x, y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
@@ -110,6 +137,8 @@ public class SpellManager implements IDrawable, IUpdateable {
 			y = (int)START_POS.y;
 			graphics.setColor(new Color(0.2f, 1.0f, 0.2f));
 			graphics.fillRect(x, y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
+			graphics.setColor(fontColor);
+			graphics.drawString("7", x + 4, y + 12);
 			if(shieldCooldown > 0) {
 				graphics.setColor(new Color(0.3f, 0.3f, 0.3f, 0.5f));
 				graphics.fillRect(x, y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);

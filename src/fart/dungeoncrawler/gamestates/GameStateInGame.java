@@ -44,6 +44,11 @@ public class GameStateInGame extends BaseGameState {
 				game.setGameState(GameState.InInventory);
 				((GameStateInInventory)game.getGameState()).setCurrentActor(game.getPlayer());
 			}
+			
+			if(controller.justPressed(KeyEvent.VK_O)) {
+				game.setGameState(GameState.InStatsMenu);
+				((GameStateInStatsMenu)game.getGameState()).setCurrentActor(game.getPlayer());
+			}
 		}
 		dManager.update(elapsed);
 	}

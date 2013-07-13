@@ -11,21 +11,20 @@ import fart.dungeoncrawler.actor.Actor;
 import fart.dungeoncrawler.actor.DynamicObjectManager;
 import fart.dungeoncrawler.actor.NewPlayer;
 import fart.dungeoncrawler.actor.Stats;
+import fart.dungeoncrawler.actor.StatsMenu;
 import fart.dungeoncrawler.enums.GameState;
 import fart.dungeoncrawler.items.Equipment;
 import fart.dungeoncrawler.items.Inventory;
 
-public class GameStateInInventory extends BaseGameState {
-	private Inventory inventory;
-	private Equipment equip;
-	private Stats stats;
+public class GameStateInStatsMenu extends BaseGameState {
+	private StatsMenu stats;
 	private StaticObjectManager sManager;
 	private DynamicObjectManager dManager;
 	private Tilemap map;
 	private Controller controller;
 	private NewPlayer player;
 
-	public GameStateInInventory(Game game) {
+	public GameStateInStatsMenu(Game game) {
 		super(game);
 
 		sManager = game.getStaticManager();
@@ -35,25 +34,23 @@ public class GameStateInInventory extends BaseGameState {
 	}
 	
 	public void setCurrentActor(Actor actor) {
-		this.inventory = actor.getInventory();
-		this.equip = actor.getEquipment();
-		this.stats = actor.getStats();
-		if(actor instanceof NewPlayer)
+		if(actor instanceof NewPlayer) {
 			player = (NewPlayer)actor;
+			this.stats = player.getStatsMenu();
+		}
 	}
 
 	@Override
 	public void update(float elapsed) {
-		if(controller.justPressed(KeyEvent.VK_I) || controller.justPressed(KeyEvent.VK_ESCAPE)) {
+		if(controller.justPressed(KeyEvent.VK_O) || controller.justPressed(KeyEvent.VK_ESCAPE)) {
 			player.setControllerActive(true);
 			game.setGameState(GameState.InGame);
 			return;
 		}
 		
 		player.setControllerActive(false);
-		inventory.setDrawTooltip(true);
-		inventory.update(elapsed);
 		dManager.update(elapsed);
+		stats.update();
 	}
 
 	@Override
@@ -61,9 +58,7 @@ public class GameStateInInventory extends BaseGameState {
 		map.draw(graphics);
 		sManager.draw(graphics);
 		dManager.draw(graphics);
-		equip.draw(graphics);
-		stats.draw(graphics);
-		inventory.draw(graphics);
+		stats.drawMenu(graphics);
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import fart.dungeoncrawler.StaticObjectManager;
 import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.actor.Actor;
 import fart.dungeoncrawler.actor.DynamicObjectManager;
+import fart.dungeoncrawler.actor.NewPlayer;
 import fart.dungeoncrawler.actor.Stats;
 import fart.dungeoncrawler.enums.GameState;
 import fart.dungeoncrawler.items.Equipment;
@@ -26,7 +27,7 @@ public class GameStateInShop extends BaseGameState {
 	private DynamicObjectManager dManager;
 	private Tilemap map;
 	private Controller controller;
-	
+	private NewPlayer player;
 	
 	public static final Font FONT = new Font("Lucida Console", 0x1, 12);
 	public static final Color FONT_COLOR = new Color(0.275f, 0.0f, 0.14f);
@@ -49,6 +50,10 @@ public class GameStateInShop extends BaseGameState {
 		this.equip = actor.getEquipment();
 		this.stats = actor.getStats();
 		shop.setInventory(inventory);
+		
+		inventory.setDrawTooltip(false);
+		if(actor instanceof NewPlayer)
+			player = (NewPlayer)actor;
 	}
 	
 	@Override
@@ -63,9 +68,13 @@ public class GameStateInShop extends BaseGameState {
 
 	@Override
 	public void update(float elapsed) {
-		if(controller.justPressed(KeyEvent.VK_ESCAPE))
+		if(controller.justPressed(KeyEvent.VK_ESCAPE)) {
+			player.setControllerActive(true);
 			game.setGameState(GameState.InGame);
+			return;
+		}
 		
+		player.setControllerActive(false);
 		shop.update(elapsed);
 		dManager.update(elapsed);
 	}
@@ -76,9 +85,9 @@ public class GameStateInShop extends BaseGameState {
 		sManager.draw(graphics);
 		dManager.draw(graphics);
 		shop.draw(graphics);
-		inventory.draw(graphics);
 		equip.draw(graphics);
 		stats.draw(graphics);
+		inventory.draw(graphics);
 	}
 
 }

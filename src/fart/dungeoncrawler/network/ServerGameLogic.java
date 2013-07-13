@@ -51,6 +51,9 @@ public class ServerGameLogic extends Thread {
 		} else if(bm.type == GameMessage.GAME_ATTACK_MESSAGE) {
 			GameAttackMessage msg = (GameAttackMessage)bm;
 			handleAttack(msg);
+		} else if(bm.type == GameMessage.GAME_STATS_UPDATE) {
+			GameStatsUpdateMessage msg = (GameStatsUpdateMessage)bm;
+			handleStatsUpdate(msg);
 		}
 	}
 	
@@ -75,6 +78,13 @@ public class ServerGameLogic extends Thread {
 	private void handleAttack(GameAttackMessage msg) {
 		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
 		a.simpleAttack();
+		
+		server.broadcastMessage(msg);
+	}
+	
+	private void handleStatsUpdate(GameStatsUpdateMessage msg) {
+		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
+		a.setStats(msg.newStats);
 		
 		server.broadcastMessage(msg);
 	}

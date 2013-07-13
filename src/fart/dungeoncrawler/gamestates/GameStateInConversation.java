@@ -56,8 +56,10 @@ public class GameStateInConversation extends BaseGameState {
 
 	@Override
 	public void update(float elapsed) {
-		if(controller.justPressed(KeyEvent.VK_ENTER))
+		if(controller.justPressed(KeyEvent.VK_ENTER)) {
 			game.setGameState(GameState.InGame);
+			return;
+		}
 		
 		dManager.update(elapsed);
 	}

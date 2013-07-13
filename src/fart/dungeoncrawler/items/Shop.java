@@ -64,7 +64,10 @@ public class Shop implements IDrawable, IUpdateable {
 
 	@Override
 	public void draw(Graphics2D graphics) {
-		graphics.setColor(new Color(0.6f, 0.6f, 0.6f));
+		int ttx = 0;
+		int tty = 0;
+		int index = iconController.getCurrentIndex();
+		boolean dtt = false;
 		
 		for(int i = 0; i < maxItems; i++) {
 			int x = i % columns;
@@ -77,10 +80,24 @@ public class Shop implements IDrawable, IUpdateable {
 			yPos += (y * borderSize);
 			yPos += startPosition.y;
 			
+			graphics.setColor(new Color(0.6f, 0.6f, 0.6f));
 			graphics.fillRect(xPos, yPos, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
 			
 			if(i < items.size())
 				graphics.drawImage(items.get(i).getIcon(), xPos, yPos, null);
+			
+			
+			if(index == i) {
+				if(index < items.size()) {
+					ttx = xPos;
+					tty = yPos;
+					dtt = true;
+				}
+			}
+		}
+		
+		if(dtt) {
+			items.get(index).drawToolTip(graphics, ttx, tty);
 		}
 		
 		iconController.draw(graphics);

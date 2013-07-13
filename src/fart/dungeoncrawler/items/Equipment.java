@@ -1,5 +1,6 @@
 package fart.dungeoncrawler.items;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 
@@ -50,6 +51,9 @@ public class Equipment implements IDrawable {
 
 	@Override
 	public void draw(Graphics2D graphics) {
+		graphics.setColor(new Color(0.8f, 0.8f, 0.4f));
+		graphics.fillRect(852, 0, 400, 640);
+		
 		graphics.setFont(GameStateInShop.FONT);
 		graphics.setColor(GameStateInShop.FONT_COLOR);
 		

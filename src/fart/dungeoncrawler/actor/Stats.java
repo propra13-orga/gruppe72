@@ -1,13 +1,17 @@
 package fart.dungeoncrawler.actor;
 
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
 import Utils.Vector2;
 
 import fart.dungeoncrawler.IDrawable;
 import fart.dungeoncrawler.gamestates.GameStateInShop;
 
-public class Stats implements IDrawable {
+public class Stats implements IDrawable, Serializable {
+	private static final long serialVersionUID = 7841914871298265438L;
+	
 	public static final int HEALTH_PER_STAM = 10;
 	public static final float HEALTH_REG_PER_STAM = 0.15f;
 	public static final int MANA_PER_WILL = 10;
@@ -15,7 +19,7 @@ public class Stats implements IDrawable {
 	public static final float SPELL_DMG_PER_WILL = 0.25f;
 	
 	@SuppressWarnings("unused")
-	private static final int STATS_PER_LEVEL = 5;
+	public static final int STATS_PER_LEVEL = 5;
 	private static final Stats MELEE_BASE_STATS = new Stats(5, 6, 5, 3, 10, 6, 0);
 	private static final Stats CASTER_BASE_STATS = new Stats(4, 4, 4, 7, 4, 2, 0);
 	
@@ -27,7 +31,9 @@ public class Stats implements IDrawable {
 	
 	private int damage;
 	private int spellDamage;
+	
 	private static final Vector2 START_POS = new Vector2(860, 400);
+	private static final Font font = new Font("Arial", 0x1, 12);
 	
 	public Stats() {
 		stamina = 4;
@@ -134,20 +140,27 @@ public class Stats implements IDrawable {
 	
 	@Override
 	public void draw(Graphics2D graphics) {
-		graphics.setFont(GameStateInShop.FONT);
+		graphics.setFont(font);
 		graphics.setColor(GameStateInShop.FONT_COLOR);
 		
 		int yPos = 280;
-		int border = 15;
+		int border = 21;
 		int pos = 0;
-		graphics.drawString("Stamina:          " + stamina, START_POS.x, yPos + border * pos++);
-		graphics.drawString("Strength:         " + strength, START_POS.x, yPos + border * pos++);
-		graphics.drawString("Agility:          " + agility, START_POS.x, yPos + border * pos++);
-		graphics.drawString("Will:             " + will, START_POS.x, yPos + border * pos++);
-		graphics.drawString("Armor:            " + armor, START_POS.x, yPos + border * pos++);
+		graphics.drawString("Stamina:", START_POS.x, yPos + border * pos);
+		graphics.drawString(((Integer)stamina).toString(), START_POS.x + 4 * 32, yPos + border * pos++);
+		graphics.drawString("Strength:", START_POS.x, yPos + border * pos);
+		graphics.drawString(((Integer)strength).toString(), START_POS.x + 4 * 32, yPos + border * pos++);
+		graphics.drawString("Agility:", START_POS.x, yPos + border * pos);
+		graphics.drawString(((Integer)agility).toString(), START_POS.x + 4 * 32, yPos + border * pos++);
+		graphics.drawString("Will:", START_POS.x, yPos + border * pos);
+		graphics.drawString(((Integer)will).toString(), START_POS.x + 4 * 32, yPos + border * pos++);
+		graphics.drawString("Armor:", START_POS.x, yPos + border * pos);
+		graphics.drawString(((Integer)armor).toString(), START_POS.x + 4 * 32, yPos + border * pos++);
 		
-		graphics.drawString("Damage:           " + damage, START_POS.x, yPos + border * pos++);
-		graphics.drawString("Spell-Damage:     " + spellDamage, START_POS.x, yPos + border * pos++);
+		graphics.drawString("Damage:", START_POS.x, yPos + border * pos);
+		graphics.drawString(((Integer)damage).toString(), START_POS.x + 4 * 32, yPos + border * pos++);
+		graphics.drawString("Spell-Damage:", START_POS.x, yPos + border * pos);
+		graphics.drawString(((Integer)spellDamage).toString(), START_POS.x + 4 * 32, yPos + border * pos++);
 	}
 
 	/**

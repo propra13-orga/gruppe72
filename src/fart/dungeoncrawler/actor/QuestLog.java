@@ -11,10 +11,10 @@ import fart.dungeoncrawler.IDrawable;
 import fart.dungeoncrawler.enums.QuestObjectiveType;
 
 public class QuestLog implements IDrawable {
-	private static Color bgColor = new Color(0.4f, 0.4f, 0.8f, 0.75f);
+	private static Color bgColor = new Color(0.8f, 0.8f, 0.4f);
 	private static Font font = new Font("Arial", 0x1, 12);
 	private static Color fontColor = new Color(0.1f, 0.1f, 0.35f);
-	private static Vector2 startPos = new Vector2(16 * 32, 2 * 32);
+	private static Vector2 startPos = new Vector2(18 * 32, 2 * 32);
 	
 	private NewPlayer owner;
 	private ArrayList<Quest> quests;
@@ -43,16 +43,34 @@ public class QuestLog implements IDrawable {
 		qosAll.add(qoc);
 		Quest qAll = new Quest("Together", 10, 10, qosAll);
 		
-		addQuest(qAll);
+		/*addQuest(qAll);
 		addQuest(qk);
 		addQuest(qkb);
-		addQuest(qc);
+		addQuest(qc);*/
 		
 	}
 	
 	public void addQuest(Quest quest) {
 		quests.add(quest);
 		quest.setQuestLog(this);
+	}
+	
+	public boolean contains(Quest q) {
+		for(int i = 0; i < quests.size(); i++) {
+			if(quests.get(i).equals(q))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public Quest getQuest(Quest q) {
+		for(int i = 0; i < quests.size(); i++) {
+			if(quests.get(i).equals(q))
+				return quests.get(i);
+		}
+		
+		return null;
 	}
 	
 	public void removeQuest(Quest quest) {
@@ -65,27 +83,27 @@ public class QuestLog implements IDrawable {
 		for(int i = 0; i < quests.size(); i++)
 			quests.get(i).mobKilled(owner, mapName);
 		
-		checkQuestsDone();
+		//checkQuestsDone();
 	}
 	
 	public void bossKilled(String mapName) {
 		for(int i = 0; i < quests.size(); i++)
 			quests.get(i).bossKilled(owner, mapName);
 		
-		checkQuestsDone();
+		//checkQuestsDone();
 	}
 	
 	public void itemCollected(int index) {
 		for(int i = 0; i < quests.size(); i++)
 			quests.get(i).itemCollected(index);
 		
-		checkQuestsDone();
+		//checkQuestsDone();
 	}
 	
-	private void checkQuestsDone() {
+	/*private void checkQuestsDone() {
 		for(int i = 0; i < quests.size(); i++)
 			quests.get(i).checkQuestDone(owner);
-	}
+	}*/
 
 	@Override
 	public void draw(Graphics2D graphics) {
@@ -112,21 +130,21 @@ public class QuestLog implements IDrawable {
 				if(obj.getType() == QuestObjectiveType.Collect) {
 					QuestObjCollect o = (QuestObjCollect)obj;
 					text = "Collect " + o.getNumber() + " x " + o.getItem().getName();
-					graphics.drawString(text.toString(), startPos.x + 16 + 5 * 32, startPos.y + 64 + i * 32 + j * 16 + yOffsetO);
-					graphics.drawString(o.getCurrent() + "/" + o.getNumber(), startPos.x + 16 + 13 * 32, startPos.y + 64 + i * 32 + j * 16 + yOffsetO);
+					graphics.drawString(text.toString(), startPos.x + 16 + 4 * 32, startPos.y + 64 + i * 32 + j * 16 + yOffsetO);
+					graphics.drawString(o.getCurrent() + "/" + o.getNumber(), startPos.x + 16 + 12 * 32, startPos.y + 64 + i * 32 + j * 16 + yOffsetO);
 				} 
 				else if (obj.getType() == QuestObjectiveType.Kill) {
 					QuestObjKill o = (QuestObjKill)obj;
 					text = "Kill " + o.getNumber() + " enemies in " + o.getMap();
-					graphics.drawString(text.toString(), startPos.x + 16 + 5 * 32, startPos.y + 64 + i * 32 + j * 16 + yOffsetO);
-					graphics.drawString(o.getCurrent() + "/" + o.getNumber(), startPos.x + 16 + 13 * 32, startPos.y + 64 + i * 32 + j * 16 + yOffsetO);
+					graphics.drawString(text.toString(), startPos.x + 16 + 4 * 32, startPos.y + 64 + i * 32 + j * 16 + yOffsetO);
+					graphics.drawString(o.getCurrent() + "/" + o.getNumber(), startPos.x + 16 + 12 * 32, startPos.y + 64 + i * 32 + j * 16 + yOffsetO);
 				} 
 				else if (obj.getType() == QuestObjectiveType.KillBoss) {
 					QuestObjKillBoss o = (QuestObjKillBoss)obj;
 					text = "Kill the Boss in " + o.getMap();
 					int c = o.fulfilled() ? 1 : 0;
-					graphics.drawString(text, startPos.x + 16 + 5 * 32, startPos.y + 64 + i * 32 + j * 16 + yOffsetO);
-					graphics.drawString(c + "/" + 1, startPos.x + 16 + 13 * 32, startPos.y + 64 + i * 32 + j * 16 + yOffsetO);
+					graphics.drawString(text, startPos.x + 16 + 4 * 32, startPos.y + 64 + i * 32 + j * 16 + yOffsetO);
+					graphics.drawString(c + "/" + 1, startPos.x + 16 + 12 * 32, startPos.y + 64 + i * 32 + j * 16 + yOffsetO);
 				}
 				if(j >= 1)
 					yOffsetQ += 16;

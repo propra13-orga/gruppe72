@@ -7,5 +7,6 @@ public enum GameState {
 	InShop,
 	InInventory,
 	InLobby,
-	InNetworkGame
+	InNetworkGame,
+	InStatsMenu
 }

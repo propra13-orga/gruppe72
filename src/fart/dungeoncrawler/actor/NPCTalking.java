@@ -18,11 +18,11 @@ public class NPCTalking extends NPCTrigger {
 							"Do we know us?",
 							"I heard of some guy named Dennis Esken...they say he's awesome"};
 
-	public NPCTalking(Game game, Vector2 position, NPCDescription npcDesc, Rectangle colRect) {
+	public NPCTalking(Game game, Vector2 position, NPCDescription npcDesc, Rectangle triggerRect) {
 		super(game, position, npcDesc);
 		this.game = game;
 		this.screenPosition = position;
-		this.triggerArea = colRect;
+		this.triggerArea = triggerRect;
 		this.type = NPCType.Talking;
 	}
 
