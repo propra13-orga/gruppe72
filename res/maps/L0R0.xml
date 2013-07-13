@@ -72,6 +72,11 @@
                         <level>1</level>
                         <element>0</element>
                 </actor>
+                <actor name="npcquest" id="8">
+                        <spritesheet>res/shop.png</spritesheet>
+                        <level>1</level>
+                        <element>0</element>
+                </actor>
         </descriptions>
         <gameobjects>
                 <objects>
@@ -113,6 +118,12 @@
                         <actor id="6">
                                 <positionX>8</positionX>
                                 <positionY>1</positionY>
+                        </actor>
+                        <actor id="8">
+                                <positionX>3</positionX>
+                                <positionY>17</positionY>
+                                <level>0</level>
+                                <level>1</level>
                         </actor>
                 </actors>
                 <items>

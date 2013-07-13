@@ -207,6 +207,15 @@ public class MapLoader
 								new Stats(), Heading.Down));
 				saveToA = true;
 			}
+			else if(tmp.getAttribute(1).getValue().equals("8"))
+			{
+				aDescriptions.add(new NPCDescription(tmp.getChildElements().get(0).getValue(),
+								NPCType.Talking.ordinal(),
+								Integer.parseInt(tmp.getChildElements().get(1).getValue()),
+								Integer.parseInt(tmp.getChildElements().get(2).getValue()),
+								new Stats(), Heading.Down));
+				saveToA = true;
+			}
 			else
 				bDescriptions.add(null);
 			
@@ -385,6 +394,33 @@ public class MapLoader
 					CheckPoint cp = new CheckPoint(game, dManager, collision, tilemap, new Rectangle(posX, posY, 32, 32));
 					sManager.addObject(cp);
 					collision.addTriggerOnKey(cp);
+				}
+				else if(tmp2.getAttribute(0).getValue().equals("8"))
+				{
+					NPCDescription npcd = null;
+					for(int k=0; k<descLoc.length && npcd == null; k++)
+						if(descLoc[k][0].equals("8"))
+							npcd = (NPCDescription) aDescriptions.get(Integer.parseInt(descLoc[k][1]));
+					
+					if(npcd!=null)
+					{
+						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
+						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
+						
+						ArrayList<Integer> questlist = new ArrayList<Integer>();
+						for(int k=2; k<tmp2.getChildElements().size(); k++)
+							questlist.add(Integer.valueOf(tmp2.getChildElements().get(k).getValue()));
+						
+						NPCQuest npcquest = new NPCQuest(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE),
+										npcd, new Rectangle(posX*Tilemap.TILE_SIZE-16,posY*Tilemap.TILE_SIZE-16, Tilemap.TILE_SIZE+32, Tilemap.TILE_SIZE+32),
+										questlist);
+						sManager.addObject(npcquest);
+						collision.addTriggerOnKey(npcquest);
+					}
+					else
+					{
+						System.err.println("No NPCDescription in XML file, but NPCQuest Objects");
+					}
 				}
 				else if(Integer.parseInt(tmp2.getAttribute(0).getValue()) >= 100)
 				{

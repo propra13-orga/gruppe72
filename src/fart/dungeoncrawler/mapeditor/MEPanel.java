@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,29 +14,6 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import javax.xml.XMLConstants;
-
-import Utils.Vector2;
-import fart.dungeoncrawler.CheckPoint;
-import fart.dungeoncrawler.Goal;
-import fart.dungeoncrawler.MapItem;
-import fart.dungeoncrawler.Portal;
-import fart.dungeoncrawler.PortalDescription;
-import fart.dungeoncrawler.Tilemap;
-import fart.dungeoncrawler.Trap;
-import fart.dungeoncrawler.TrapDescription;
-import fart.dungeoncrawler.actor.ActorDescription;
-import fart.dungeoncrawler.actor.BaseDescription;
-import fart.dungeoncrawler.actor.BossEnemy;
-import fart.dungeoncrawler.actor.EnemyDescription;
-import fart.dungeoncrawler.actor.MeleeEnemy;
-import fart.dungeoncrawler.actor.NPCDescription;
-import fart.dungeoncrawler.actor.NPCShop;
-import fart.dungeoncrawler.actor.NPCTalking;
-import fart.dungeoncrawler.actor.Stats;
-import fart.dungeoncrawler.enums.Heading;
-import fart.dungeoncrawler.enums.NPCType;
-import fart.dungeoncrawler.items.ItemCollection;
-import fart.dungeoncrawler.npc.states.EnemyStateMachine;
 
 import nu.xom.*;
 
@@ -443,6 +419,16 @@ public class MEPanel extends JPanel implements MouseInputListener
 								elObjects.appendChild(newObj);
 							}
 							
+							else if(objects[i][j] == 8)
+							{
+								newObj =  new Element("actor");
+								newObj.addAttribute(new Attribute("id", "8"));
+								newObj.appendChild(posX);
+								newObj.appendChild(posY);
+								
+								elObjects.appendChild(newObj);
+							}
+							
 							else if(objects[i][j] >= 100)
 							{
 								newObj = new Element("item");
@@ -479,7 +465,7 @@ public class MEPanel extends JPanel implements MouseInputListener
 	
 	public void loadMap(String inputFile)
 	{
-File source = new File(inputFile);
+		File source = new File(inputFile);
 		
 		// Loads the XML File into "map"
 		Document map = null;

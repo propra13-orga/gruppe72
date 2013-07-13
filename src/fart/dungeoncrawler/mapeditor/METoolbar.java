@@ -59,6 +59,7 @@ public class METoolbar extends JPanel
 		// NPCs
 		imgmgr.add("5", ObjectCategory.npcs, "res/shop.png");
 		imgmgr.add("6", ObjectCategory.npcs, "res/shop.png");
+		imgmgr.add("8", ObjectCategory.npcs, "res/shop.png");
 		
 		// Items
 		imgmgr.add("100", ObjectCategory.items, "res/icons/smallhealpotion.png");
