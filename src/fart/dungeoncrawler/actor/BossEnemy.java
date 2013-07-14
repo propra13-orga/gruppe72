@@ -14,10 +14,17 @@ import fart.dungeoncrawler.enums.*;
 public class BossEnemy extends BaseEnemy {
 	private DynamicObjectState curState;
 	
-	public BossEnemy(Game game, Vector2 position, EnemyDescription enemyDesc) {
+	private String mapToName;
+	private Vector2 mapToPos;
+	
+	public BossEnemy(Game game, Vector2 position, EnemyDescription enemyDesc,
+						String mapToName, Vector2 mapToPos) {
 		super(game, position, enemyDesc);
 		curState = DynamicObjectState.Idle;
 		heading = Heading.Down;
+		
+		this.mapToName = mapToName;
+		this.mapToPos = mapToPos;
 		
 		buildAttacks();
 		buildSpell();

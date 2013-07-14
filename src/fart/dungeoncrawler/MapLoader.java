@@ -328,7 +328,12 @@ public class MapLoader
 						int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
 						int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
 						
-						BossEnemy be = new BossEnemy(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE), ed);
+						String mapToName = tmp2.getChildElements().get(2).getValue();
+						int mapToX = Integer.parseInt(tmp2.getChildElements().get(3).getValue());
+						int mapToY = Integer.parseInt(tmp2.getChildElements().get(4).getValue());
+						
+						BossEnemy be = new BossEnemy(game, new Vector2(posX*Tilemap.TILE_SIZE,posY*Tilemap.TILE_SIZE),
+													ed, mapToName, new Vector2(mapToX, mapToY));
 						EnemyStateMachine machine = new EnemyStateMachine(be, game.getAllPlayers());
 						be.setMachine(machine);
 					}
