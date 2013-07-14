@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import javax.xml.XMLConstants;
 
+import fart.dungeoncrawler.Tilemap;
+
 import nu.xom.*;
 
 @SuppressWarnings("serial")
@@ -494,6 +496,19 @@ public class MEPanel extends JPanel implements MouseInputListener
 		
 		current = map.getRootElement().getChildElements("name").get(0);
 		//TODO: mapName = current.getChild(0).getValue();
+		current = map.getRootElement().getChildElements("width").get(0);
+		int mapwidth = Integer.parseInt(current.getChild(0).getValue());
+		Tilemap.setWidth(mapwidth);
+		current = map.getRootElement().getChildElements("height").get(0);
+		int mapheight = Integer.parseInt(current.getChild(0).getValue());
+		Tilemap.setHeight(mapheight);
+		
+		if((mapheight != 20) || (mapwidth != 32))
+		{
+			System.err.println("Could not load map. Reason: Mapwidth "+
+								"is not 32 or mapheight is not 20");
+			return;
+		}
 		
 		this.init();
 		

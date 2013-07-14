@@ -4,14 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 @SuppressWarnings("serial")
 public class MEMenuBar extends JMenuBar implements ActionListener
 {
 	MapEditor me;
+	JFileChooser fc;
 	
 	public MEMenuBar(MapEditor mapeditor)
 	{
@@ -25,6 +28,9 @@ public class MEMenuBar extends JMenuBar implements ActionListener
 	{
 		JMenu file = new JMenu("Datei");
 		file.setMnemonic(KeyEvent.VK_D);
+		
+		fc = new JFileChooser("res/maps/");
+		fc.setFileFilter(new FileNameExtensionFilter("Map files(*.xml)", "xml"));
 		
 		JMenuItem newmap = new JMenuItem("Neue Map", KeyEvent.VK_N);
 		newmap.setName("newmap");
@@ -60,11 +66,15 @@ public class MEMenuBar extends JMenuBar implements ActionListener
 		}
 		else if(action.equals("load"))
 		{
-			me.getMEPanel().loadMap("res/maps/L0R0ME.xml");
+			int returnVal = fc.showOpenDialog(me.getMEPanel());
+			if(returnVal == JFileChooser.APPROVE_OPTION)
+				me.getMEPanel().loadMap(fc.getSelectedFile().getPath());
 		}
 		else if(action.equals("save"))
 		{
-			me.getMEPanel().saveMap("res/maps/L0R0ME.xml");
+			int returnVal = fc.showSaveDialog(me.getMEPanel());
+			if(returnVal == JFileChooser.APPROVE_OPTION)
+				me.getMEPanel().saveMap(fc.getSelectedFile().getPath());
 		}
 		else if(action.equals("close"))
 		{
