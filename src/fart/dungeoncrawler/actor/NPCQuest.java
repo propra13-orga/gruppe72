@@ -5,9 +5,8 @@ import java.util.ArrayList;
 
 import Utils.Vector2;
 import fart.dungeoncrawler.Game;
-import fart.dungeoncrawler.ITriggerableOnKey;
 
-public class NPCQuest extends BaseNPC implements ITriggerableOnKey{
+public class NPCQuest extends NPCTrigger {
 	private ArrayList<Quest> quests;
 	private int actQuest;
 	private Rectangle triggerArea;

@@ -1,9 +1,7 @@
 package fart.dungeoncrawler;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -79,13 +77,11 @@ public class Game extends JPanel implements Runnable
 		if(!isServer) {
 			setFocusable(true);
 			requestFocusInWindow();
-			//setVisible(false);
 		} else {
 			setVisible(false);
 		}
 		
 		initGame();
-		//createPlayers(/*ID, numPlayers*/);
 	}
 	
 	public ArrayList<NewPlayer> getAllPlayers() {
@@ -212,7 +208,6 @@ public class Game extends JPanel implements Runnable
 		collision.clearDynamicObjects();
 		collision.clearTriggers();
 		
-		//createPlayers(/*playerID, numPlayers*/);
 		if(!isServer) {
 			player.setInNetwork(isInNetwork);
 			resetPlayer();
@@ -231,19 +226,6 @@ public class Game extends JPanel implements Runnable
 			collision.addDynamicObject(otherPlayers.get(i));
 			manager.addObject(otherPlayers.get(i));
 		}
-		
-		ArrayList<Integer> qs = new ArrayList<Integer>();
-		qs.add(0);
-		qs.add(1);
-		NPCQuest qg = new NPCQuest(this, 
-				new Vector2(200, 200), 
-				new NPCDescription("res/shop.png", 
-						NPCType.Quest.ordinal(), 
-						new ActorDescription(new Dimension(32, 32), 1, 0, new Stats(), Heading.Down)),
-						new Rectangle(190, 190, 52, 52), qs);
-		
-		//manager.addObject(qg);
-		collision.addTriggerOnKey(qg);
 	}
 	
 	public void playerDead() {
