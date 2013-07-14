@@ -1,20 +1,24 @@
 package fart.dungeoncrawler.mapeditor;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 @SuppressWarnings("serial")
 public class MEMenuBar extends JMenuBar implements ActionListener
 {
-	MapEditor me;
-	JFileChooser fc;
+	private MapEditor me;
+	private JFileChooser fc;
+	private JTextField tx_mapname;
 	
 	public MEMenuBar(MapEditor mapeditor)
 	{
@@ -53,6 +57,16 @@ public class MEMenuBar extends JMenuBar implements ActionListener
 		file.add(close);
 		
 		this.add(file);
+		
+		
+		JLabel lb_mapname = new JLabel("I Name der Map: ");
+		this.add(lb_mapname);
+		
+		
+		tx_mapname = new JTextField();
+		tx_mapname.setMaximumSize(new Dimension(200, (int)tx_mapname.getPreferredSize().getHeight()));
+		tx_mapname.setText("NewMap");
+		this.add(tx_mapname);
 	}
 
 	@Override
@@ -74,11 +88,17 @@ public class MEMenuBar extends JMenuBar implements ActionListener
 		{
 			int returnVal = fc.showSaveDialog(me.getMEPanel());
 			if(returnVal == JFileChooser.APPROVE_OPTION)
-				me.getMEPanel().saveMap(fc.getSelectedFile().getPath());
+				if(!tx_mapname.getText().equals(""))
+					me.getMEPanel().saveMap(fc.getSelectedFile().getPath(), tx_mapname.getText());
 		}
 		else if(action.equals("close"))
 		{
 			System.exit(0);
 		}
+	}
+	
+	public void setMapName(String mapName)
+	{
+		tx_mapname.setText(mapName);
 	}
 }

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<map>
+        <name>hiFelix</name>
+        <width>32</width>
+        <height>20</height>
+        <tiles xml:space="preserve">
+		################################
+		#                              #
+		#  #  # #   ### ### #   # # #  #
+		#  #  # #   #   #   #   # # #  #
+		#  #### #   ##  ##  #   #  #   #
+		#  #  # #   #   #   #   # # #  #
+		#  #  # #   #   ### ### # # #  #
+		#                              #
+		#                              #
+		#                              #
+		#                              #
+		#                              #
+		#                              #
+		#                              #
+		#                              #
+		#                              #
+		#                              #
+		#                              #
+		#                              #
+		################################
+	</tiles>
+        <descriptions>
+                <object name="portal" id="0">
+                        <spritesheet>res/tp.png</spritesheet>
+                        <colWidth>32</colWidth>
+                        <colHeight>32</colHeight>
+                        <passable>1</passable>
+                </object>
+                <object name="goal" id="1">
+                        <spritesheet>res/goal.png</spritesheet>
+                        <colWidth>32</colWidth>
+                        <colHeight>32</colHeight>
+                        <passable>1</passable>
+                </object>
+                <object name="fire" id="2">
+                        <spritesheet>res/trap.png</spritesheet>
+                        <colWeight>32</colWeight>
+                        <colHeight>32</colHeight>
+                        <damage>1</damage>
+                </object>
+                <actor name="meleenemy" id="3">
+                        <spritesheet>res/enemy1.png</spritesheet>
+                        <isRanged>0</isRanged>
+                        <aggroRange>96</aggroRange>
+                        <attackRange>16</attackRange>
+                        <type>3</type>
+                        <level>1</level>
+                        <element>1</element>
+                </actor>
+                <actor name="bossenemy" id="4">
+                        <spritesheet>res/enemy1.png</spritesheet>
+                        <isRanged>0</isRanged>
+                        <aggroRange>96</aggroRange>
+                        <attackRange>32</attackRange>
+                        <type>3</type>
+                        <level>2</level>
+                        <element>1</element>
+                </actor>
+                <actor name="npcshop" id="5">
+                        <spritesheet>res/shop.png</spritesheet>
+                        <level>1</level>
+                        <element>0</element>
+                </actor>
+                <actor name="npctalking" id="6">
+                        <spritesheet>res/shop.png</spritesheet>
+                        <level>1</level>
+                        <element>0</element>
+                </actor>
+        </descriptions>
+        <gameobjects>
+                <objects>
+                        <object id="1">
+                                <positionX>30</positionX>
+                                <positionY>2</positionY>
+                        </object>
+                        <object id="1">
+                                <positionX>30</positionX>
+                                <positionY>3</positionY>
+                        </object>
+                        <object id="1">
+                                <positionX>30</positionX>
+                                <positionY>4</positionY>
+                        </object>
+                        <object id="1">
+                                <positionX>10</positionX>
+                                <positionY>6</positionY>
+                        </object>
+                        <object id="1">
+                                <positionX>30</positionX>
+                                <positionY>6</positionY>
+                        </object>
+                        <object id="1">
+                                <positionX>10</positionX>
+                                <positionY>7</positionY>
+                        </object>
+                        <object id="1">
+                                <positionX>9</positionX>
+                                <positionY>8</positionY>
+                        </object>
+                </objects>
+                <traps/>
+                <actors/>
+                <items/>
+        </gameobjects>
+</map>

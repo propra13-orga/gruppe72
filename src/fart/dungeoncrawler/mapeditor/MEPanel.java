@@ -109,7 +109,7 @@ public class MEPanel extends JPanel implements MouseInputListener
 		g2d.drawRect((int)highlight.getX()-1, (int)highlight.getY()-1, me.TILE_SIZE, me.TILE_SIZE);
 	}
 	
-	public void saveMap(String outputFile)
+	public void saveMap(String outputFile, String mapName)
 	{
 		// Descriptions
 		Element desc_width;
@@ -284,7 +284,7 @@ public class MEPanel extends JPanel implements MouseInputListener
 		{
 			// Elements to append to map
 			Element map_name = new Element("name");
-			map_name.appendChild("MapEditorSave");
+			map_name.appendChild(mapName);
 			map.appendChild(map_name);
 			
 			Element map_width = new Element("width");
@@ -495,7 +495,7 @@ public class MEPanel extends JPanel implements MouseInputListener
 		Element current;
 		
 		current = map.getRootElement().getChildElements("name").get(0);
-		//TODO: mapName = current.getChild(0).getValue();
+		me.getMEMenuBar().setMapName(current.getChild(0).getValue());
 		current = map.getRootElement().getChildElements("width").get(0);
 		int mapwidth = Integer.parseInt(current.getChild(0).getValue());
 		Tilemap.setWidth(mapwidth);

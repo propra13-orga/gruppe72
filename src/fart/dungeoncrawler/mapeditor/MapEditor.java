@@ -46,6 +46,11 @@ public class MapEditor
 		return imgmgr;
 	}
 	
+	public MEMenuBar getMEMenuBar()
+	{
+		return menubar;
+	}
+	
 	public MEPanel getMEPanel()
 	{
 		return mepanel;
