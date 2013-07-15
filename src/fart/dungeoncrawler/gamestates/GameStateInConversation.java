@@ -14,10 +14,13 @@ import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.actor.DynamicObjectManager;
 import fart.dungeoncrawler.enums.GameState;
 
+/**
+ * This GameState is activated when the player is in conversation with an NPC. It is responsible
+ * for drawing the text on screen. 
+ * @author Felix
+ *
+ */
 public class GameStateInConversation extends BaseGameState {
-	//private Inventory inventory;
-	//private Equipment equip;
-	//private Stats stats;
 	private String text;
 	private Font font;
 	private Color fontColor;
@@ -41,6 +44,9 @@ public class GameStateInConversation extends BaseGameState {
 		init();
 	}
 	
+	/**
+	 * Initializes colors and fonts used for drawing. 
+	 */
 	private void init() {
 		font = new Font("Arial", 0x1, 16);
 		fontColor = new Color(0.2f, 0.1f, 0.4f);
@@ -49,6 +55,10 @@ public class GameStateInConversation extends BaseGameState {
 		textStart = new Point(40, 16 * 32);
 	}
 	
+	/**
+	 * Sets the text that should be drawn. 
+	 * @param text
+	 */
 	public void setCurrentDialog(String text) {
 		this.text = text;
 	}
@@ -80,14 +90,10 @@ public class GameStateInConversation extends BaseGameState {
 
 	@Override
 	public void activate() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void exit() {
-		// TODO Auto-generated method stub
-
 	}
 
 	

@@ -17,6 +17,11 @@ import fart.dungeoncrawler.network.Client;
 import fart.dungeoncrawler.network.Lobby;
 import fart.dungeoncrawler.network.Server;
 
+/**
+ * The game menu that is shown at the beginning. 
+ * @author Erhan
+ *
+ */
 public class Menu implements IDrawable, IUpdateable{
 	private static Color bgColor = new Color(0.4f, 0.4f, 0.8f);
 	private static Vector2 startPos = new Vector2(32 * 10, 32 * 5.5f);
@@ -34,6 +39,11 @@ public class Menu implements IDrawable, IUpdateable{
 	private String enteredName;
 	private String enteredIP;
 	
+	/**
+	 * Creates the menu. 
+	 * @param game instance of the game
+	 * @param controller keyboard controller
+	 */
 	public Menu(Game game, Controller controller) {
 		this.game = game;
 		this.controller = controller;
@@ -60,6 +70,10 @@ public class Menu implements IDrawable, IUpdateable{
 		iconController = new IconController(controller, startPos, 32, 1, 5);
 	}
 	
+	/**
+	 * Sets a flag if the game is started. 
+	 * @param gameStarted
+	 */
 	public void setGameStarted(boolean gameStarted) {
 		this.isGameStarted = gameStarted;
 	}
@@ -114,7 +128,7 @@ public class Menu implements IDrawable, IUpdateable{
 			if(index == 0) {
 				game.setInNetwork(false);
 				game.createPlayers((byte) 0, 1);
-				game.startGame(true);
+				game.startGame();
 				isGameStarted = true;
 				game.setGameState(GameState.InGame);
 			} else if (index == 1) {
@@ -132,6 +146,9 @@ public class Menu implements IDrawable, IUpdateable{
 			game.setGameState(GameState.InGame);
 	}
 	
+	/**
+	 * Starts the server in a network-game.
+	 */
 	private void startServer() {
 		Server.createInstance();
 		Lobby lobby = new Lobby(controller, Server.isOnline());
@@ -142,6 +159,9 @@ public class Menu implements IDrawable, IUpdateable{
 		((GameStateInLobby)game.getGameState()).initLobby(lobby, true);
 	}
 	
+	/**
+	 * Starts a client in a network-game. 
+	 */
 	private void startClient() {
 		Lobby lobby = new Lobby(controller, Server.isOnline());
 		Client client = new Client(lobby, game, enteredIP, enteredName);
@@ -177,12 +197,20 @@ public class Menu implements IDrawable, IUpdateable{
 		}
 	}
 	
+	/**
+	 * When going in a network-game every player has to enter a name. This method initializes
+	 * the user input. 
+	 */
 	public void waitingForName() {
 		enteredName = "";
 		currentString = new StringBuilder();
 		waitingForName = true;
 	}
 	
+	/**
+	 * When joining a network-game the player must type in the ip. This method initializes the
+	 * user input. 
+	 */
 	public void waitingForIP() {
 		enteredIP = "";
 		currentString = new StringBuilder();
@@ -190,25 +218,48 @@ public class Menu implements IDrawable, IUpdateable{
 		waitingForIP = true;
 	}
 	
+	/**
+	 * This class stands for one item in the menu.
+	 * @author Erhan
+	 *
+	 */
 	class MenuItem {
 		private BufferedImage icon;
 		private String text;
 		private int ID;
 		
+		/**
+		 * Creates a MenuItem. 
+		 * @param icon the icon to be shown
+		 * @param text the text to be shown
+		 * @param ID the index of this item
+		 */
 		MenuItem(BufferedImage icon, String text, int ID) {
 			this.icon = icon;
 			this.text = text;
 			this.ID = ID;
 		}
 		
+		/**
+		 * Returns the icon.
+		 * @return
+		 */
 		public BufferedImage getIcon() {
 			return icon;
 		}
 		
+		/**
+		 * Returns the text. 
+		 * @return
+		 */
 		public String getText() {
 			return text;
 		}
 		
+		/**
+		 * Returns the ID. 
+		 * @return
+		 */
 		public int getID() {
 			return ID;
 		}

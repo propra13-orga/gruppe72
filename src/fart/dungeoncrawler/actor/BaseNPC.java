@@ -7,12 +7,23 @@ import fart.dungeoncrawler.*;
 import fart.dungeoncrawler.actor.states.EnemyStateMachine;
 import fart.dungeoncrawler.enums.*;
 
-public class BaseNPC extends Actor implements IUpdateable {
+/**
+ * The abstract base class for all NPCs in the game.
+ * @author Erhan/Felix
+ *
+ */
+public abstract class BaseNPC extends Actor implements IUpdateable {
 	protected EnemyStateMachine machine;
 	protected NPCDescription npcDesc;
 	protected NPCType type;
 	protected BufferedImage texture;
 	
+	/**
+	 * Creates a BaseNPC from the NPCDescription. 
+	 * @param game instance of the game running
+	 * @param position position in screenspace
+	 * @param npcDesc NPCDescription
+	 */
 	public BaseNPC(Game game, Vector2 position, NPCDescription npcDesc) {
 		super(game, (ActorDescription)npcDesc, position);
 		this.state = DynamicObjectState.Idle;
@@ -20,6 +31,11 @@ public class BaseNPC extends Actor implements IUpdateable {
 		velocity = new Vector2();
 	}
 	
+	/**
+	 * Creates a BaseNPC from a CheckPointInfo.
+	 * @param game instance of the game running
+	 * @param info CheckPointInfo
+	 */
 	public BaseNPC(Game game, CheckPointInfo info) {
 		super(game, info.getActDesc(), info.getPosition());
 		npcDesc = info.getNpcDesc();
@@ -31,15 +47,26 @@ public class BaseNPC extends Actor implements IUpdateable {
 		stats = info.getStats();
 	}
 	
+	/**
+	 * Activates a state in the StateMachine.
+	 * @param state
+	 */
 	public void activateState(DynamicObjectState state) {
 		machine.setState(state);
 	}
 	
+	/**
+	 * Sets the StateMachine
+	 * @param machine
+	 */
 	public void setMachine(EnemyStateMachine machine) {
 		this.machine = machine;
 		machine.setState(state);
 	}
 	
+	/**
+	 * Sets the current velocity.
+	 */
 	public void setVelocity(Vector2 velocity) {
 		if(velocity.equals(this.velocity))
 			return;
@@ -47,17 +74,11 @@ public class BaseNPC extends Actor implements IUpdateable {
 		this.velocity = velocity;
 	}
 	
-
-	public void addVelocity(Vector2 velocity) {
-		this.velocity.x += velocity.x;
-		this.velocity.y += velocity.y;
-	}
-	
-	@Override
-	public void setState(DynamicObjectState state) {
+	//@Override
+	/*public void setState(DynamicObjectState state) {
 		if(machine != null)
 			machine.setState(state);
-	}
+	}*/
 	
 	@Override
 	public void terminate() {
@@ -69,16 +90,14 @@ public class BaseNPC extends Actor implements IUpdateable {
 	}
 
 	@Override
-	protected BufferedImage getTexture() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
 	public void update(float elapsed) {
 		screenPosition = screenPosition.add(velocity);
 	}
 
+	/**
+	 * Returns the NPCDescription
+	 * @return
+	 */
 	public NPCDescription getNPCDescription() {
 		return npcDesc;
 	}

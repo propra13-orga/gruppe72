@@ -9,7 +9,6 @@ import Utils.DamageCalculator;
 import Utils.Vector2;
 
 import fart.dungeoncrawler.Game;
-import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.Health;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.ElementType;
@@ -17,6 +16,12 @@ import fart.dungeoncrawler.network.Server;
 import fart.dungeoncrawler.network.messages.game.GameHitMessage;
 import fart.dungeoncrawler.network.messages.game.GamePlayerKilledMessage;
 
+/**
+ * This class is responsible for handling all dynamic objects (actors), updating their states
+ * and drawing them to screen.
+ * @author Erhan/Felix
+ *
+ */
 public class DynamicObjectManager {
 	private ArrayList<Actor> dynamics = new ArrayList<Actor>();
 	private ArrayList<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
@@ -25,15 +30,30 @@ public class DynamicObjectManager {
 	private Game game;
 	private boolean updateLogic = true;
 	
+	/**
+	 * Creates an instance of the manager.
+	 * @param game instance of the game
+	 * @param updateLogic if the logic should be updated. In a networkgame only the server updates
+	 * the logic.
+	 */
 	public DynamicObjectManager(Game game, boolean updateLogic) {
 		this.game = game;
 		this.updateLogic = updateLogic;
 	}
 	
+	/**
+	 * Adds an actor to the list of all actors.
+	 * @param npc
+	 */
 	public void addObject(Actor npc) {		
 		dynamics.add(npc);
 	}
 	
+	/**
+	 * Gets an actor by his actorID
+	 * @param actorID
+	 * @return
+	 */
 	public Actor getActorByID(int actorID) {
 		for(Actor a : dynamics) {
 			if(a.getActorID() == actorID)
@@ -43,7 +63,10 @@ public class DynamicObjectManager {
 		return null;
 	}
 	
-	//objekt entfernen
+	/**
+	 * Removes an actor from the list. This is done when an object is terminated. 
+	 * @param npc
+	 */
 	public void removeObject(Actor npc) {
 		int id = npc.getID();
 		for(int i = 0; i < dynamics.size(); i++) {
@@ -54,16 +77,25 @@ public class DynamicObjectManager {
 		}
 	}
 
-	//alle objekte löschen
+	/**
+	 * Clears all actors. 
+	 */
 	public void clearObjects() {
 		dynamics.clear();
 	}
 	
+	/**
+	 * Returns a list of all actors. 
+	 * @return
+	 */
 	public ArrayList<Actor> getActors() {
 		return dynamics;
 	}
 	
-	//spieler und objekte updaten
+	/**
+	 * Updates all actors and the logic if the updateLogic-flag is set to true. 
+	 * @param elapsed
+	 */
 	public void update(float elapsed) {
 		for(int i = 0; i < dynamics.size(); i++) {
 			Actor a = dynamics.get(i);
@@ -82,8 +114,8 @@ public class DynamicObjectManager {
 				attacks.remove(i);
 				i -= 1;
 				a.getOwner().setState(DynamicObjectState.Idle);
-				if(a.getOwner() instanceof NewPlayer)
-					((NewPlayer)(a.getOwner())).setIdleAnim();
+				if(a.getOwner() instanceof Player)
+					((Player)(a.getOwner())).setIdleAnim();
 				
 				continue;
 			}
@@ -158,7 +190,12 @@ public class DynamicObjectManager {
 		}
 	}
 	
-	public void removeProjectileInNetwork(NewPlayer a) {
+	/**
+	 * Removes a spellProjectile in a network-game after the server sent a message indicating that the
+	 * projectile has hit a target.
+	 * @param a the player that was hit. 
+	 */
+	public void removeProjectileInNetwork(Player a) {
 		float minDis = 9999;
 		int minIndex = 9999;
 		Vector2 pos = a.getPosition();
@@ -174,6 +211,13 @@ public class DynamicObjectManager {
 			projectiles.remove(minIndex);
 	}
 	
+	/**
+	 * Reduces the health of an actor and checks if the actor is dead.
+	 * @param dmg the damage done
+	 * @param attacker the attacker
+	 * @param defender the defender
+	 * @param hitState indicates if the defender should be put in the HitState
+	 */
 	private void reduceHealth(float dmg, Actor attacker, Actor defender, boolean hitState) {
 		defender.getHealth().reduceHealth(dmg);
 		
@@ -191,13 +235,13 @@ public class DynamicObjectManager {
 			}
 			
 			if(!game.isInNetwork()) {
-				if(attacker instanceof NewPlayer) {
+				if(attacker instanceof Player) {
 					int exp = Level.getMobExperienceForLevel(defender.getLevel().getLevel());
 					attacker.getLevel().addExperince(exp);
 					System.out.println("Gained " + exp + " EXP.");
 					System.out.println("Player EXP: " + attacker.getLevel().getCurrentExperience() + "/" + attacker.getLevel().getExperienceForLevelUp());
 					
-					NewPlayer p = (NewPlayer)attacker;
+					Player p = (Player)attacker;
 					if(defender instanceof MeleeEnemy)
 						p.getQuestLog().mobKilled(game.getMapName());
 					else if(defender instanceof BossEnemy) {
@@ -210,18 +254,40 @@ public class DynamicObjectManager {
 		}
 	}
 	
+	/**
+	 * Registers an attack. All registered attacks are updated in the update()-method.
+	 * @param attack
+	 */
 	public void registerAttack(Attack attack) {
 		attacks.add(attack);
 	}
 	
-	public void spawnSpell(GameObject attacker, SpellProjectile proj, Spell spell) {
+	/**
+	 * Adds a SpellProjectile to the list. This list is updated in the update()-method. 
+	 * @param attacker
+	 * @param proj
+	 * @param spell
+	 */
+	public void spawnSpell(SpellProjectile proj) {
 		projectiles.add(proj);
 	}
 	
+	/**
+	 * Adds a spell to the list of spells to update. 
+	 * @param spell
+	 */
 	public void addSpellToUpdate(Spell spell) {
 		spells.add(spell);
 	}
 	
+	/**
+	 * Handles area of effect spells (like the fireshield). The damage done does not set the defender
+	 * in the HitState.
+	 * @param owner attacker
+	 * @param damage damage done
+	 * @param type elemental tyle
+	 * @param area area of effect
+	 */
 	public void handleAreaOfEffectSpell(Actor owner, float damage, ElementType type, Rectangle area) {
 		for (int i = 0; i < dynamics.size(); i++) {
 			Actor a = dynamics.get(i);
@@ -235,6 +301,10 @@ public class DynamicObjectManager {
 		}
 	}
 	
+	/**
+	 * Draws all dynamic objects, spells and healthbars to the screen. 
+	 * @param g2d
+	 */
 	public void draw(Graphics2D g2d) {
 		for(int i = 0; i < dynamics.size(); i++)
 			dynamics.get(i).draw(g2d);
@@ -250,6 +320,10 @@ public class DynamicObjectManager {
 		}
 	}
 	
+	/**
+	 * Draws healthbars. 
+	 * @param graphics
+	 */
 	public void drawHealthbars(Graphics2D graphics) {
 		int startX = 0;
 		int startY = 0;
@@ -273,6 +347,10 @@ public class DynamicObjectManager {
 		}
 	}
 	
+	/**
+	 * A debug method to draw all collision-rectangles of dynamic objects and spell-projectiles.
+	 * @param graphics
+	 */
 	public void drawCollisionRects(Graphics2D graphics) {
 		graphics.setColor(Color.cyan);
 		
@@ -282,6 +360,10 @@ public class DynamicObjectManager {
 		}
 	}
 
+	/**
+	 * Sets the updateLogic-flag. 
+	 * @param updateLogic
+	 */
 	public void setUpdateLogic(boolean updateLogic) {
 		this.updateLogic = updateLogic;
 	}

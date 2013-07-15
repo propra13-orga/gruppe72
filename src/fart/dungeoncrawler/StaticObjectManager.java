@@ -3,6 +3,11 @@ package fart.dungeoncrawler;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+/**
+ * A Manager that handles (primarily draws) all static objects in game. 
+ * @author Felix
+ *
+ */
 public class StaticObjectManager {
 	private ArrayList<GameObject> objects;
 	

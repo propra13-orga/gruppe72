@@ -3,10 +3,17 @@ package fart.dungeoncrawler;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-//import javax.swing.SwingUtilities;
 
+/**
+ * The class containing the main()-method. It creates a window and adds the game (extending JPanel) to it. 
+ * @author Timo
+ *
+ */
 public class Main
 {
+	/**
+	 * Creates the window and game-instance. 
+	 */
 	public Main()
 	{
 		JFrame frame = new JFrame();
@@ -27,16 +34,12 @@ public class Main
 		mainpanel.startGameLoop();
 	}
 	
+	/**
+	 * The entrypoint. 
+	 * @param args
+	 */
 	public static void main(String[] args)
 	{
-		//SwingUtilities.invokeLater(new Runnable()
-		//{
-		//	public void run()
-		//	{
-		//		@SuppressWarnings("unused")
-		//		Main dc = new Main();
-		//	}
-		//});
 		new Main();
 	}
 }

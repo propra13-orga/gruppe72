@@ -11,12 +11,23 @@ import Utils.Vector2;
 
 import fart.dungeoncrawler.actor.Actor;
 
+/**
+ * Represents Gold lying on the map. It can be picked up by the player. 
+ * @author Felix
+ *
+ */
 public class GoldItem extends GameObject implements ITriggerableOnKey {
 	private int amount;
 	private Rectangle triggerArea;
 	private static BufferedImage texture;
 	private Game game;
 	
+	/**
+	 * Creates the item at the given position. 
+	 * @param game instance of the game
+	 * @param position position of the item
+	 * @param amount amount of gold
+	 */
 	public GoldItem(Game game, Vector2 position, int amount) {
 		this.amount = amount;
 		this.screenPosition = position;

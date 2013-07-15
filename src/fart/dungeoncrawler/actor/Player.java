@@ -17,7 +17,12 @@ import fart.dungeoncrawler.enums.*;
 import fart.dungeoncrawler.network.DeathMatchStatistics;
 import fart.dungeoncrawler.network.NetworkManager;
 
-public class NewPlayer extends Actor implements IUpdateable {
+/**
+ * This class represents an actos that can be controlled by a player through the keyboard.
+ * @author Felix
+ *
+ */
+public class Player extends Actor implements IUpdateable {
 	private HashMap<Heading, Animation> walkAnim;
 	private HashMap<Heading, Animation> idleAnim;
 	private HashMap<Heading, Animation> simpleAttackAnim;
@@ -36,7 +41,6 @@ public class NewPlayer extends Actor implements IUpdateable {
 	//DEBUG
 	private int maxHitDuration = 15;
 	private int curHitDuration;
-	private BufferedImage spTex;
 	private float spSpeed = 4.0f;
 	private boolean controllerActive;
 	private boolean controlled;
@@ -45,12 +49,13 @@ public class NewPlayer extends Actor implements IUpdateable {
 	private StatsMenu statsMenu;
 	
 	/**
-	 * Represents the player.
-	 * 
-	 * @param Position Startposition in tiles
-	 * @param game Current instance of the game
+	 * Creates an instace of the player from an actorDescription.
+	 * @param game instance of the game running
+	 * @param desc the ActorDescription
+	 * @param position the position in screenspace
+	 * @param controllerActive indicates if the player should be controlled by the keyboard. 
 	 */
-	public NewPlayer(Game game, ActorDescription desc, Vector2 position, boolean controllerActive) {
+	public Player(Game game, ActorDescription desc, Vector2 position, boolean controllerActive) {
 		super(game, desc, position);
 		
 		this.state = DynamicObjectState.Idle;
@@ -59,7 +64,7 @@ public class NewPlayer extends Actor implements IUpdateable {
 		
 		controller = game.getController();
 		statsMenu = new StatsMenu(stats, controller, this);
-		questLog = new QuestLog(this);
+		questLog = new QuestLog();
 		statusbar = new StatusBar(this, game);
 		inventory.setGold(25);
 		
@@ -78,7 +83,15 @@ public class NewPlayer extends Actor implements IUpdateable {
 		posState = new PositionState(this);
 	}
 	
-	public NewPlayer(Game game, ActorDescription desc, Vector2 position, boolean controllerActive, int actID) {
+	/**
+	 * Creates an instace of the player from an actorDescription.
+	 * @param game instance of the game running
+	 * @param desc the ActorDescription
+	 * @param position the position in screenspace
+	 * @param controllerActive indicates if the player should be controlled by the keyboard
+	 * @param actID the actorID to be given. This is only done in network-games
+	 */
+	public Player(Game game, ActorDescription desc, Vector2 position, boolean controllerActive, int actID) {
 		super(game, desc, position);
 		
 		this.actorID = actID;
@@ -89,7 +102,6 @@ public class NewPlayer extends Actor implements IUpdateable {
 		
 		controller = game.getController();
 		statsMenu = new StatsMenu(stats, controller, this);
-		//questLog = new QuestLog(this);
 		statusbar = new StatusBar(this, game);
 		inventory.setGold(25);
 		
@@ -108,6 +120,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 		posState = new PositionState(this);
 	}
 	
+	/**
+	 * Sets a flag of the game is running in the network.
+	 * @param isInNetwork
+	 */
 	public void setInNetwork(boolean isInNetwork) {
 		this.isInNetwork = isInNetwork;
 	}
@@ -120,15 +136,26 @@ public class NewPlayer extends Actor implements IUpdateable {
 		spellManager.addShields();
 	}
 	
+	/**
+	 * Updates MaxHealth and MaxMana after a change in stats. 
+	 */
 	public void renewHealthMana() {
 		health.setMaxHealh(stats.getStamina() * Stats.HEALTH_PER_STAM);
 		mana.setMaxMana(stats.getWill() * Stats.MANA_PER_WILL);
 	}
 	
+	/**
+	 * Returns the QuestLog of the player. 
+	 * @return
+	 */
 	public QuestLog getQuestLog() {
 		return questLog;
 	}
 	
+	/**
+	 * Resets the player to a checkpoint with the given CheckPointInfo
+	 * @param info
+	 */
 	public void resetCheckpoint(CheckPointInfo info) {
 		state = info.getState();
 		velocity = Vector2.Zero;
@@ -142,16 +169,25 @@ public class NewPlayer extends Actor implements IUpdateable {
 		statusbar.setMana(mana);
 	}
 	
+	/**
+	 * Sets the currentAnimation to the idleAnimation. 
+	 */
 	public void setIdleAnim() {
 		curAnim = idleAnim.get(heading);
 	}
 
+	/**
+	 * Creates all spells.
+	 */
 	private void buildSpell() {
 		spellManager.addSpell(skillTree.getFireSkills().get(0).getSpell());
 		spellManager.addSpell(skillTree.getWaterSkills().get(0).getSpell());
 		spellManager.addSpell(skillTree.getEarthSkills().get(0).getSpell());
 	}
 	
+	/**
+	 * Initializes all animations for the player. 
+	 */
 	private void initAnimations() {
 		//Setup Animations
 				try {
@@ -225,6 +261,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 				}
 	}
 	
+	/**
+	 * Sets the animation for a given object state. 
+	 * @param state
+	 */
 	public void setAnimation(DynamicObjectState state) {
 		if(state == DynamicObjectState.Idle)
 			setIdleAnim();
@@ -240,8 +280,6 @@ public class NewPlayer extends Actor implements IUpdateable {
 			game.playerDead();
 		} else {
 			game.playerDeadInNetwork(actorID);
-			/*if(controllerActive)
-				NetworkManager.sendPositionMessage(this);*/
 		}
 	}
 	
@@ -280,14 +318,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 			velocity.y = +1;
 			break;
 		}
-		
-		/*if(isInNetwork && controllerActive) {
-			sendPositionMessage();
-		}*/
 	}
 	
 	/**
-	 * The player will perform a simple MeleeAttack. Mostly debugpurpose. 
+	 * The player will perform a simple MeleeAttack.
 	 */
 	public void simpleAttack() {
 		if(state == DynamicObjectState.Attacking)
@@ -304,6 +338,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 		}
 	}
 	
+	/**
+	 * The player received an attackMessage in a network game. This method sets the AttackingState
+	 * and initializes the attack. 
+	 */
 	public void receivedAttackMsg() {
 		state = DynamicObjectState.Attacking;
 		curAnim = simpleAttack.getAnimation(heading);
@@ -311,6 +349,10 @@ public class NewPlayer extends Actor implements IUpdateable {
 		simpleAttack.activate();
 	}
 	
+	/**
+	 * Tries to cast the spell with the given index. Checks cooldown and manacosts. 
+	 * @param index
+	 */
 	public void spellAttack(int index) {
 		if(state == DynamicObjectState.Attacking)
 			return;
@@ -337,7 +379,7 @@ public class NewPlayer extends Actor implements IUpdateable {
 		Spell curSpell = spellManager.getSpell(index);
 		if(!curSpell.isOnCooldown() && mana.getCurrentMana() >= curSpell.getManaCost()) {
 			mana.reduceMana(curSpell.getManaCost());
-			manager.spawnSpell(this, curSpell.getProjectile(startPos, heading), curSpell);
+			manager.spawnSpell(curSpell.getProjectile(startPos, heading));
 			spellManager.activate(index);
 			if(isInNetwork && controllerActive) {
 				NetworkManager.sendSpellMessage(this, index);
@@ -353,11 +395,12 @@ public class NewPlayer extends Actor implements IUpdateable {
 		this.velocity.y = 0;
 		this.curAnim = idleAnim.get(heading);
 		state = DynamicObjectState.Idle;
-		
-		/*if(isInNetwork && controllerActive)
-			sendPositionMessage();*/
 	}
 	
+	/**
+	 * Handles the keyboard input. 
+	 * @param elapsed time elapsed since the last frame
+	 */
 	private void handleControllerInput(float elapsed) {
 		if(controllerActive) {
 			if(controller.justPressed(KeyEvent.VK_A)) {
@@ -394,11 +437,13 @@ public class NewPlayer extends Actor implements IUpdateable {
 				stopMovement();
 			else if(controller.justPressed(KeyEvent.VK_ENTER))
 				collision.checkOnKeyTriggers(this);
-			else if(controller.justPressed(KeyEvent.VK_L))
-				level.addExperince(Level.getExperienceForLevel(level.getLevel()) - level.getCurrentExperience());
 		}
 	}
 	
+	/**
+	 * Returns the statsMenu. 
+	 * @return
+	 */
 	public StatsMenu getStatsMenu() {
 		return statsMenu;
 	}
@@ -523,10 +568,17 @@ public class NewPlayer extends Actor implements IUpdateable {
 		return curAnim.getTexture();
 	}
 	
+	/**
+	 * Sets the controllerActive-flag.
+	 * @param b
+	 */
 	public void setControllerActive(boolean b) {
 		controllerActive = b;
 	}
 	
+	/**
+	 * Sends a PositionMessage in a networkgame if needed. 
+	 */
 	private void sendPositionMessage() {
 		if(posState.equals(this))
 			return;
@@ -535,30 +587,27 @@ public class NewPlayer extends Actor implements IUpdateable {
 		NetworkManager.sendPositionMessage(this);
 	}
 	
+	/**
+	 * The PositionState is used in networkgames to check if a position update should be sent to the server. 
+	 * @author Felix
+	 *
+	 */
 	class PositionState {
-		//public int posX;
-		//public int posY;
 		public int veloX;
 		public int veloY;
 		
-		public PositionState(NewPlayer p) {
-			//posX = (int)p.screenPosition.x;
-			//posY = (int)p.screenPosition.y;
+		public PositionState(Player p) {
 			veloX = (int)p.getVelocity().x;
 			veloY = (int)p.getVelocity().y;
 		}
 		
-		public void update(NewPlayer p) {
-			//posX = (int)p.screenPosition.x;
-			//posY = (int)p.screenPosition.y;
+		public void update(Player p) {
 			veloX = (int)p.getVelocity().x;
 			veloY = (int)p.getVelocity().y;
 		}
 		
-		public boolean equals(NewPlayer p) {
+		public boolean equals(Player p) {
 			return 
-				//posX == (int)p.screenPosition.x &&
-				//posY == (int)p.screenPosition.y &&
 				veloX == (int)p.getVelocity().x &&
 				veloY == (int)p.getVelocity().y;
 		}

@@ -12,6 +12,12 @@ import fart.dungeoncrawler.IDrawable;
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.Tilemap;
 
+/**
+ * The Shop holds a list of all items that can be bought in it. It is not an NPC but only the
+ * shop-element.
+ * @author Felix
+ *
+ */
 public class Shop implements IDrawable, IUpdateable {
 	private static Vector2 startPosition = new Vector2(50, 50);
 	private static int borderSize = 8;
@@ -24,6 +30,11 @@ public class Shop implements IDrawable, IUpdateable {
 	private IconController iconController;
 	private Inventory inventory;
 	
+	/**
+	 * Creates a shop. The controller is passed to an IconController which lets the player navigate through
+	 * all items.
+	 * @param controller keyboard
+	 */
 	public Shop(Controller controller) {
 		iconController = new IconController(controller, startPosition, borderSize, columns, rows);
 		this.controller = controller;
@@ -40,6 +51,10 @@ public class Shop implements IDrawable, IUpdateable {
 		items.add(ItemCollection.getInstance().getByID(8));
 	}
 	
+	/**
+	 * Sets the inventory of the actor currently visiting the shop. 
+	 * @param inventory
+	 */
 	public void setInventory(Inventory inventory) {
 		this.inventory = inventory;
 	}

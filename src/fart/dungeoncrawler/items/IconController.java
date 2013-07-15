@@ -15,6 +15,12 @@ import fart.dungeoncrawler.IDrawable;
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.Tilemap;
 
+/**
+ * The IconController is used to easily navigate through a number of icons. It highlights the current
+ * selection and holds an index to it. 
+ * @author Felix
+ *
+ */
 public class IconController implements IDrawable, IUpdateable {
 	private Controller controller;
 	private Vector2 startPosition;
@@ -25,6 +31,14 @@ public class IconController implements IDrawable, IUpdateable {
 	private int curY;
 	private BufferedImage frame;
 	
+	/**
+	 * Creates an IconController from the given informations. 
+	 * @param controller Keyboard
+	 * @param startPos Position of the first icon
+	 * @param border Border between items
+	 * @param columns Number of columns
+	 * @param rows Number of rows
+	 */
 	public IconController(Controller controller, Vector2 startPos, int border, int columns, int rows) {
 		this.controller = controller;
 		this.startPosition = startPos;
@@ -43,6 +57,10 @@ public class IconController implements IDrawable, IUpdateable {
 		curY = 0;
 	}
 	
+	/**
+	 * Returns the index of the currently selected icon.
+	 * @return
+	 */
 	public int getCurrentIndex() {
 		return curX + curY * columns;
 	}

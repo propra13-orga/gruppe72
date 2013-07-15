@@ -8,7 +8,4 @@ public class RangedEnemy extends BaseEnemy {
 		super(game, position, enemyDesc);
 	}
 	
-	//private void buildAttacks() {
-	//	
-	//}
 }

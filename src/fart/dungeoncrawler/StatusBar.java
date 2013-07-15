@@ -11,10 +11,16 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import fart.dungeoncrawler.actor.Level;
-import fart.dungeoncrawler.actor.NewPlayer;
+import fart.dungeoncrawler.actor.Player;
 import fart.dungeoncrawler.actor.QuestLog;
 import fart.dungeoncrawler.actor.StatsMenu;
 
+/**
+ * This is a GUI-class that draws HP, MP, experiance, Level and the name of the map in a
+ * statusbar. 
+ * @author Erhan
+ *
+ */
 public class StatusBar implements IDrawable {
 	private Health health;
 	private Mana mana;
@@ -31,8 +37,10 @@ public class StatusBar implements IDrawable {
 	private static Font fontStats = new Font("Arial", 0x0, 12);
 	private static Font fontLevel = new Font("Arial", 0x1, 14);
 	
-	//zur anzeige von lebenspunkten etc
-	public StatusBar(NewPlayer player, Game game) {
+	/**
+	 * Creates the statusbar and gets all information needed from the game instance and the player. 
+	 */
+	public StatusBar(Player player, Game game) {
 		this.health = player.getHealth();
 		this.mana = player.getMana();
 		this.level = player.getLevel();
@@ -124,10 +132,20 @@ public class StatusBar implements IDrawable {
 		}
 	}
 
+	/**
+	 * Sets the health-instance which should be drawn. After every change in stats a new
+	 * instance is created and has to be set here. 
+	 * @param h
+	 */
 	public void setHealth(Health h) {
 		this.health = h;
 	}
 	
+	/**
+	 * Sets the mana-instance which should be drawn. After every change in stats a new instance
+	 * is created and has to be set here. 
+	 * @param m
+	 */
 	public void setMana(Mana m) {
 		this.mana = m;
 	}

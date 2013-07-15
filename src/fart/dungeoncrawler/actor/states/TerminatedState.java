@@ -4,6 +4,11 @@ import Utils.Vector2;
 import fart.dungeoncrawler.actor.BaseEnemy;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 
+/**
+ * This state is activated after the enemy died.
+ * @author Felix
+ *
+ */
 public class TerminatedState extends NPCState {
 	private static final DynamicObjectState DO_STATE = DynamicObjectState.Terminated;
 	

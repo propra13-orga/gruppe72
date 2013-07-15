@@ -10,6 +10,11 @@ import fart.dungeoncrawler.items.Equipment;
 import fart.dungeoncrawler.items.Inventory;
 import fart.dungeoncrawler.network.NetworkManager;
 
+/**
+ * This class is the abstract base class for all acting objects in the game. 
+ * @author Felix
+ *
+ */
 public abstract class Actor extends GameObject implements IUpdateable {
 	private static int serverActorCounter = 0;
 	private static int clientActorCounter = 0;
@@ -21,7 +26,7 @@ public abstract class Actor extends GameObject implements IUpdateable {
 	protected Mana mana;
 	protected Heading heading;
 	protected DynamicObjectManager manager;
-	protected Collision collision;
+	protected CollisionDetector collision;
 	protected Inventory inventory;
 	protected Equipment equip;
 	protected Stats stats;
@@ -40,6 +45,12 @@ public abstract class Actor extends GameObject implements IUpdateable {
 	protected boolean isInNetwork;
 	protected NetworkManager netManager;
 	
+	/**
+	 * Creates an actor from the given ActorDescription at a specific position.
+	 * @param game instance of the running game
+	 * @param desc the actordescription
+	 * @param position screenspace position
+	 */
 	public Actor(Game game, ActorDescription desc, Vector2 position) {
 		this.stats = desc.getStats();
 		health = new Health(stats.getStamina() * Stats.HEALTH_PER_STAM);
@@ -80,10 +91,16 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		lastReg = System.currentTimeMillis();
 	}
 	
+	/**
+	 * @return the unique actorID
+	 */
 	public int getActorID() {
 		return actorID;
 	}
 
+	/**
+	 * Regenerates health and mana every REG_MS. The amount is calculated based on stamina and will.
+	 */
 	protected void regenerate() {
 		long cur = System.currentTimeMillis();
 		if(cur - lastReg > REG_MS) {
@@ -95,18 +112,33 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		}
 	}
 	
+	/**
+	 * Returns the ActorDescription
+	 * @return
+	 */
 	public ActorDescription getActorDesc() {
 		return description;
 	}
 	
+	/**
+	 * Returns the Level-instance. This holds the current level and experiance. 
+	 * @return
+	 */
 	public Level getLevel() {
 		return level;
 	}
 	
+	/**
+	 * Returns the Element-Type of the actor.
+	 * @return
+	 */
 	public ElementType getElementType() {
 		return elementType;
 	}
 	
+	/**
+	 * This function is called when an actor levels up. 
+	 */
 	public void levelUp() { }
 
 	/**
@@ -165,26 +197,47 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		return inventory;
 	}
 	
-	public Collision getCollision() {
+	/**
+	 * @return the collisiondetector
+	 */
+	public CollisionDetector getCollision() {
 		return collision;
 	}
 	
+	/**
+	 * @return the stats from this actor
+	 */
 	public Stats getStats() {
 		return stats;
 	}
 	
+	/**
+	 * @return the equipment
+	 */
 	public Equipment getEquipment() {
 		return equip;
 	}
 	
+	/**
+	 * Sets a new ElementType
+	 * @param type the new type
+	 */
 	public void setElementType(ElementType type) {
 		this.elementType = type;
 	}
 	
+	/**
+	 * Sets a new Health-instance.
+	 * @param health
+	 */
 	public void setHealth(Health health) {
 		this.health = health;
 	}
 
+	/**
+	 * Sets a new heading. 
+	 * @param heading
+	 */
 	public void setHeading(Heading heading) {
 		this.heading = heading;
 	}
@@ -217,6 +270,10 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		collisionRect.y = (int)screenPosition.y;
 	}
 	
+	/**
+	 * Sets new stats. The amount of health und mana is recalculated based on the new stats.
+	 * @param newStats
+	 */
 	public void setStats(Stats newStats) {
 		this.stats = newStats;
 		
@@ -226,6 +283,10 @@ public abstract class Actor extends GameObject implements IUpdateable {
 		mana = new Mana(stats.getWill() * Stats.MANA_PER_WILL, cMana);
 	}
 	
+	/**
+	 * Sets a new velocity. 
+	 * @param v
+	 */
 	public void setVelocity(Vector2 v) {
 		this.velocity = new Vector2(v);
 		

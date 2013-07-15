@@ -11,11 +11,21 @@ import fart.dungeoncrawler.actor.Actor;
 
 import Utils.Vector2;
 
+/**
+ * This class represents the goal. When the player reaches the goal the game is won. 
+ * @author Felix
+ *
+ */
 public class Goal extends GameObject implements ITriggerableOnKey {
 	private BufferedImage texture;
 	private Rectangle triggerArea;
 	private Game game;
 	
+	/**
+	 * Creates the goal. 
+	 * @param tilePosition the position in tiles of the goal
+	 * @param game instance of the game
+	 */
 	public Goal(Vector2 tilePosition, Game game) {
 		super();
 		this.game = game;
@@ -38,9 +48,6 @@ public class Goal extends GameObject implements ITriggerableOnKey {
 		game.playerWins();
 	}
 	
-	//@Override
-	//public void trigger(BaseNPC npc) { }
-
 	@Override
 	protected BufferedImage getTexture() {
 		return texture;

@@ -10,6 +10,12 @@ import fart.dungeoncrawler.IDrawable;
 import fart.dungeoncrawler.enums.EquipSlot;
 import fart.dungeoncrawler.gamestates.GameStateInShop;
 
+/**
+ * This class is responsible for all items that can be worn. It handles equipping and unequipping of items
+ * and drawing them when the inventory is opened.
+ * @author Felix
+ *
+ */
 public class Equipment implements IDrawable {
 	private HashMap<EquipSlot, StatItem> items = new HashMap<EquipSlot, StatItem>();
 	private int border = 8;
@@ -20,12 +26,18 @@ public class Equipment implements IDrawable {
 	public Equipment() {
 	}
 	
+	/**
+	 * Returns if a given EquipSlot is free. 
+	 * @param slot
+	 * @return
+	 */
 	public boolean isFree(EquipSlot slot) {
 		return items.get(slot) == null;
 	}
 	
 	/**
-	 * Equips a new item based on the slot and returns the previously worn item.
+	 * Equips a new item based on the slot and returns the previously worn item so that it can be put back 
+	 * in the inventory.
 	 * @param slot Slot to equip.
 	 * @param item Item to equip.
 	 * @return Previous item. 
@@ -38,6 +50,12 @@ public class Equipment implements IDrawable {
 		return previous;
 	}
 	
+	/**
+	 * Unequips a given slot and returns the previously worn item so that it can be put back in the
+	 * inventory.
+	 * @param slot
+	 * @return
+	 */
 	public StatItem unequipSlot(EquipSlot slot) {
 		StatItem previous = items.get(slot);
 		items.remove(slot);
@@ -45,6 +63,10 @@ public class Equipment implements IDrawable {
 		return previous;
 	}
 	
+	/**
+	 * Returns the currently worn weapon.
+	 * @return
+	 */
 	public Weapon getWeapon() {
 		return (Weapon)items.get(EquipSlot.Weapon);
 	}

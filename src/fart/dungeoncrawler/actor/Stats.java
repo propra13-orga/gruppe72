@@ -9,6 +9,22 @@ import Utils.Vector2;
 import fart.dungeoncrawler.IDrawable;
 import fart.dungeoncrawler.gamestates.GameStateInShop;
 
+/**
+ * The Stats class holds a number of values improving the overall strength of an actor. 
+ * 
+ * Stamina: 	increases the maximum HP and regeneration
+ * Strength: 	increases the physical damage done
+ * Agility: 	increases the attackspeed
+ * Will: 		increases the maximum MP, regeneration and spelldamage
+ * Armor:		reduces the physical damage taken
+ * 
+ * Damage:		the physical damage done (without considering strength)
+ * SpellDamage:	extradamage done from each damagespell
+ * 
+ * This class can also draw itself when the player is in the inventory. 
+ * @author Felix
+ *
+ */
 public class Stats implements IDrawable, Serializable {
 	private static final long serialVersionUID = 7841914871298265438L;
 	
@@ -34,6 +50,9 @@ public class Stats implements IDrawable, Serializable {
 	private static final Vector2 START_POS = new Vector2(860, 400);
 	private static final Font font = new Font("Arial", 0x1, 12);
 	
+	/**
+	 * Creates a new instance with default-values. 
+	 */
 	public Stats() {
 		stamina = 4;
 		strength = 8;
@@ -44,6 +63,14 @@ public class Stats implements IDrawable, Serializable {
 		spellDamage = 0;
 	}
 	
+	/**
+	 * Creates a new instance. Missing stats hold default values. 
+	 * @param stamina
+	 * @param strength
+	 * @param agility
+	 * @param will
+	 * @param armor
+	 */
 	public Stats(int stamina, int strength, int agility, int will, int armor) {
 		this.stamina = stamina;
 		this.strength = strength;
@@ -54,6 +81,16 @@ public class Stats implements IDrawable, Serializable {
 		spellDamage = 0;
 	}
 	
+	/**
+	 * Creates a new instance.
+	 * @param stamina
+	 * @param strength
+	 * @param agility
+	 * @param will
+	 * @param armor
+	 * @param damage
+	 * @param spellDamage
+	 */
 	public Stats(int stamina, int strength, int agility, int will, int armor, int damage, int spellDamage) {
 		this.stamina = stamina;
 		this.strength = strength;
@@ -64,16 +101,10 @@ public class Stats implements IDrawable, Serializable {
 		this.spellDamage = spellDamage;
 	}
 	
-	public Stats(int stamina, int strength, int agility, int will, int armor, int damage, int spellDamage, boolean fireResi, boolean waterResi, boolean earthResi) {
-		this.stamina = stamina;
-		this.strength = strength;
-		this.agility = agility;
-		this.will = will;
-		this.armor = armor;
-		this.damage = damage;
-		this.spellDamage = spellDamage;
-	}
-	
+	/**
+	 * Copies an instance.
+	 * @param s
+	 */
 	public Stats(Stats s) {
 		stamina = s.stamina;
 		strength = s.strength;
@@ -84,6 +115,11 @@ public class Stats implements IDrawable, Serializable {
 		spellDamage = s.spellDamage;
 	}
 	
+	/**
+	 * Creates stats for a melee-enemy of a given level. 
+	 * @param level
+	 * @return
+	 */
 	public static Stats getMeleeStats(int level) {
 		Stats result = new Stats(MELEE_BASE_STATS);
 		//per level we add 5 StatPoints. 2 go to stamina, 2 to strength, 1 to agility
@@ -104,6 +140,11 @@ public class Stats implements IDrawable, Serializable {
 		return result;
 	}
 	
+	/**
+	 * Creates stats for a casting enemy of a given level. 
+	 * @param level
+	 * @return
+	 */
 	public static Stats getCasterStats(int level) {
 		Stats result = new Stats(CASTER_BASE_STATS);
 
@@ -113,6 +154,10 @@ public class Stats implements IDrawable, Serializable {
 		return result;
 	}
 	
+	/**
+	 * Adds to instances of stats together. 
+	 * @param s
+	 */
 	public void addStats(Stats s) {
 		stamina += s.stamina;
 		strength += s.strength;
@@ -123,6 +168,10 @@ public class Stats implements IDrawable, Serializable {
 		spellDamage += s.spellDamage;
 	}
 	
+	/**
+	 * Reduces the values of this instance by the corresponding values in s. 
+	 * @param s
+	 */
 	public void redStats(Stats s) {
 		stamina -= s.stamina;
 		strength -= s.strength;
@@ -131,10 +180,6 @@ public class Stats implements IDrawable, Serializable {
 		armor -= s.armor;
 		damage -= s.damage;
 		spellDamage -= s.spellDamage;
-	}
-	
-	public void drawInGame(Graphics2D graphics) {
-		
 	}
 	
 	@Override
@@ -169,10 +214,18 @@ public class Stats implements IDrawable, Serializable {
 		return stamina;
 	}
 
+	/**
+	 * Adds the amount to stamina. 
+	 * @param amount
+	 */
 	public void addStamina(int amount) {
 		this.stamina += amount;
 	}
 	
+	/**
+	 * Reduces stamina by amount.
+	 * @param amount
+	 */
 	public void redStamina(int amount) {
 		this.stamina -= amount;
 	}
@@ -184,10 +237,18 @@ public class Stats implements IDrawable, Serializable {
 		return strength;
 	}
 
+	/**
+	 * Adds the amount to strength.
+	 * @param amount
+	 */
 	public void addStrength(int amount) {
 		this.strength += amount;
 	}
 	
+	/**
+	 * Reduces strength by amount.
+	 * @param amount
+	 */
 	public void redStrength(int amount) {
 		this.strength -= strength;
 	}
@@ -199,10 +260,18 @@ public class Stats implements IDrawable, Serializable {
 		return agility;
 	}
 
+	/**
+	 * Adds the amount to agility.
+	 * @param amount
+	 */
 	public void addAgility(int amount) {
 		this.agility += amount;
 	}
 	
+	/**
+	 * Reduces agility by amount. 
+	 * @param amount
+	 */
 	public void redAgility(int amount) {
 		this.agility -= amount;
 	}
@@ -214,10 +283,18 @@ public class Stats implements IDrawable, Serializable {
 		return will;
 	}
 
+	/**
+	 * Adds the amount to will.
+	 * @param amount
+	 */
 	public void addWill(int amount) {
 		this.will += amount;
 	}
 	
+	/**
+	 * Reduces will by amount. 
+	 * @param amount
+	 */
 	public void redWill(int amount) {
 		this.will -= amount;
 	}
@@ -229,42 +306,82 @@ public class Stats implements IDrawable, Serializable {
 		return armor;
 	}
 
+	/**
+	 * Adds the amount to armor.
+	 * @param amount
+	 */
 	public void addArmor(int amount) {
 		this.armor += amount;
 	}
 	
+	/**
+	 * Reduces armor by amount. 
+	 * @param amount
+	 */
 	public void redArmor(int amount) {
 		this.armor -= amount;
 	}
 	
+	/**
+	 * Returns the damage. 
+	 * @return
+	 */
 	public int getDamage() {
 		return damage;
 	}
 	
+	/**
+	 * Adds the amount to damage. 
+	 * @param amount
+	 */
 	public void addDamage(int amount) {
 		this.damage += amount;
 	}
 	
+	/**
+	 * Reduces damage by amount.
+	 * @param amount
+	 */
 	public void redDamage(int amount) {
 		this.damage -= amount;
 	}
 	
+	/**
+	 * Returns the spellDamage. 
+	 * @return
+	 */
 	public int getSpellDamage() {
 		return spellDamage;
 	}
 	
+	/**
+	 * Adds the amount to spelldamage. 
+	 * @param amount
+	 */
 	public void addSpellDamage(int amount) {
 		this.spellDamage += amount;
 	}
 	
+	/**
+	 * Reduces spelldamage by amount. 
+	 * @param amount
+	 */
 	public void redSpellDamage(int amount) {
 		this.spellDamage -= amount;
 	}
 
+	/**
+	 * Returns the amount of health regenerated.
+	 * @return
+	 */
 	public float getHealthRegAmount() {
 		return stamina * HEALTH_REG_PER_STAM;
 	}
 	
+	/**
+	 * Returns the amount of mana regenerated. 
+	 * @return
+	 */
 	public float getManaRegAmount() {
 		return will * MANA_REG_PER_STAM;
 	}

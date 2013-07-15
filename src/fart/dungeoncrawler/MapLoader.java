@@ -46,13 +46,13 @@ public class MapLoader
 	private Game game;
 	private StaticObjectManager sManager;
 	private DynamicObjectManager dManager;
-	private Collision collision;
+	private CollisionDetector collision;
 	private String mapName;
 	
 	public MapLoader(Game game,
 					StaticObjectManager sManager,
 					DynamicObjectManager dManager,
-					Collision collision)
+					CollisionDetector collision)
 	{
 		this.game = game;
 		this.sManager = sManager;

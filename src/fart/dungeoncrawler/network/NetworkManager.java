@@ -36,16 +36,16 @@ public class NetworkManager {
 		sendMessage(msg);
 	}
 	
-	public static void sendSpellMessage(NewPlayer p, int spellIndex) {
+	public static void sendSpellMessage(Player p, int spellIndex) {
 		GameSpellMessage msg = new GameSpellMessage(p, spellIndex);
 		sendMessage(msg);
 	}
 	
-	public static void sendAttackMessage(NewPlayer a) {
+	public static void sendAttackMessage(Player a) {
 		sendMessage(new GameAttackMessage(a));
 	}
 	
-	public static void sendStatsMessage(NewPlayer a) {
+	public static void sendStatsMessage(Player a) {
 		sendMessage(new GameStatsUpdateMessage(a));
 	}
 	
@@ -69,12 +69,12 @@ public class NetworkManager {
 	}
 	
 	private void handleStatsUpdate(GameStatsUpdateMessage msg) {
-		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
+		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.setStats(msg.newStats);
 	}
 
 	private void handleAttackMessage(GameAttackMessage msg) {
-		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
+		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.receivedAttackMsg();
 	}
 
@@ -83,18 +83,18 @@ public class NetworkManager {
 		a.setScreenPosition(msg.position);
 		a.setVelocity(msg.velocity);
 		a.setState(DynamicObjectState.values()[msg.state]);
-		if(a instanceof NewPlayer) {
-			((NewPlayer)a).setAnimation(a.getState());
+		if(a instanceof Player) {
+			((Player)a).setAnimation(a.getState());
 		}
 	}
 	
 	private void handleSpellMessage(GameSpellMessage msg) {
-		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
+		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.spellAttack(msg.spellIndex);
 	}
 	
 	private void handleHitMessage(GameHitMessage msg) {
-		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
+		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.getHealth().setHealth(msg.health);
 		
 		if(msg.isSpell)
@@ -103,12 +103,12 @@ public class NetworkManager {
 	
 	private void handlePlayerKilledMessage(GamePlayerKilledMessage msg) {
 		//Terminate the killed player
-		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.deadID);
+		Player a = (Player)dManager.getActorByID(msg.deadID);
 		a.terminate();
 		DeathMatchStatistics.getInstance().killed(msg.ID, msg.deadID);
 		
 		//Let the killer gain experience
-		NewPlayer b = (NewPlayer)dManager.getActorByID(msg.ID);
+		Player b = (Player)dManager.getActorByID(msg.ID);
 		int exp = Level.getMobExperienceForLevel(a.getLevel().getLevel()) * 2;
 		b.getLevel().addExperince(exp);
 	}

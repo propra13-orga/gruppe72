@@ -14,6 +14,12 @@ import fart.dungeoncrawler.actor.*;
 import fart.dungeoncrawler.actor.states.EnemyStateMachine;
 import fart.dungeoncrawler.enums.NPCType;
 
+/**
+ * This class represents a CheckPoint. The game is saved at this position. As soon as the player dies
+ * this save is restored.
+ * @author Erhan
+ *
+ */
 public class CheckPoint extends GameObject implements ITriggerableOnKey {
 	private static final int MAX_LOADS_PER_CP = 2;
 	private static BufferedImage texture;
@@ -21,7 +27,7 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 	private Game game;
 	private DynamicObjectManager dManager;
 	private StaticObjectManager sManager;
-	private Collision collision;
+	private CollisionDetector collision;
 	
 	private Tilemap map;
 	private String mapName;
@@ -30,7 +36,15 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 	private Rectangle rect;
 	private int loads = 0;
 	
-	public CheckPoint(Game game, DynamicObjectManager dManager, Collision collision, Tilemap map, Rectangle rect) {
+	/**
+	 * Creates an instance of the Checkpoint. 
+	 * @param game instance of the game currently running
+	 * @param dManager the dynamicObjectManager
+	 * @param collision the Collision-detector
+	 * @param map the current map
+	 * @param rect the trigger-rectangle for the checkpoint
+	 */
+	public CheckPoint(Game game, DynamicObjectManager dManager, CollisionDetector collision, Tilemap map, Rectangle rect) {
 		this.game = game;
 		this.dManager = game.getDynamicManager();
 		this.sManager = game.getStaticManager();
@@ -50,6 +64,10 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 		infos = new ArrayList<CheckPointInfo>();
 	}
 	
+	/**
+	 * Saves the game.
+	 * @param map the current map. 
+	 */
 	public void save(Tilemap map) {
 		this.mapName = new String(map.getName());
 		ArrayList<Actor> dynamics = dManager.getActors();
@@ -78,8 +96,8 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 				nDesc = n.getNPCDescription();
 			} 
 			//Save player
-			else if (a instanceof NewPlayer) {
-				NewPlayer p = (NewPlayer)a;
+			else if (a instanceof Player) {
+				Player p = (Player)a;
 				playerInfo = new CheckPointInfo(
 									p.getHealth().getCurrentHealth(),
 									p.getHealth().getMaxHealth(),
@@ -118,6 +136,10 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 		}
 	}
 	
+	/**
+	 * Loads the state that was previously saved. 
+	 * @return
+	 */
 	public boolean load() {
 		loads += 1;
 		if(loads > MAX_LOADS_PER_CP)
@@ -189,6 +211,10 @@ public class CheckPoint extends GameObject implements ITriggerableOnKey {
 		return rect;
 	}
 
+	/**
+	 * Returns the name of the map. 
+	 * @return
+	 */
 	public String getMapName() {
 		return mapName;
 	}

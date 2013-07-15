@@ -3,10 +3,14 @@ package fart.dungeoncrawler.actor.states;
 import fart.dungeoncrawler.actor.BaseEnemy;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 
+/**
+ * An actor is in IdleState when nothing is happening. It just stands around. 
+ * @author Felix
+ *
+ */
 public class IdleState extends NPCState {
 	private static final DynamicObjectState doState = DynamicObjectState.Idle;
 	
-	//In this state the object is idle. Nothing happens here. 
 	public IdleState(EnemyStateMachine machine, BaseEnemy owner) {
 		super(machine, owner);
 	}

@@ -15,6 +15,12 @@ import fart.dungeoncrawler.enums.*;
 import fart.dungeoncrawler.network.Server;
 import fart.dungeoncrawler.network.messages.game.GamePositionMessage;
 
+/**
+ * BaseEnemy is an abstract base class for different kinds of enemies. It contains methods that all
+ * enemytyps share. 
+ * @author Felix
+ *
+ */
 public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	protected Animation curAnim;
 	protected int aggroRange;
@@ -29,6 +35,12 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	protected float spSpeed = 4.0f;
 	protected BufferedImage spTex;
 	
+	/**
+	 * Creates a BaseEnemy from the EnemyDescription at the given position.
+	 * @param game instance of the game running
+	 * @param position position in screenspace
+	 * @param enemyDesc the enemyDescription
+	 */
 	public BaseEnemy(Game game, Vector2 position, EnemyDescription enemyDesc) {
 		super(game, position, (NPCDescription)enemyDesc);
 		this.aggroRange = enemyDesc.getAggroRange();
@@ -40,6 +52,11 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		buildAnimations(enemyDesc.getSpriteSheet());
 	}
 	
+	/**
+	 * Creates a BaseEnemy from a CheckPointInfo.
+	 * @param game instance of the game running
+	 * @param info the checkpointinfo
+	 */
 	public BaseEnemy(Game game, CheckPointInfo info) {
 		super(game, info.getPosition(), info.getNpcDesc());
 		enemyDesc = info.getEnemyDesc();
@@ -55,6 +72,10 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		buildAnimations(enemyDesc.getSpriteSheet());
 	}
 
+	/**
+	 * Sets up all animations from the spritesheet.
+	 * @param spriteSheet
+	 */
 	protected void buildAnimations(BufferedImage spriteSheet) {
 		BufferedImage[] bi = new BufferedImage[1];
 		bi[0] = spriteSheet;
@@ -120,7 +141,11 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		}
 	}
 	
-	//calculates the new velocity based on the current one to try to avoid obstacles. 
+	/**
+	 * Calculates the new velocity based on the current one to try to avoid obstacles. 
+	 * @param dir the direction
+	 * @return
+	 */
 	protected Vector2 getAvoidanceVelocity(Vector2 dir) {
 		Vector2 velocity = getVelocity();
 		float speed = velocity.length();
@@ -138,10 +163,17 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		return newVelocity;
 	}
 	
+	/**
+	 * Returns the EnemyDescription
+	 * @return
+	 */
 	public EnemyDescription getDescription() {
 		return enemyDesc;
 	}
 	
+	/**
+	 * Sets the heading based on the current velocity.
+	 */
 	public void setHeading() {
 		Vector2 velocity = getVelocity();
 		Heading newHeading = heading;
@@ -160,6 +192,10 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		}
 	}
 	
+	/**
+	 * Sets the corrent animation for a given DynamicObjectState
+	 * @param state
+	 */
 	public void setCurrentAnimation(DynamicObjectState state) {
 		HashMap<Heading, Animation> map = animations.get(state);
 		if(map == null)
@@ -168,14 +204,26 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		curAnim = map.get(heading);
 	}
 	
+	/**
+	 * Sets a specific animation.
+	 * @param anim
+	 */
 	public void setCurrentAnimation(Animation anim) {
 		curAnim = anim;
 	}
 	
+	/**
+	 * Returns the simple attack off the enemy.
+	 * @return
+	 */
 	public Attack getSimpleAttack() {
 		return simpleAttack;
 	}
 	
+	/**
+	 * Returns the spell of this enemy.
+	 * @return
+	 */
 	public Spell getSimpleSpell() {
 		return simpleSpell;
 	}
@@ -185,34 +233,65 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		return curAnim.getTexture();
 	}
 	
+	/**
+	 * Returns the aggroRange of this enemy.
+	 * @return
+	 */
 	public int getAggroRange() {
 		return aggroRange;
 	}
 	
+	/**
+	 * Sets the aggroRange of this enemy.
+	 * @param newAggroRange
+	 */
 	public void setAggroRange(int newAggroRange) {
 		this.aggroRange = newAggroRange;
 	}
 	
+	/**
+	 * Returns the attackRange of this enemy.
+	 * @return
+	 */
 	public int getAttackRange() {
 		return attackRange;
 	}
 	
+	/**
+	 * Returns the spellRange of this enemy. 
+	 * @return
+	 */
 	public int getSpellRange() {
 		return spellRange;
 	}
 	
+	/**
+	 * Sets the current attackType
+	 * @param newAttackType
+	 */
 	public void setAttackType(AttackType newAttackType) {
 		this.curAttackType = newAttackType;
 	}
 	
+	/**
+	 * Returns the current attackType
+	 * @return
+	 */
 	public AttackType getAttackType() {
 		return curAttackType;
 	}
 	
+	/**
+	 * Updates the logic (EnemyStateMachine)
+	 * @param elapsed
+	 */
 	public void updateLogic(float elapsed) {
 		machine.update(elapsed);
 	}
 	
+	/**
+	 * Tries to cast a spell. Checks cooldown and mana.
+	 */
 	public void spell() {
 		if(!simpleSpell.isOnCooldown() && mana.getCurrentMana() >= simpleSpell.getManaCost()) {
 			
@@ -236,12 +315,15 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 			
 			mana.reduceMana(simpleSpell.getManaCost());
 			simpleSpell.activate();
-			manager.spawnSpell(this, simpleSpell.getProjectile(startPos, heading), simpleSpell);
+			manager.spawnSpell(simpleSpell.getProjectile(startPos, heading));
 			manager.addSpellToUpdate(simpleSpell);
 			System.out.println("Spell!");
 		}
 	}
 	
+	/**
+	 * Performs a meleeAttack. 
+	 */
 	public void attack() {
 		setCurrentAnimation(simpleAttack.getAnimation(heading));
 		manager.registerAttack(simpleAttack);
@@ -250,7 +332,6 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 	
 	@Override
 	public void update(float elapsed) {
-		//machine.update(elapsed);
 		state = machine.getState();
 		Vector2 sVelo = new Vector2(getVelocity());
 
@@ -261,35 +342,7 @@ public abstract class BaseEnemy extends BaseNPC implements IUpdateable {
 		
 		if(state == DynamicObjectState.Attacking) {
 			if(curAttackType == AttackType.melee) {
-				//manager.handleAttack(this, simpleAttack);
 				return;
-			}
-			else if(curAttackType == AttackType.spell) {
-				/*Vector2 spVelo = new Vector2();
-				Vector2 startPos = new Vector2();
-				if(heading == Heading.Right) {
-					spVelo.x = spSpeed;
-					startPos = new Vector2(collisionRect.x + collisionRect.width, collisionRect.y);
-				}
-				else if(heading == Heading.Left) {
-					spVelo.x = -spSpeed;
-					startPos = new Vector2(collisionRect.x - spTex.getWidth(), collisionRect.y);
-				}
-				else if(heading == Heading.Up) {
-					spVelo.y = -spSpeed;
-					startPos = new Vector2(collisionRect.x, collisionRect.y - spTex.getHeight());
-				} else {
-					spVelo.y = spSpeed;
-					startPos = new Vector2(collisionRect.x, collisionRect.y + (float)collisionRect.getHeight());
-				}
-				
-				if(!simpleSpell.isOnCooldown() && mana.getCurrentMana() >= simpleSpell.getManaCost()) {
-					mana.reduceMana(simpleSpell.getManaCost());
-					simpleSpell.activate();
-					manager.spawnSpell(this, simpleSpell.getProjectile(startPos, heading), simpleSpell);
-					manager.addSpellToUpdate(simpleSpell);
-					System.out.println("Spell!");
-				}*/
 			}
 		}
 		

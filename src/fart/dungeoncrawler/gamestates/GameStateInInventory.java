@@ -9,12 +9,17 @@ import fart.dungeoncrawler.StaticObjectManager;
 import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.actor.Actor;
 import fart.dungeoncrawler.actor.DynamicObjectManager;
-import fart.dungeoncrawler.actor.NewPlayer;
+import fart.dungeoncrawler.actor.Player;
 import fart.dungeoncrawler.actor.Stats;
 import fart.dungeoncrawler.enums.GameState;
 import fart.dungeoncrawler.items.Equipment;
 import fart.dungeoncrawler.items.Inventory;
 
+/**
+ * This state is activated when the player opens up the inventory.
+ * @author Felix
+ *
+ */
 public class GameStateInInventory extends BaseGameState {
 	private Inventory inventory;
 	private Equipment equip;
@@ -23,7 +28,7 @@ public class GameStateInInventory extends BaseGameState {
 	private DynamicObjectManager dManager;
 	private Tilemap map;
 	private Controller controller;
-	private NewPlayer player;
+	private Player player;
 
 	public GameStateInInventory(Game game) {
 		super(game);
@@ -34,12 +39,16 @@ public class GameStateInInventory extends BaseGameState {
 		controller = game.getController();
 	}
 	
+	/**
+	 * Sets the current Actor (that opened the inventory) to get all information needed. 
+	 * @param actor
+	 */
 	public void setCurrentActor(Actor actor) {
 		this.inventory = actor.getInventory();
 		this.equip = actor.getEquipment();
 		this.stats = actor.getStats();
-		if(actor instanceof NewPlayer)
-			player = (NewPlayer)actor;
+		if(actor instanceof Player)
+			player = (Player)actor;
 	}
 
 	@Override

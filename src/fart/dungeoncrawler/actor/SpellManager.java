@@ -12,6 +12,12 @@ import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.enums.ElementType;
 
+/**
+ * Players have an instance of the spellmanager that handles all spells and drawing the icons to
+ * the GUI.
+ * @author Felix
+ *
+ */
 public class SpellManager implements IDrawable, IUpdateable {
 	private static final Vector2 START_POS = new Vector2(8 * Tilemap.TILE_SIZE - 20, 20 * Tilemap.TILE_SIZE + 16);
 	private static int BORDER = 16;
@@ -27,19 +33,31 @@ public class SpellManager implements IDrawable, IUpdateable {
 	private ElementalShield currentShield;
 	private int shieldCooldown;
 	
+	/**
+	 * Creates the instance for an actor.
+	 * @param owner
+	 */
 	public SpellManager(Actor owner) {
 		spells = new ArrayList<Spell>();
 		this.owner = owner;
 	}
 	
+	/***
+	 * Creates all elemental shields. This method is called at the beginning of a game and after a
+	 * levelup because the shields have to be rebuild. The statsbonuses and damagebonuses have to be
+	 * recalculated. 
+	 */
 	public void addShields() {
 		shields[0] = ElementalShield.getFireShield(owner);
 		shields[1] = ElementalShield.getWaterShield(owner);
 		shields[2] = ElementalShield.getEarthShield(owner);
-		//shieldCooldown = 0;
 	}
 	
 	@SuppressWarnings("incomplete-switch")
+	/**
+	 * Activates a shield from the given elemental type. 
+	 * @param type
+	 */
 	public void activateShield(ElementType type) {
 		if(shieldCooldown > 0)
 			return;
@@ -62,14 +80,23 @@ public class SpellManager implements IDrawable, IUpdateable {
 		currentShield.activate();
 		shieldCooldown = SHIELD_COOLDOWN;
 		
-		if(owner instanceof NewPlayer)
-			((NewPlayer)owner).renewHealthMana();
+		if(owner instanceof Player)
+			((Player)owner).renewHealthMana();
 	}
 	
+	/**
+	 * Adds a spell to the list of all spells from the owner. 
+	 * @param spell
+	 */
 	public void addSpell(Spell spell) {
 		spells.add(spell);
 	}
 	
+	/**
+	 * Returns the spell with the given index. 
+	 * @param index
+	 * @return
+	 */
 	public Spell getSpell(int index) {
 		return spells.get(index);
 	}
@@ -146,6 +173,11 @@ public class SpellManager implements IDrawable, IUpdateable {
 		}
 	}
 	
+	/**
+	 * Activates the spell with the given index. This sets the current cooldown of the spell to the
+	 * maximum cooldown and the cooldowns of all other spells to GLOBAL_COOLDOWN. 
+	 * @param index
+	 */
 	public void activate(int index) {
 		spells.get(index).activate();
 		
@@ -168,6 +200,10 @@ public class SpellManager implements IDrawable, IUpdateable {
 			shieldCooldown = 0;
 	}
 
+	/**
+	 * Returns the currently active shield. 
+	 * @return
+	 */
 	public ElementalShield getCurrentShield() {
 		return currentShield;
 	}

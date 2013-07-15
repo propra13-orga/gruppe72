@@ -8,6 +8,12 @@ import fart.dungeoncrawler.actor.BaseEnemy;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 import fart.dungeoncrawler.enums.Heading;
 
+/**
+ * This state is activated from the AlertState. After a short freezingtime in the AlertState the enemy
+ * starts chasing the player. In the update()-method the direction to walk to is calculated. 
+ * @author Felix
+ *
+ */
 public class ChasingState extends NPCState {
 	private static final DynamicObjectState DO_STATE = DynamicObjectState.Chasing;
 	private GameObject goal;
@@ -22,6 +28,10 @@ public class ChasingState extends NPCState {
 
 	}
 	
+	/**
+	 * Sets the goal that is chased. 
+	 * @param goal
+	 */
 	public void setGoal(GameObject goal) {
 		this.goal = goal;
 	}
@@ -51,6 +61,10 @@ public class ChasingState extends NPCState {
 		return DO_STATE;
 	}
 	
+	/**
+	 * Checks if the enemy is touching his threat and sets the correct heading so that it is facing it.
+	 * @return
+	 */
 	private boolean touchesThreat() {
 		Rectangle r1 = owner.getCollisionRect();
 		Rectangle r2 = goal.getCollisionRect();

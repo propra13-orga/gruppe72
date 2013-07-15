@@ -2,6 +2,12 @@ package fart.dungeoncrawler.actor;
 
 import java.util.ArrayList;
 
+/**
+ * In this (singleton-)class all quests are created and stored. When creating an NPCQuest it only
+ * has to get a list of indices for the questcollection.
+ * @author Erhan
+ *
+ */
 public class QuestCollection {
 	private static QuestCollection instance;
 	
@@ -11,6 +17,9 @@ public class QuestCollection {
 		createQuests();
 	}
 	
+	/**
+	 * Creates all quests that are part of the game.
+	 */
 	private void createQuests() {
 		quests = new ArrayList<Quest>();
 		
@@ -25,6 +34,10 @@ public class QuestCollection {
 		//QuestObjKill q3o1 = new QuestObjKill(5, "MapEditorSave");
 	}
 	
+	/**
+	 * Returns the (singleton-)instance.
+	 * @return
+	 */
 	public static QuestCollection getInstance() {
 		if(instance == null)
 			instance = new QuestCollection();
@@ -32,6 +45,11 @@ public class QuestCollection {
 		return instance;
 	}
 	
+	/**
+	 * Returns a quest by its ID. The ID is used as an index in the list of all quests. 
+	 * @param id
+	 * @return
+	 */
 	public static Quest getQuestByID(int id) {
 		return instance.quests.get(id);
 	}

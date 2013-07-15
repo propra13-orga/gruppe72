@@ -19,6 +19,13 @@ import fart.dungeoncrawler.actor.Stats;
  * 		  8 Staff
  */
 
+/**
+ * This singleton-class creates a collection of all items. New items have to be added inside createItems().
+ * When starting the game this collection is automatically created so that other elements can access every
+ * item in the game. 
+ * @author Felix
+ *
+ */
 public class ItemCollection {
 	private ArrayList<BaseItem> itemCollection;
 	private static ItemCollection instance;
@@ -29,11 +36,18 @@ public class ItemCollection {
 		createItems();
 	}
 	
+	/**
+	 * Creates a new instance of the ItemCollection with all items in it. 
+	 */
 	public static void createNewInstace() {
 		if(instance == null)
 			instance = new ItemCollection();
 	}
 	
+	/**
+	 * Returns the (singleton-)instance.
+	 * @return
+	 */
 	public static ItemCollection getInstance() {
 		if(instance == null) {
 			instance = new ItemCollection();
@@ -42,6 +56,9 @@ public class ItemCollection {
 		return instance;
 	}
 	
+	/**
+	 * Creates all items that should be part of the game.
+	 */
 	private void createItems() {
 		itemCollection.add(new Potion("Small Healpotion", "Restores 40 Healthpoints.", "res/icons/smallhealpotion.png", 30, 40, 0));
 		itemCollection.add(new Potion("Small Manapotion", "Restores 40 Manapoints", "res/icons/smallmanapotion.png", 30, 0, 40));
@@ -64,10 +81,19 @@ public class ItemCollection {
 		itemCollection.add(new Weapon("Staff", "A twohanded Staff", "res/icons/staff.png", 20, false, staffStats, new ElementalDamage(0, 0, 0), 3300));
 	}
 	
+	/**
+	 * Returns the item with the specific itemID.
+	 * @param id
+	 * @return
+	 */
 	public BaseItem getByID(int id) {
 		return itemCollection.get(id);
 	}
 	
+	/**
+	 * Returns the number of all items. 
+	 * @return
+	 */
 	public int getItemCount() {
 		return itemCollection.size();
 	}

@@ -5,6 +5,12 @@ import fart.dungeoncrawler.GameObject;
 import fart.dungeoncrawler.actor.BaseEnemy;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 
+/**
+ * This state is activated when the belonging enemy has low HP and the player is near. It starts
+ * fleeing. The direction is calculated in the update()-method. 
+ * @author Felix
+ *
+ */
 public class FleeingState extends NPCState {
 	private static final DynamicObjectState DO_STATE = DynamicObjectState.Fleeing;
 	private static final float SPEED = 0.75f;
@@ -14,6 +20,10 @@ public class FleeingState extends NPCState {
 		super(machine, owner);
 	}
 	
+	/**
+	 * Sets the threat to flee from.
+	 * @param threat
+	 */
 	public void setThreat(GameObject threat) {
 		this.threat = threat;
 	}

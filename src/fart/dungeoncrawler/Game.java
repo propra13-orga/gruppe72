@@ -16,6 +16,12 @@ import fart.dungeoncrawler.items.*;
 import fart.dungeoncrawler.network.Server;
 import fart.dungeoncrawler.network.messages.game.GamePositionMessage;
 
+/**
+ * The game class is the heart of the game. It initializes all game-states, loads the game,
+ * runs the gameloop and updates/draws the current state. 
+ * @author Felix
+ *
+ */
 @SuppressWarnings("serial")
 public class Game extends JPanel implements Runnable
 {
@@ -25,8 +31,8 @@ public class Game extends JPanel implements Runnable
 	private final long frameTime = 32l;
 	private boolean isRunning = true;
 	
-	private NewPlayer player;
-	public NewPlayer getPlayer() { return player; }
+	private Player player;
+	public Player getPlayer() { return player; }
 	
 	private Tilemap map;
 	public Tilemap getMap() { return map ; }
@@ -40,8 +46,8 @@ public class Game extends JPanel implements Runnable
 	private Controller controller;
 	public Controller getController() { return controller; }
 	
-	private Collision collision;
-	public Collision getCollision() { return collision; }
+	private CollisionDetector collision;
+	public CollisionDetector getCollision() { return collision; }
 	
 	private Menu menu;
 	public Menu getMenu() { return menu; }
@@ -64,9 +70,15 @@ public class Game extends JPanel implements Runnable
 	//DEBUG
 	private static final Vector2 PLAYER_START_POS = new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE);
 	public static boolean debugDraw = false;
-	private ArrayList<NewPlayer> otherPlayers;
-	private ArrayList<NewPlayer> allPlayers;
+	private ArrayList<Player> otherPlayers;
+	private ArrayList<Player> allPlayers;
 	
+	/**
+	 * Creates and initializes a new instance of the game. 
+	 * @param ID ID of the player. Used in network-games
+	 * @param numPlayers the number of players. Used in network-games.
+	 * @param isServer indicates if the instance is created from the server. 
+	 */
 	public Game(byte ID, int numPlayers, boolean isServer)
 	{
 		super();
@@ -84,22 +96,34 @@ public class Game extends JPanel implements Runnable
 		initGame();
 	}
 	
-	public ArrayList<NewPlayer> getAllPlayers() {
+	/**
+	 * Returns a list of all players.
+	 * @return
+	 */
+	public ArrayList<Player> getAllPlayers() {
 		if(allPlayers == null) {
-			allPlayers = new ArrayList<NewPlayer>();
+			allPlayers = new ArrayList<Player>();
 			if(player != null)
 				allPlayers.add(player);
-			for(NewPlayer p : otherPlayers)
+			for(Player p : otherPlayers)
 				allPlayers.add(p);
 		}
 		
 		return allPlayers;
 	}
 	
+	/**
+	 * Returns the flag indicating if this instance was created from the server. 
+	 * @return
+	 */
 	public boolean isServer() {
 		return isServer;
 	}
 	
+	/**
+	 * Sets a flag indicating if a network-game is running.
+	 * @param isInNetwork
+	 */
 	public void setInNetwork(boolean isInNetwork) {
 		this.isInNetwork = isInNetwork;
 		
@@ -109,10 +133,18 @@ public class Game extends JPanel implements Runnable
 		manager.setUpdateLogic(updateLogic);
 	}
 	
+	/**
+	 * Returns if the game is a network-game. 
+	 * @return
+	 */
 	public boolean isInNetwork() {
 		return isInNetwork;
 	}
 	
+	/**
+	 * Initializes the game. The most important classes are instanciated and the game-states
+	 * are created. 
+	 */
 	public void initGame()
 	{
 		frameLast = System.currentTimeMillis();
@@ -125,9 +157,9 @@ public class Game extends JPanel implements Runnable
 		
 		manager = new DynamicObjectManager(this, true);
 		sManager = new StaticObjectManager();
-		collision = new Collision();
+		collision = new CollisionDetector();
 		map = new Tilemap(this, sManager, manager, collision);
-		otherPlayers = new ArrayList<NewPlayer>();
+		otherPlayers = new ArrayList<Player>();
 		
 		states = new HashMap<GameState, BaseGameState>();
 		states.put(GameState.InMenu, new GameStateInMenu(this));
@@ -136,7 +168,6 @@ public class Game extends JPanel implements Runnable
 		states.put(GameState.InInventory, new GameStateInInventory(this));
 		states.put(GameState.InConversation, new GameStateInConversation(this));
 		states.put(GameState.InLobby, new GameStateInLobby(this));
-		states.put(GameState.InNetworkGame, new GameStateInGame(this));
 		states.put(GameState.InStatsMenu, new GameStateInStatsMenu(this));
 		states.put(GameState.InQuestLog, new GameStateInQuestLog(this));
 		
@@ -154,8 +185,11 @@ public class Game extends JPanel implements Runnable
 		startPositions[3] = new Vector2(4 * 32, 16 * 32);
 	}
 	
+	/**
+	 * Creates all player-instances. 
+	 */
 	public void createPlayers() {
-		allPlayers = new ArrayList<NewPlayer>();
+		allPlayers = new ArrayList<Player>();
 		
 		for(int i = 0; i < numPlayers; i++) {
 			ActorDescription actDesc = new ActorDescription("res/player.png", 1, 0, new Stats(12, 8, 7, 8, 0, 8, 0), Heading.Up);
@@ -165,19 +199,24 @@ public class Game extends JPanel implements Runnable
 			
 			if(!isServer && playerID == i) {
 				if(isInNetwork)
-					player = new NewPlayer(this, actDesc, plPos, true, playerID);
+					player = new Player(this, actDesc, plPos, true, playerID);
 				else
-					player = new NewPlayer(this, actDesc, plPos, true);
+					player = new Player(this, actDesc, plPos, true);
 				allPlayers.add(player);
 				continue;
 			}
 			
-			NewPlayer p = new NewPlayer(this, actDesc, plPos, false, i);
+			Player p = new Player(this, actDesc, plPos, false, i);
 			allPlayers.add(p);
 			otherPlayers.add(p);
 		}
 	}
 	
+	/**
+	 * Creates all player-instances. 
+	 * @param ID ID of the player that should be controlled
+	 * @param numPlayers number of all players
+	 */
 	public void createPlayers(byte ID, int numPlayers) {
 		playerID = ID;
 		this.numPlayers = numPlayers;
@@ -185,6 +224,10 @@ public class Game extends JPanel implements Runnable
 		createPlayers();
 	}
 	
+	/**
+	 * Sets a new game-state. 
+	 * @param state the state to be set.
+	 */
 	public void setGameState(GameState state) {
 		currentState = state;
 		if(currentGameState != null)
@@ -194,15 +237,27 @@ public class Game extends JPanel implements Runnable
 		currentGameState.activate();
 	}
 	
+	/**
+	 * Passes the actor to the shop that has opened it. 
+	 * @param act
+	 */
 	public void setShopActor(Actor act) {
 		((GameStateInShop)states.get(GameState.InShop)).setCurrentActor(act);
 	}
 	
-	public void startGame(boolean newGame) {
-		startGame(newGame, "res/maps/L0R0.xml");
+	/**
+	 * Starts a new game. 
+	 * @param newGame
+	 */
+	public void startGame() {
+		startGame("res/maps/L0R0.xml");
 	}
 	
-	public void startGame(boolean newGame, String mapPath) {
+	/**
+	 * Starts the game and loads the given map. 
+	 * @param mapPath
+	 */
+	public void startGame(String mapPath) {
 		manager.clearObjects();
 		sManager.clearObjects();
 		collision.clearDynamicObjects();
@@ -228,6 +283,10 @@ public class Game extends JPanel implements Runnable
 		}
 	}
 	
+	/**
+	 * This function is called when the player dies. It checks if a checkpoint was reached and if so loads
+	 * the state from the checkpoint. Otherwise the menu is opened. 
+	 */
 	public void playerDead() {
 		if(checkPoint != null) {
 			if(checkPoint.load()) {
@@ -248,12 +307,13 @@ public class Game extends JPanel implements Runnable
 		resetPlayer();
 	}
 	
+	/**
+	 * This function is called when a player dies in a network-game. The player is set back to his
+	 * start-position, health and mana are restored and the game continues. 
+	 * @param actorID
+	 */
 	public void playerDeadInNetwork(int actorID) {
-		if(isServer) 
-			System.out.println("**SERVER: playerDeadInNetwork " + actorID);
-		else
-			System.out.println("**CLIENT: playerDeadInNetwork " + actorID);
-		NewPlayer a = allPlayers.get(actorID);
+		Player a = allPlayers.get(actorID);
 		a.getHealth().fillHealth();
 		a.getMana().fillMana();
 		a.setScreenPosition(new Vector2(startPositions[actorID]));
@@ -266,12 +326,10 @@ public class Game extends JPanel implements Runnable
 		}
 	}
 	
+	/**
+	 * Resets the player when starting a new game. 
+	 */
 	private void resetPlayer() {
-		/*startPositions[0] = new Vector2(27 * 32, 16 * 32);
-		startPositions[1] = new Vector2(27 * 32, 4 * 32);
-		startPositions[2] = new Vector2(4 * 32, 4 * 32);
-		startPositions[3] = new Vector2(4 * 32, 16 * 32);*/
-		
 		Vector2 plPos = new Vector2(PLAYER_START_POS.x + playerID * Tilemap.TILE_SIZE + playerID, PLAYER_START_POS.y);
 		if(isInNetwork)
 			plPos = new Vector2(startPositions[playerID]);
@@ -284,16 +342,28 @@ public class Game extends JPanel implements Runnable
 		player.setVelocity(Vector2.Zero);
 	}
 	
+	/**
+	 * Saves on a checkpoint. 
+	 * @param cp
+	 */
 	public void saveCheckPoint(CheckPoint cp) {
 		checkPoint = cp;
 		cp.save(map);
 	}
 	
+	/**
+	 * This method is called when the player reaches the goal. 
+	 */
 	public void playerWins() {
 		setGameState(GameState.InMenu);
 		menu.setGameStarted(false);
 	}
 	
+	/**
+	 * This method is used to load a new map. 
+	 * @param mapTo the path to the mapfile
+	 * @param position the start-position of the player
+	 */
 	public void changeMap(String mapTo, Vector2 position) {
 		map.loadMap(mapTo);
 		player.setScreenPosition(new Vector2(position));
@@ -302,20 +372,36 @@ public class Game extends JPanel implements Runnable
 		currentMapPath = mapTo;
 	}
 	
+	/**
+	 * Returns the path to the mapfile of the current map. 
+	 * @return
+	 */
 	public String getMapPath() {
 		return currentMapPath;
 	}
 	
+	/**
+	 * Returns the name of the current map.
+	 * @return
+	 */
 	public String getMapName() {
 		return map.getName();
 	}
 	
+	/**
+	 * Starts a thread running the gameloop. 
+	 */
 	public void startGameLoop() {
 		Thread thread = new Thread(this);
 		thread.start();
 	}
 	
 	@Override
+	/**
+	 * This method contains the gameloop. The current game-state is updated and the window is asked
+	 * to be repainted. To get a steady frametime the deltatime is calculated in every frame and the
+	 * thread is put to sleep for (frameTime - deltaTime). 
+	 */
 	public void run()
 	{
 		long frameAct;
@@ -350,6 +436,9 @@ public class Game extends JPanel implements Runnable
 		}
 	}
 	
+	/**
+	 * Draws the window and the current game-state. 
+	 */
 	public void paintComponent(Graphics g)
 	{
 		if(!isServer) {

@@ -8,10 +8,15 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import fart.dungeoncrawler.actor.Actor;
-import fart.dungeoncrawler.actor.NewPlayer;
+import fart.dungeoncrawler.actor.Player;
 
 import Utils.Vector2;
 
+/**
+ * The portal lets the player be teleported onto an other map. 
+ * @author Roman
+ *
+ */
 public class Portal extends GameObject implements ITriggerable {
 
 	private String mapTo;
@@ -21,14 +26,14 @@ public class Portal extends GameObject implements ITriggerable {
 	private BufferedImage texture;
 	private Rectangle collisionRect;
 	
-	public Portal(Game game, String mapTo, Vector2 tilePositionFrom, Vector2 tilePositionTo) {
-		this.game = game;
-		this.mapTo = mapTo;
-		pointTo = tilePositionTo;
-		screenPosition = new Vector2(tilePositionFrom.x * Tilemap.TILE_SIZE, tilePositionFrom.y * Tilemap.TILE_SIZE);
-		collisionRect = new Rectangle((int)screenPosition.x + Tilemap.TILE_SIZE / 4, (int)screenPosition.y + Tilemap.TILE_SIZE / 4, Tilemap.TILE_SIZE / 2, Tilemap.TILE_SIZE / 2);
-	}
-	
+	/**
+	 * Creates a portal.
+	 * @param game instance of the game
+	 * @param spritePath path to the texture
+	 * @param mapTo path to the map the player is teleported onto
+	 * @param tilePositionFrom position in tiles on the sourcemap
+	 * @param tilePositionTo position in tiles on the destinationmap
+	 */
 	public Portal(Game game, String spritePath, String mapTo, Vector2 tilePositionFrom, Vector2 tilePositionTo) {
 		this.game = game;
 		this.spritePath = spritePath;
@@ -40,7 +45,7 @@ public class Portal extends GameObject implements ITriggerable {
 	
 	@Override
 	public void trigger(Actor trigger) {
-		if(trigger instanceof NewPlayer)
+		if(trigger instanceof Player)
 			game.changeMap(mapTo, pointTo);
 	}
 

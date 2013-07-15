@@ -2,6 +2,12 @@ package fart.dungeoncrawler.actor;
 
 import fart.dungeoncrawler.enums.Heading;
 
+/**
+ * The EnemyDescription holds some metadata from an enemytype. It is used to instanciate a number
+ * of similar enemies. 
+ * @author Felix
+ *
+ */
 public class EnemyDescription extends NPCDescription{
 	
 	private boolean isRanged;
@@ -23,24 +29,19 @@ public class EnemyDescription extends NPCDescription{
 		this.attackRange = attackRange;
 	}
 	
-	/*public EnemyDescription(boolean isRanged,
-			String spritePath,
-			int aggroRange,
-			int attackRange,
-			int type,
-			ActorDescription aDesc) {
-		super(spritePath,
-				type,
-				(int)aDesc.health.getMaxHealth(),
-				(int)aDesc.mana.getMaxMana(),
-				aDesc.getStats(),
-				aDesc.getHeading());
-		this.isRanged = isRanged;
-		this.aggroRange = aggroRange;
-		this.attackRange = attackRange;
-	}*/
-	
+	/**
+	 * Returns if the enemy is ranged.
+	 * @return
+	 */
 	public boolean getIsRanged() { return isRanged; }
+	/**
+	 * Returns the aggroRange.
+	 * @return
+	 */
 	public int getAggroRange() { return aggroRange; }
+	/**
+	 * Returns the attackRange.
+	 * @return
+	 */
 	public int getAttackRange() { return attackRange; }
 }

@@ -110,6 +110,9 @@
                         <actor id="4">
                                 <positionX>6</positionX>
                                 <positionY>1</positionY>
+				<mapToName>res/maps/L0R1.xml</mapToName>
+				<mapToPosX>3</mapToPosX>
+				<mapToPosY>3</mapToPosY>
                         </actor>
                         <actor id="5">
                                 <positionX>7</positionX>

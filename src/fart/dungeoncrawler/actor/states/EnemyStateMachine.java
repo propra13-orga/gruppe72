@@ -9,16 +9,20 @@ import Utils.Vector2;
 
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.actor.BaseEnemy;
-import fart.dungeoncrawler.actor.NewPlayer;
+import fart.dungeoncrawler.actor.Player;
 import fart.dungeoncrawler.enums.AttackType;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 
+/**
+ * This FinitStateMachine does all the logic for enemies.
+ * @author Svenja
+ *
+ */
 public class EnemyStateMachine implements IUpdateable {
 	private HashMap<DynamicObjectState, NPCState> states;
 	private NPCState curState;
 	private BaseEnemy owner;
-	//private NewPlayer player;
-	private ArrayList<NewPlayer> allPlayers;
+	private ArrayList<Player> allPlayers;
 	private Random random;
 	
 	/**
@@ -26,23 +30,14 @@ public class EnemyStateMachine implements IUpdateable {
 	 * @param owner The enemy this machine belongs to.
 	 * @param player The Player. 
 	 */
-	public EnemyStateMachine(BaseEnemy owner, ArrayList<NewPlayer> allPlayers/*NewPlayer player*/) {
+	public EnemyStateMachine(BaseEnemy owner, ArrayList<Player> allPlayers/*NewPlayer player*/) {
 		this.owner = owner;
-		//this.player = player;
 		this.allPlayers = allPlayers;
 		
 		random = new Random();
 		
 		initStates();
 	}
-	
-	/**
-	 * Gets the Player.
-	 * @return The Player. 
-	 */
-	/*public GameObject getPlayer() {
-		return player;
-	}*/
 	
 	/**
 	 * Creates and initializes all states and puts them in the state-hashmap.
@@ -66,8 +61,9 @@ public class EnemyStateMachine implements IUpdateable {
 	public void update(float elapsed) {
 		if(owner.getHealth().isDead())
 			setState(DynamicObjectState.Terminated);
+		
 		DynamicObjectState doState = owner.getState();
-		NewPlayer player = getNearestPlayer();
+		Player player = getNearestPlayer();
 		
 		if(doState == DynamicObjectState.Attacking) {
 			curState.update(elapsed);
@@ -133,25 +129,11 @@ public class EnemyStateMachine implements IUpdateable {
 				}
 			}
 		}
-		//Attacking
-		if(doState == DynamicObjectState.Attacking) {
-			
-		}
-		//Is Hit
-		if(doState == DynamicObjectState.Hit) {
-			
-		}
-		//Flees
-		if(doState == DynamicObjectState.Fleeing) {
-			
-		}
 		if(doState == DynamicObjectState.Terminated) {
 			return;
 		}
 		
 		curState.update(elapsed);
-		
-		//Server.getInstance().broadcastMessage(new GamePositionMessage(owner));
 	}
 	
 	/**
@@ -189,23 +171,10 @@ public class EnemyStateMachine implements IUpdateable {
 	}
 	
 	/**
-	 * Checks if the player is in aggroRange, to change to alertstate. 
-	 * Function is not in use. Use checkPlayerInAggroRange() instead. 
-	 * @return If the player is in range.
-	 */ 
-	@Deprecated
-	/*public boolean isPlayerInAggroRange() {
-		Vector2 dirToPlayer = player.getPosition().sub(owner.getPosition());
-		float distanceToPlayer = dirToPlayer.length();
-		
-		return distanceToPlayer < owner.getAggroRange();
-	}*/
-	
-	/**
 	 * Checks if the player is in aggroRange. If so, the state is switched to alerted.
 	 * @return Is the Player is in aggroRange. 
 	 */
-	public boolean checkPlayerInAggroRange(NewPlayer player) {
+	public boolean checkPlayerInAggroRange(Player player) {
 		Vector2 dirToPlayer = player.getPosition().sub(owner.getPosition());
 		float distanceToPlayer = dirToPlayer.length();
 		
@@ -222,7 +191,7 @@ public class EnemyStateMachine implements IUpdateable {
 	 * Checks if the player is in attackRange. 
 	 * @return If the player is in range. 
 	 */
-	public boolean checkPlayerInAttackRange(NewPlayer player) {
+	public boolean checkPlayerInAttackRange(Player player) {
 		Rectangle collisionRect = new Rectangle(owner.getCollisionRect());
 		int range = owner.getAttackRange();
 		
@@ -234,7 +203,11 @@ public class EnemyStateMachine implements IUpdateable {
 		return player.getCollisionRect().intersects(collisionRect);
 	}
 	
-	public NewPlayer getNearestPlayer() {
+	/**
+	 * Returns the NewPlayer that is closest to the enemy.
+	 * @return
+	 */
+	public Player getNearestPlayer() {
 		if(allPlayers.size() == 0)
 			return allPlayers.get(0);
 		

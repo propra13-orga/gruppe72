@@ -10,6 +10,11 @@ import Utils.Vector2;
 import fart.dungeoncrawler.IDrawable;
 import fart.dungeoncrawler.enums.QuestObjectiveType;
 
+/**
+ * The QuestLog holds all currently active quests. It can draw itself to the screen. 
+ * @author Erhan
+ *
+ */
 public class QuestLog implements IDrawable {
 	private static Color bgColor = new Color(0.8f, 0.8f, 0.4f);
 	private static Font fontHeader = new Font("Arial", 0x1, 24);
@@ -17,55 +22,45 @@ public class QuestLog implements IDrawable {
 	private static Color fontColor = new Color(0.1f, 0.1f, 0.35f);
 	private static Vector2 startPos = new Vector2(18 * 32, 2 * 32);
 	
-	private NewPlayer owner;
 	private ArrayList<Quest> quests;
 	private boolean containsNew;
 	
-	public QuestLog(NewPlayer owner) {
-		this.owner = owner;
+	/**
+	 * Creates a new QuestLog.
+	 */
+	public QuestLog() {
 		quests = new ArrayList<Quest>();
-		
-		/*QuestObjKill qok = new QuestObjKill(2, "MapEditorSave");
-		ArrayList<QuestObjective> qosk = new ArrayList<QuestObjective>();
-		qosk.add(qok);
-		Quest qk = new Quest("KillMobs", 50, 50, qosk);
-		
-		QuestObjKillBoss qokb = new QuestObjKillBoss("MapEditorSave");
-		ArrayList<QuestObjective> qoskb = new ArrayList<QuestObjective>();
-		qoskb.add(qokb);
-		Quest qkb = new Quest("KillBoss", 50, 50, qoskb);
-		
-		QuestObjCollect qoc = new QuestObjCollect(1, 3);
-		ArrayList<QuestObjective> qosc = new ArrayList<QuestObjective>();
-		qosc.add(qoc);
-		Quest qc = new Quest("Collect", 50, 50, qosc);
-		
-		ArrayList<QuestObjective> qosAll = new ArrayList<QuestObjective>();
-		qosAll.add(qokb);
-		qosAll.add(qoc);
-		Quest qAll = new Quest("Together", 10, 10, qosAll);*/
-		
-		/*addQuest(qAll);
-		addQuest(qk);
-		addQuest(qkb);
-		addQuest(qc);*/
-		
 	}
 	
+	/**
+	 * Indicates if a new quest is in the log since the player last opened it. 
+	 * @return
+	 */
 	public boolean containsNew() {
 		return containsNew;
 	}
 	
+	/**
+	 * Sets the flag indicating if a new quest is in the log.
+	 * @param containsNew
+	 */
 	public void setContainsNew(boolean containsNew) {
 		this.containsNew = containsNew;
 	}
 	
+	/**
+	 * Adds a new quest to the log.
+	 * @param quest
+	 */
 	public void addQuest(Quest quest) {
 		quests.add(quest);
 		quest.setQuestLog(this);
 		containsNew = true;
 	}
 	
+	/**
+	 * Checks if the log already contains a specific quest.
+	 */
 	public boolean contains(Quest q) {
 		for(int i = 0; i < quests.size(); i++) {
 			if(quests.get(i).equals(q))
@@ -75,6 +70,11 @@ public class QuestLog implements IDrawable {
 		return false;
 	}
 	
+	/**
+	 * Returns a specific quest from the log. 
+	 * @param q
+	 * @return
+	 */
 	public Quest getQuest(Quest q) {
 		for(int i = 0; i < quests.size(); i++) {
 			if(quests.get(i).equals(q))
@@ -84,37 +84,45 @@ public class QuestLog implements IDrawable {
 		return null;
 	}
 	
+	/**
+	 * Removes a quest from the log. 
+	 * @param quest
+	 */
 	public void removeQuest(Quest quest) {
 		if(quests.contains(quest)) {
 			quests.remove(quest);
 		}
 	}
 	
+	/**
+	 * This method is called when the player has killed an enemy. Every quest inside the log checks if this
+	 * was part of the quest.
+	 * @param mapName
+	 */
 	public void mobKilled(String mapName) {
 		for(int i = 0; i < quests.size(); i++)
-			quests.get(i).mobKilled(owner, mapName);
-		
-		//checkQuestsDone();
+			quests.get(i).mobKilled(mapName);
 	}
 	
+	/**
+	 * This method is called when the player has killed a boss. Every quest inside the log checks if this
+	 * was part of the quest.
+	 * @param mapName
+	 */
 	public void bossKilled(String mapName) {
 		for(int i = 0; i < quests.size(); i++)
-			quests.get(i).bossKilled(owner, mapName);
-		
-		//checkQuestsDone();
+			quests.get(i).bossKilled(mapName);
 	}
 	
+	/**
+	 * This method is called when the player picks up an item. Every quest inside the log checks if this
+	 * was part of the quest.
+	 * @param index
+	 */
 	public void itemCollected(int index) {
 		for(int i = 0; i < quests.size(); i++)
 			quests.get(i).itemCollected(index);
-		
-		//checkQuestsDone();
 	}
-	
-	/*private void checkQuestsDone() {
-		for(int i = 0; i < quests.size(); i++)
-			quests.get(i).checkQuestDone(owner);
-	}*/
 
 	@Override
 	public void draw(Graphics2D graphics) {

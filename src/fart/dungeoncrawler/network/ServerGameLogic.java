@@ -36,7 +36,7 @@ public class ServerGameLogic extends Thread {
 		//collision = game.getCollision();
 		//map = game.getMap();
 		game.setGameState(GameState.InGame);
-		game.startGame(true, "res/maps/DM1.xml");
+		game.startGame("res/maps/DM1.xml");
 		
 		game.startGameLoop();
 	}
@@ -69,21 +69,21 @@ public class ServerGameLogic extends Thread {
 	}
 	
 	private void handleSpell(GameSpellMessage msg) {
-		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
+		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.spellAttack(msg.spellIndex);
 		
 		server.broadcastMessage(msg);
 	}
 	
 	private void handleAttack(GameAttackMessage msg) {
-		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
+		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.simpleAttack();
 		
 		server.broadcastMessage(msg);
 	}
 	
 	private void handleStatsUpdate(GameStatsUpdateMessage msg) {
-		NewPlayer a = (NewPlayer)dManager.getActorByID(msg.ID);
+		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.setStats(msg.newStats);
 		
 		server.broadcastMessage(msg);

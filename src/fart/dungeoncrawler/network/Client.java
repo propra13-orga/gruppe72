@@ -211,7 +211,7 @@ public class Client extends Thread{
 			game.initGame();
 			game.setInNetwork(true);
 			game.createPlayers((byte)ID, allClients.size());
-			game.startGame(true, "res/maps/DM1.xml");
+			game.startGame("res/maps/DM1.xml");
 			
 			NetworkManager.createInstance(this, game.getDynamicManager());
 			

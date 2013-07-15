@@ -11,21 +11,22 @@ import fart.dungeoncrawler.actor.Actor;
 
 import Utils.Vector2;
 
+/**
+ * Represents a trap on the map.
+ * @author Timo
+ *
+ */
 public class Trap extends GameObject implements ITriggerable
 {
-	//private Point tilePosition;
 	private Rectangle triggerArea;
 	private BufferedImage texture;
 	private int damage = 1;
 	
-	public Trap(Vector2 tilePosition)
-	{
-		super();
-		
-		this.screenPosition = new Vector2(tilePosition.x * Tilemap.TILE_SIZE, tilePosition.y * Tilemap.TILE_SIZE);
-		this.triggerArea = new Rectangle((int)screenPosition.x, (int)screenPosition.y, Tilemap.TILE_SIZE, Tilemap.TILE_SIZE);
-	}
-	
+	/**
+	 * Creates a trap from the given description. 
+	 * @param desc description of the trap
+	 * @param position position in tiles
+	 */
 	public Trap(TrapDescription desc, Vector2 position) {
 		this.screenPosition = new Vector2(position.x * Tilemap.TILE_SIZE, position.y * Tilemap.TILE_SIZE);
 		this.triggerArea = new Rectangle((int)position.x * Tilemap.TILE_SIZE, (int)position.y * Tilemap.TILE_SIZE, desc.getTexture().getWidth(), desc.getTexture().getHeight());
@@ -41,11 +42,6 @@ public class Trap extends GameObject implements ITriggerable
 		if(health.isDead())
 			trigger.terminate();
 	}
-	
-	//@Override
-	//public void trigger(BaseNPC npc) {
-	//	npc.getHealth().reduceHealth(damage);
-	//}
 
 	@Override
 	protected BufferedImage getTexture()

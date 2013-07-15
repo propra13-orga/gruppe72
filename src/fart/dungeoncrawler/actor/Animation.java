@@ -6,6 +6,13 @@ import java.awt.image.BufferedImage;
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.Tilemap;
 
+/**
+ * This class is used to play and create animations from spriteSheets.
+ * The spriteSheet should contain three rows (the animation will have 4 frames) and
+ * 4 columns (one for each heading, down, left, right, up respectively).  
+ * @author Felix
+ *
+ */
 public class Animation implements IUpdateable {
 	private BufferedImage[] textures;
 	private float curDuration;
@@ -66,10 +73,8 @@ public class Animation implements IUpdateable {
 			curDuration %= frameDuration;
 			
 			curFrame += 1;
-			//System.out.println("CurFrame = " + curFrame);
 			if(curFrame >= numFrames) {
 				curFrame = 0;
-				//System.out.println("CurFrame = " + curFrame);
 			}
 		}
 	}

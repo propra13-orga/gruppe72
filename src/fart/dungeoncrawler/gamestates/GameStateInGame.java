@@ -7,6 +7,12 @@ import fart.dungeoncrawler.*;
 import fart.dungeoncrawler.actor.DynamicObjectManager;
 import fart.dungeoncrawler.enums.GameState;
 
+/**
+ * This state is active when the player is in game and has no menus/conversations/etc open. It updates all 
+ * the logic, draws the game and can switch in other states when the user pressed specific keys.
+ * @author Felix
+ *
+ */
 public class GameStateInGame extends BaseGameState {
 	private DynamicObjectManager dManager;
 	private StaticObjectManager sManager;
@@ -24,14 +30,10 @@ public class GameStateInGame extends BaseGameState {
 	
 	@Override
 	public void activate() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void exit() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

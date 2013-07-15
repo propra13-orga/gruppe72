@@ -7,16 +7,22 @@ import java.util.ArrayList;
 
 import fart.dungeoncrawler.actor.Actor;
 
-public class Collision {
+/**
+ * The collision detector is responsible for finding and handling all collisions in
+ * the game. 
+ * @author Felix
+ *
+ */
+public class CollisionDetector {
 	private ArrayList<Rectangle> staticObjects;
 	private ArrayList<ITriggerable> triggers;
 	private ArrayList<ITriggerableOnKey> onKeyTriggers;
 	private ArrayList<Actor> dynamicObjects;
 	
 	/**
-	 * CollisionDetector. Has methods to check all collisions (player/map, player/trigger, player/npc, etc.).
+	 * Creates a new instance. 
 	 */
-	public Collision() {
+	public CollisionDetector() {
 		staticObjects = new ArrayList<Rectangle>();
 		triggers = new ArrayList<ITriggerable>();
 		dynamicObjects = new ArrayList<Actor>();
@@ -44,6 +50,10 @@ public class Collision {
 		}
 	}
 	
+	/**
+	 * Adds a static object to the list of all static objects.
+	 * @param rect
+	 */
 	public void addStaticObject(Rectangle rect) {
 		staticObjects.add(rect);
 	}
@@ -56,6 +66,10 @@ public class Collision {
 		dynamicObjects.add(obj);
 	}
 	
+	/**
+	 * Removes an object from the list of all dynamic objects.
+	 * @param obj
+	 */
 	public void removeDynamicObject(GameObject obj) {
 		int id = obj.getID();
 		for(int i = 0; i < dynamicObjects.size(); i++) {
@@ -73,26 +87,48 @@ public class Collision {
 		dynamicObjects.clear();
 	}
 	
+	/**
+	 * Adds a trigger to the trigger list.
+	 * @param trigger
+	 */
 	public void addTrigger(ITriggerable trigger) {
 		triggers.add(trigger);
 	}
 	
+	/**
+	 * Removes a trigger from the trigger list.
+	 * @param trigger
+	 */
 	public void removeTrigger(ITriggerable trigger) {
 		triggers.remove(trigger);
 	}
 	
+	/**
+	 * Clears the trigger list.
+	 */
 	public void clearTriggers() {
 		triggers.clear();
 	}
 	
+	/**
+	 * Adds a triggerOnKey.
+	 * @param trigger
+	 */
 	public void addTriggerOnKey(ITriggerableOnKey trigger) {
 		onKeyTriggers.add(trigger);
 	}
 	
+	/**
+	 * Removes a triggerOnKey.
+	 * @param trigger
+	 */
 	public void removeTriggerOnKey(ITriggerableOnKey trigger) {
 		onKeyTriggers.remove(trigger);
 	}
 	
+	/**
+	 * Clears all triggersOnKey. 
+	 */
 	public void clearTriggersOnKey() {
 		onKeyTriggers.clear();
 	}
@@ -152,7 +188,7 @@ public class Collision {
 	}
 	
 	/**
-	 * checks if a gameObject is near a trigger. this is used for NPCs so that they don't run
+	 * Checks if a gameObject is near a trigger. This is used for NPCs so that they don't run
 	 * on triggers. To do this we take the original rectangle and enlarge it. The collision-test
 	 * is done with the enlarged rect. 
 	 * @param collider Object to check.
@@ -176,6 +212,10 @@ public class Collision {
 		return false;
 	}
 	
+	/**
+	 * Checks all triggersOnKey if they should be triggered. Only called after a key-press.
+	 * @param actor
+	 */
 	public void checkOnKeyTriggers(Actor actor) {
 		Rectangle colRect = actor.getCollisionRect();
 		
@@ -186,6 +226,10 @@ public class Collision {
 		}
 	}
 	
+	/**
+	 * A debug-method to draw all static collision rectangles to the screen. 
+	 * @param graphics
+	 */
 	public void drawCollisionRects(Graphics2D graphics) {
 		graphics.setColor(Color.red);
 		for(int i = 0; i < dynamicObjects.size(); i++) {

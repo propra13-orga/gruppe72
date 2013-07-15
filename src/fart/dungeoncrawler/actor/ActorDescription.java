@@ -10,6 +10,12 @@ import javax.imageio.ImageIO;
 import fart.dungeoncrawler.enums.ElementType;
 import fart.dungeoncrawler.enums.Heading;
 
+/**
+ * This class describes a kind of actor and is used to initialize it. Different actors can share an
+ * ActorDescription because it only stored some metadata and no specific data like position. 
+ * @author Felix
+ *
+ */
 public class ActorDescription {
 	private BufferedImage spriteSheet;
 	protected Dimension collisionDimension;
@@ -33,18 +39,6 @@ public class ActorDescription {
 			System.exit(2);
 		}
 	
-		this.stats = stats;
-		this.heading = heading;
-		this.level = level;
-		this.element = element;
-	}
-	
-	public ActorDescription(Dimension collisionDim, 
-			int level, 
-			int element, 
-			Stats stats, 
-			Heading heading) {
-		this.collisionDimension = collisionDim;
 		this.stats = stats;
 		this.heading = heading;
 		this.level = level;
@@ -86,6 +80,9 @@ public class ActorDescription {
 		return heading;
 	}
 	
+	/**
+	 * @return the spriteSheet
+	 */
 	public BufferedImage getSpriteSheet() {
 		return spriteSheet;
 	}

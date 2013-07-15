@@ -19,6 +19,11 @@ import fart.dungeoncrawler.Tilemap;
 
 import nu.xom.*;
 
+/**
+ * 
+ * @author Timo
+ *
+ */
 @SuppressWarnings("serial")
 public class MEPanel extends JPanel implements MouseInputListener
 {

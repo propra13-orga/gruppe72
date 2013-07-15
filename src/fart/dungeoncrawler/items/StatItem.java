@@ -8,6 +8,13 @@ import java.util.ArrayList;
 import fart.dungeoncrawler.actor.Actor;
 import fart.dungeoncrawler.actor.Stats;
 
+/**
+ * This is the abstract base class for all equipped items. It holds a Stats-field which contains
+ * the stats that are added when wearing the item. It also creates a new tooltip-image to include
+ * the stat-increase.
+ * @author Felix
+ *
+ */
 public abstract class StatItem extends BaseItem {
 	protected Stats stats;
 	
@@ -19,10 +26,17 @@ public abstract class StatItem extends BaseItem {
 		generateTooltipImageWithStats();
 	}
 
+	/**
+	 * Returns the stats to be added when worn.
+	 * @return
+	 */
 	public Stats getStats() {
 		return stats;
 	}
 	
+	/**
+	 * Generates a tooltip-image including the stats. 
+	 */
 	protected void generateTooltipImageWithStats() {
 		tooltipImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
 		Graphics2D graphics = (Graphics2D)tooltipImage.getGraphics();
@@ -119,9 +133,6 @@ public abstract class StatItem extends BaseItem {
 		s.addAgility(stats.getAgility());
 		s.addWill(stats.getWill());
 		s.addArmor(stats.getArmor());
-		/*s.setFireResistant(stats.getFireResistance());
-		s.setWaterResistant(stats.getWaterResistance());
-		s.setEarthResistant(stats.getEarthResistance());*/
 		s.addDamage(stats.getDamage());
 		s.addSpellDamage(stats.getSpellDamage());
 	}
@@ -133,9 +144,6 @@ public abstract class StatItem extends BaseItem {
 		s.redAgility(stats.getAgility());
 		s.redWill(stats.getWill());
 		s.redArmor(stats.getArmor());
-		/*s.setFireResistant(stats.getFireResistance());
-		s.setWaterResistant(stats.getWaterResistance());
-		s.setEarthResistant(stats.getEarthResistance());*/
 		s.redDamage(stats.getDamage());
 		s.redSpellDamage(stats.getSpellDamage());
 	}

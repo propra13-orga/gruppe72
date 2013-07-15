@@ -9,6 +9,11 @@ import javax.imageio.ImageIO;
 
 import fart.dungeoncrawler.actor.DynamicObjectManager;
 
+/**
+ * The tilemap is responsible for drawing the map to the screen.
+ * @author Timo
+ *
+ */
 public class Tilemap implements IDrawable {
 	public static final int TILE_SIZE = 32;
 	
@@ -30,7 +35,14 @@ public class Tilemap implements IDrawable {
 	private String name;
 	public String getName() { return name; }
 	
-	public Tilemap(Game game, StaticObjectManager sManager, DynamicObjectManager dManager, Collision collision) {
+	/**
+	 * Creates an instance of the tilemap. 
+	 * @param game instance of the game running.
+	 * @param sManager the static object manager. It is passed to the maploader.
+	 * @param dManager the dynamic object manager. It is passed to the maploader. 
+	 * @param collision the collision detector. It is passed to the maploader. 
+	 */
+	public Tilemap(Game game, StaticObjectManager sManager, DynamicObjectManager dManager, CollisionDetector collision) {
 		loader = new MapLoader(game, sManager, dManager, collision);
 		try
 		{
@@ -44,14 +56,26 @@ public class Tilemap implements IDrawable {
 		}
 	}
 	
+	/**
+	 * Returns the maploader. 
+	 * @return
+	 */
 	public MapLoader getLoader() {
 		return loader;
 	}
 	
+	/**
+	 * Returns the map-array. 
+	 * @return
+	 */
 	public int[][] getActRoom() {
 		return actRoom;
 	}
 	
+	/**
+	 * Loads a new map. This is done in the maploader. 
+	 * @param mapPath path to the mapfile. 
+	 */
 	public void loadMap(String mapPath) {
 		loader.loadMap(this, mapPath);
 		actRoom = loader.getMap();

@@ -13,6 +13,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+/**
+ * This is the menubar-component. 
+ * @author Timo
+ *
+ */
 @SuppressWarnings("serial")
 public class MEMenuBar extends JMenuBar implements ActionListener
 {
@@ -20,6 +25,10 @@ public class MEMenuBar extends JMenuBar implements ActionListener
 	private JFileChooser fc;
 	private JTextField tx_mapname;
 	
+	/**
+	 * Creates the menubar. 
+	 * @param mapeditor instance of the mapeditor
+	 */
 	public MEMenuBar(MapEditor mapeditor)
 	{
 		super();
@@ -28,6 +37,9 @@ public class MEMenuBar extends JMenuBar implements ActionListener
 		init();
 	}
 	
+	/**
+	 * Initializes the menubar and puts all elements in it. 
+	 */
 	public void init()
 	{
 		JMenu file = new JMenu("Datei");
@@ -97,6 +109,10 @@ public class MEMenuBar extends JMenuBar implements ActionListener
 		}
 	}
 	
+	/**
+	 * Sets the name of the map. 
+	 * @param mapName
+	 */
 	public void setMapName(String mapName)
 	{
 		tx_mapname.setText(mapName);

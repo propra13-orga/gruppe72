@@ -7,8 +7,13 @@ import java.awt.Graphics2D;
 import fart.dungeoncrawler.Game;
 import fart.dungeoncrawler.network.Lobby;
 
+/**
+ * This state is activated when a player joins a networkgame. All players meet in the Lobby before
+ * the game is started.
+ * @author Felix
+ *
+ */
 public class GameStateInLobby extends BaseGameState {
-	//private boolean isServer;
 
 	public static Color bgColor = new Color(0.4f, 0.4f, 0.8f);
 	public static Font font = new Font("Arial", 0x1, 16);
@@ -22,7 +27,6 @@ public class GameStateInLobby extends BaseGameState {
 	
 	public void initLobby(Lobby lobby, boolean isServer) {
 		this.lobby = lobby;
-		//this.isServer = isServer;
 	}
 
 	@Override

@@ -3,6 +3,11 @@ package fart.dungeoncrawler.actor;
 import fart.dungeoncrawler.enums.Heading;
 import fart.dungeoncrawler.enums.NPCType;
 
+/**
+ * Holds metadata for NPCs that can be created with this Description. 
+ * @author Felix
+ *
+ */
 public class NPCDescription extends ActorDescription {
 	private NPCType type;
 	
@@ -17,17 +22,6 @@ public class NPCDescription extends ActorDescription {
 					element,
 					stats,
 					heading);		
-		this.type = NPCType.values()[type];
-	}
-	
-	public NPCDescription(String spritePath,
-			int type,
-			ActorDescription aDesc) {
-		super(spritePath,
-					aDesc.getLevel(),
-					aDesc.getElement().ordinal(),
-					aDesc.stats,
-					aDesc.heading);
 		this.type = NPCType.values()[type];
 	}
 	

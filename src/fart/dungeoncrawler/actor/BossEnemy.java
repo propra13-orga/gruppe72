@@ -93,31 +93,8 @@ public class BossEnemy extends BaseEnemy {
 		collision.removeDynamicObject(this);
 		manager.removeObject(this);
 		
-		Random r = new Random();
-		if(r.nextFloat() > 0.5f) {
-			int amount = r.nextInt(12);
-			new GoldItem(game, screenPosition, amount);
-		}
-		
-		String mapTo = new String(game.getMapPath());
-		if (mapTo.equals("res/maps/L2R2.xml")) {
-			Goal g = new Goal(new Vector2(screenPosition.x / Tilemap.TILE_SIZE, screenPosition.y / Tilemap.TILE_SIZE), game);
-			game.getStaticManager().addObject(g);
-			collision.addTriggerOnKey(g);
-		} else {
-			StringBuilder sb = new StringBuilder(mapTo);
-			sb.replace(mapTo.length() - 5, mapTo.length() - 4, "0");
-			String l = "";
-			l += sb.charAt(10);
-			Integer level = Integer.parseInt(l);
-			level += 1;
-			sb.replace(10, 11, level.toString());
-			String result = sb.toString();
-			
-			PortalOnKey p = new PortalOnKey(game, result, new Vector2(screenPosition.x / Tilemap.TILE_SIZE, screenPosition.y / Tilemap.TILE_SIZE), new Vector2(1 * Tilemap.TILE_SIZE, 13 * Tilemap.TILE_SIZE));
-			collision.addTriggerOnKey(p);
-			game.getStaticManager().addObject(p);
-		}
-		
+		PortalOnKey p = new PortalOnKey(game, mapToName, new Vector2((int)screenPosition.x / Tilemap.TILE_SIZE, (int)screenPosition.y / Tilemap.TILE_SIZE), mapToPos.mul(Tilemap.TILE_SIZE));
+		collision.addTriggerOnKey(p);
+		game.getStaticManager().addObject(p);
 	}
 }

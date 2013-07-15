@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import fart.dungeoncrawler.enums.QuestObjectiveType;
 
+/**
+ * Represents a quest as a collection of questobjectives. When objectives are fulfilled the quest
+ * is done. 
+ * @author Erhan
+ *
+ */
 public class Quest{
 	
 	private QuestLog qLog;
@@ -13,6 +19,13 @@ public class Quest{
 	private int goldAmount;
 	private ArrayList<QuestObjective> objectives;
 	
+	/**
+	 * Creates a quest with one objective. 
+	 * @param name name of the quest
+	 * @param exp the amount of experiance the player gains after finishing
+	 * @param gold the amount of gold the player gains after finishing
+	 * @param obj the questobjective
+	 */
 	public Quest(String name, int exp, int gold, QuestObjective obj) {
 		this.name = name;
 		this.expAmount = exp;
@@ -21,6 +34,13 @@ public class Quest{
 		objectives.add(obj);
 	}
 	
+	/**
+	 * Creates a quest with all objectives in the list.
+	 * @param name name if the quest
+	 * @param exp the amount of experiance the player gains after finishing
+	 * @param gold the amount of gold the player gains after finishing
+	 * @param objs the list of objetives to be done
+	 */
 	public Quest(String name, int exp, int gold, ArrayList<QuestObjective> objs) {
 		this.name = name;
 		this.expAmount = exp;
@@ -28,10 +48,18 @@ public class Quest{
 		this.objectives = objs;
 	}
 	
+	/**
+	 * Sets the questLog that contains this quest.
+	 * @param log
+	 */
 	public void setQuestLog(QuestLog log) {
 		this.qLog = log;
 	}
 
+	/**
+	 * Returns the killobjective if it exists. Otherwise returns null.
+	 * @return
+	 */
 	private QuestObjKill getKillObjective() {
 		for(QuestObjective q : objectives)
 			if(q.getType() == QuestObjectiveType.Kill)
@@ -40,6 +68,10 @@ public class Quest{
 		return null;
 	}
 	
+	/**
+	 * Returns the bosskillobjective if it exists. Otherwise returns null.
+	 * @return
+	 */
 	private QuestObjKillBoss getBossKillObjective() {
 		for(QuestObjective q : objectives)
 			if(q.getType() == QuestObjectiveType.KillBoss)
@@ -48,6 +80,10 @@ public class Quest{
 		return null;
 	}
 	
+	/**
+	 * Returns the collectobjective if it exists. Otherwise returns null.
+	 * @return
+	 */
 	private QuestObjCollect getCollectObjective() {
 		for(QuestObjective q : objectives)
 			if(q.getType() == QuestObjectiveType.Collect)
@@ -56,7 +92,12 @@ public class Quest{
 		return null;
 	}
 	
-	public void mobKilled(NewPlayer player, String mapName) {
+	/**
+	 * This method is called when the player has killed an enemy. It checks if it was part
+	 * of this quest.
+	 * @param mapName name of the current map
+	 */
+	public void mobKilled(String mapName) {
 		QuestObjKill killObjective = getKillObjective();
 		if(killObjective == null)
 			return;
@@ -64,7 +105,12 @@ public class Quest{
 		killObjective.killed(mapName);
 	}
 	
-	public void bossKilled(NewPlayer player, String mapName) {
+	/**
+	 * This method is called when the player has killed a boss. It checks if it was part
+	 * of this quest.
+	 * @param mapName name of the current map
+	 */
+	public void bossKilled(String mapName) {
 		QuestObjKillBoss bossObjective = getBossKillObjective();
 		if(bossObjective == null)
 			return;
@@ -72,6 +118,11 @@ public class Quest{
 		bossObjective.killed(mapName);
 	}
 	
+	/**
+	 * This method is called when the player picks up an item. It checks if it was part
+	 * of this quest.
+	 * @param index the itemIndex
+	 */
 	public void itemCollected(int index) {
 		QuestObjCollect collectObjective = getCollectObjective();
 		if(collectObjective == null)
@@ -80,7 +131,13 @@ public class Quest{
 		collectObjective.collected(index);
 	}
 	
-	public boolean checkQuestDone(NewPlayer player) {
+	/**
+	 * Checks if the quest is done. If so the player gets his rewards and the quest is deleted from
+	 * the log.
+	 * @param player
+	 * @return
+	 */
+	public boolean checkQuestDone(Player player) {
 		for(QuestObjective q : objectives)
 			if(!q.fulfilled())
 				return false;
@@ -89,14 +146,21 @@ public class Quest{
 		player.getLevel().addExperince(expAmount);
 		
 		qLog.removeQuest(this);
-		System.out.println("Quest done!");
 		return true;
 	}
 	
+	/**
+	 * Returns a list of all objectives. 
+	 * @return
+	 */
 	public ArrayList<QuestObjective> getObjectives() {
 		return objectives;
 	}
 	
+	/**
+	 * Returns the name of the quest.
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}

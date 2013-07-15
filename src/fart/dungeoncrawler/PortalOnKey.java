@@ -11,8 +11,12 @@ import fart.dungeoncrawler.actor.Actor;
 
 import Utils.Vector2;
 
+/**
+ * This class represents a portal that is only triggered on key-press
+ * @author Felix
+ *
+ */
 public class PortalOnKey extends GameObject implements ITriggerableOnKey {
-
 	private String mapTo;
 	private Vector2 pointTo;
 	private Game game;
@@ -20,19 +24,17 @@ public class PortalOnKey extends GameObject implements ITriggerableOnKey {
 	private BufferedImage texture;
 	private Rectangle collisionRect;
 	
+	/**
+	 * Creates the portal. 
+	 * @param game instance of the game
+	 * @param mapTo path to the destinationmapfile
+	 * @param tilePositionFrom position in tiles on the sourcemap
+	 * @param tilePositionTo position in tiles on the destinationmap
+	 */
 	public PortalOnKey(Game game, String mapTo, Vector2 tilePositionFrom, Vector2 tilePositionTo) {
 		this.game = game;
 		this.mapTo = mapTo;
 		pointTo = tilePositionTo;
-		screenPosition = new Vector2(tilePositionFrom.x * Tilemap.TILE_SIZE, tilePositionFrom.y * Tilemap.TILE_SIZE);
-		collisionRect = new Rectangle((int)screenPosition.x + Tilemap.TILE_SIZE / 4, (int)screenPosition.y + Tilemap.TILE_SIZE / 4, Tilemap.TILE_SIZE / 2, Tilemap.TILE_SIZE / 2);
-	}
-	
-	public PortalOnKey(Game game, String spritePath, String mapTo, Vector2 tilePositionFrom, Vector2 tilePositionTo) {
-		this.game = game;
-		this.spritePath = spritePath;
-		this.mapTo = mapTo;
-		pointTo = tilePositionTo.mul(Tilemap.TILE_SIZE);
 		screenPosition = new Vector2(tilePositionFrom.x * Tilemap.TILE_SIZE, tilePositionFrom.y * Tilemap.TILE_SIZE);
 		collisionRect = new Rectangle((int)screenPosition.x + Tilemap.TILE_SIZE / 4, (int)screenPosition.y + Tilemap.TILE_SIZE / 4, Tilemap.TILE_SIZE / 2, Tilemap.TILE_SIZE / 2);
 	}
@@ -75,8 +77,4 @@ public class PortalOnKey extends GameObject implements ITriggerableOnKey {
 	public Rectangle getTriggerArea() {
 		return collisionRect;
 	}
-
-	//@Override
-	//public void trigger(BaseNPC npc) { }
-
 }

@@ -5,6 +5,11 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+/**
+ * This is the mainclass for the editor. It creates the window and all of its components. 
+ * @author Timo
+ *
+ */
 public class MapEditor
 {
 	public final int TILE_SIZE = 32;
@@ -16,6 +21,9 @@ public class MapEditor
 	private MEPanel mepanel;
 	private METoolbar metoolbar;
 	
+	/**
+	 * Creates and initializes the editor. 
+	 */
 	public MapEditor()
 	{
 		JFrame frame = new JFrame();
@@ -41,26 +49,46 @@ public class MapEditor
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Returns the imagemanager. 
+	 * @return
+	 */
 	public ImageManager getImageManager()
 	{
 		return imgmgr;
 	}
 	
+	/**
+	 * Returns the menubar. 
+	 * @return
+	 */
 	public MEMenuBar getMEMenuBar()
 	{
 		return menubar;
 	}
 	
+	/**
+	 * Returns the mainpanel. 
+	 * @return
+	 */
 	public MEPanel getMEPanel()
 	{
 		return mepanel;
 	}
 	
+	/**
+	 * Returns the toolbar.
+	 * @return
+	 */
 	public METoolbar getMEToolbar()
 	{
 		return metoolbar;
 	}
 	
+	/**
+	 * Mainentry for the mapeditor. 
+	 * @param args
+	 */
 	public static void main(String[] args)
 	{
 		SwingUtilities.invokeLater(new Runnable()

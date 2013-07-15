@@ -5,6 +5,11 @@ import java.awt.image.BufferedImage;
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.enums.ElementType;
 
+/**
+ * 
+ * @author Felix
+ *
+ */
 public abstract class BaseSpell implements IUpdateable {
 	public static final int GLOBAL_COOLDOWN = 90;
 	public static final int MAX_SKILL_LEVEL = 3;

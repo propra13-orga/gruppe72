@@ -8,6 +8,11 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+/**
+ * The imagemanager is responsible for loading and handling all textures needed by the mapeditor.
+ * @author Timo
+ *
+ */
 public class ImageManager
 {
 	private ArrayList<String> objIDs;
@@ -16,6 +21,9 @@ public class ImageManager
 	private ArrayList<ArrayList<String>> objCat;
 	private final int categoryCount = 4;
 
+	/**
+	 * Creates and initializes a new instance.
+	 */
 	public ImageManager()
 	{
 		objIDs = new ArrayList<String>();
@@ -26,6 +34,12 @@ public class ImageManager
 			objCat.add(new ArrayList<String>());
 	}
 	
+	/**
+	 * Loads a texture from disc and stores it in correct list.
+	 * @param id 
+	 * @param oc category of the object
+	 * @param imagePath path to the texture
+	 */
 	public void add(String id, ObjectCategory oc, String imagePath)
 	{
 		BufferedImage bi = null;
@@ -52,6 +66,10 @@ public class ImageManager
 			objCat.get(3).add(id);
 	}
 	
+	/**
+	 * Removes a texture. 
+	 * @param id
+	 */
 	public void remove(String id)
 	{
 		for(int i=0; i<objIDs.size(); i++)
@@ -75,11 +93,21 @@ public class ImageManager
 		}
 	}
 	
+	/**
+	 * Returns the ID of a texture.
+	 * @param index
+	 * @return
+	 */
 	public String getID(int index)
 	{
 		return objIDs.get(index);
 	}
 	
+	/**
+	 * Returns the object category to a specific ID.
+	 * @param id
+	 * @return
+	 */
 	public int getCategory(String id)
 	{
 		for(int i=0; i<objCat.size(); i++)
@@ -89,6 +117,11 @@ public class ImageManager
 		return -1;
 	}
 	
+	/**
+	 * Returns the texture to a specific ID.
+	 * @param id
+	 * @return
+	 */
 	public BufferedImage getImage(String id)
 	{
 		return (BufferedImage)images.get(id);

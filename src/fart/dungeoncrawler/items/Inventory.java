@@ -14,6 +14,13 @@ import fart.dungeoncrawler.actor.Actor;
 import fart.dungeoncrawler.actor.Stats;
 import fart.dungeoncrawler.enums.EquipSlot;
 
+/**
+ * This class represents an inventory and stores all items and the amount of gold in it.
+ * When the player opens up the inventory, this class is responsible for drawing it.
+ * With the IconController the player can select an item and use/dress it. 
+ * @author Felix
+ *
+ */
 public class Inventory implements IDrawable, IUpdateable {
 	public static final int ROWS = 4;
 	public static final int COLUMNS = 4;
@@ -28,6 +35,12 @@ public class Inventory implements IDrawable, IUpdateable {
 	private Actor owner;
 	private boolean drawTooltip;
 	
+	/**
+	 * Creates the inventory for a specific actor. If it is user-controlled, the controller is passed to the
+	 * IconController for navigating through the inventory.
+	 * @param controller Keyboard. Can be null.
+	 * @param owner Owner of the inventory.
+	 */
 	public Inventory(Controller controller, Actor owner) {
 		items = new BaseItem[MAX_ITEMS];
 		this.controller = controller;
@@ -36,26 +49,52 @@ public class Inventory implements IDrawable, IUpdateable {
 		this.owner = owner;
 	}
 	
+	/**
+	 * Sets a flag indicating if the tooltips should be drawn.
+	 * @param draw
+	 */
 	public void setDrawTooltip(boolean draw) {
 		drawTooltip = draw;
 	}
 	
+	/**
+	 * Sets a specific amount of gold.
+	 * @param amount
+	 */
 	public void setGold(int amount) {
 		gold = amount;
 	}
 	
+	/**
+	 * Reduces gold by amount. 
+	 * @param amount
+	 */
 	public void reduceGold(int amount) {
 		gold -= amount;
 	}
 	
+	/**
+	 * Adds amount of gold. 
+	 * @param amount
+	 */
 	public void addGold(int amount) {
 		gold += amount;
 	}
 
+	/**
+	 * Returns the goldamount. 
+	 * @return
+	 */
 	public int getGold() {
 		return gold;
 	}
 	
+	/**
+	 * Tries to add an item to the inventory and returns if it was successful. 
+	 * Returns false if the inventory already contains MAX_ITEMS
+	 * @param item item to add
+	 * @return
+	 */
 	public boolean addItem(BaseItem item) {
 		for(int i = 0; i < MAX_ITEMS; i++) {
 			if(items[i] == null) {

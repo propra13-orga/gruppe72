@@ -5,14 +5,14 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import fart.dungeoncrawler.Collision;
+import fart.dungeoncrawler.CollisionDetector;
 import fart.dungeoncrawler.Controller;
 import fart.dungeoncrawler.IDrawable;
 import fart.dungeoncrawler.IUpdateable;
 
 public class SkillTree implements IDrawable, IUpdateable {
 	private Actor owner;
-	private Collision collision;
+	private CollisionDetector collision;
 	
 	private ArrayList<Skill> fireSkills;
 	private ArrayList<Skill> waterSkills;
@@ -20,7 +20,7 @@ public class SkillTree implements IDrawable, IUpdateable {
 	
 	private static final Color BG_COLOR = Color.LIGHT_GRAY;
 	
-	public SkillTree(Actor owner, Controller controller, Collision collision) {
+	public SkillTree(Actor owner, Controller controller, CollisionDetector collision) {
 		this.owner = owner;
 		this.collision = collision;
 		

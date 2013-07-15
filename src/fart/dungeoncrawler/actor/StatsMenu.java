@@ -11,6 +11,12 @@ import fart.dungeoncrawler.network.NetworkManager;
 
 import Utils.Vector2;
 
+/**
+ * The stats menu draws the players stats to the screen and is used after a levelup to
+ * add some statpoints. 
+ * @author Felix
+ *
+ */
 public class StatsMenu {
 	private static Color bgColor = new Color(0.8f, 0.8f, 0.4f);
 	private static Font font = new Font("Arial", 0x1, 14);
@@ -21,24 +27,42 @@ public class StatsMenu {
 	private Stats stats;
 	private int remainingPoints;
 	private Controller controller;
-	private NewPlayer player;
+	private Player player;
 	private IconController iconController;
 	
-	public StatsMenu(Stats stats, Controller controller, NewPlayer player) {
+	/**
+	 * Creates the menu for the given stats and player. Controller is needed for choosing stats to add
+	 * after a levelup. 
+	 * @param stats
+	 * @param controller
+	 * @param player
+	 */
+	public StatsMenu(Stats stats, Controller controller, Player player) {
 		this.stats = stats;
 		this.controller = controller;
 		this.player = player;
 		this.iconController = new IconController(controller, new Vector2(startPos.x + 16, startPos.y + 10), 8, 1, 4);
 	}
 	
+	/**
+	 * This method is called when the player levels up. After every levelup the player gains Stats.STATS_PER_LEVEL
+	 * statpoints to add. 
+	 */
 	public void leveledUp() {
 		remainingPoints += Stats.STATS_PER_LEVEL;
 	}
 	
+	/**
+	 * Returns the number of available statpoints. 
+	 * @return
+	 */
 	public boolean pointsRemaining() {
 		return remainingPoints > 0;
 	}
 	
+	/**
+	 * Updates the menu when it is open and the player has points remaining. 
+	 */
 	public void update() {
 		if(remainingPoints > 0) {
 			iconController.update(0);
@@ -66,6 +90,10 @@ public class StatsMenu {
 		
 	}
 	
+	/**
+	 * Draws the menu. 
+	 * @param graphics
+	 */
 	public void drawMenu(Graphics2D graphics) {
 		graphics.setColor(bgColor);
 		graphics.fillRect((int)startPos.x, (int)startPos.y, 7 * 32, 8 * 32);
@@ -119,6 +147,10 @@ public class StatsMenu {
 		}
 	}
 	
+	/**
+	 * Draws buttons when the player has points remaining. 
+	 * @param graphics
+	 */
 	private void drawStatButtons(Graphics2D graphics) {
 		int x = (int)startPos.x + 16;
 		int y = (int)startPos.y + 10;

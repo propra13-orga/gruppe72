@@ -4,6 +4,9 @@ import java.awt.Graphics2D;
 
 import fart.dungeoncrawler.*;
 
+/**
+ * This state is activated whenever the player is in the menu. 
+ */
 public class GameStateInMenu extends BaseGameState {
 	private Menu menu;
 	

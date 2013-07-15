@@ -7,11 +7,26 @@ import fart.dungeoncrawler.enums.Heading;
 import fart.dungeoncrawler.enums.ElementType;
 import Utils.Vector2;
 
+/**
+ * An abstract base class for all damage spells.
+ * @author Felix
+ *
+ */
 public abstract class Spell extends BaseSpell implements IUpdateable {
 	private SpellProjectile projectile;
 	protected int damage;
 	private float speed;
 	
+	/**
+	 * Creates an instance of the spell. 
+	 * @param manaCost manaCost
+	 * @param cooldown cooldown of the spell
+	 * @param type the element-type
+	 * @param icon the icon
+	 * @param projectile the projectile that is fired
+	 * @param damage spell damage
+	 * @param speed the speed of the projectile
+	 */
 	public Spell(int manaCost, int cooldown, ElementType type, BufferedImage icon, SpellProjectile projectile, int damage, float speed) {
 		super(manaCost, cooldown, icon, type);
 		this.projectile = projectile;
@@ -20,6 +35,12 @@ public abstract class Spell extends BaseSpell implements IUpdateable {
 		currentCooldown = 0;
 	}
 	
+	/**
+	 * Returns a projectile when the spell is casted. 
+	 * @param position current position of the caster
+	 * @param heading heading of the caster
+	 * @return
+	 */
 	public SpellProjectile getProjectile(Vector2 position, Heading heading) {
 		Vector2 velocity = Vector2.Zero;
 		
@@ -41,10 +62,17 @@ public abstract class Spell extends BaseSpell implements IUpdateable {
 		return new SpellProjectile(projectile, position, velocity.mul(speed), this);
 	}
 
+	/**
+	 * Returns the damage done.
+	 * @return
+	 */
 	public int getDamage() {
 		return damage;
 	}
 
+	/**
+	 * Activates the spell. It only sets the current cooldown to the cooldown of the spell.
+	 */
 	public void activate() {
 		currentCooldown = cooldown;
 	}

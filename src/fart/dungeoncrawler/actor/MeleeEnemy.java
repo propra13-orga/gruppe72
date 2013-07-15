@@ -11,9 +11,20 @@ import Utils.Vector2;
 import fart.dungeoncrawler.*;
 import fart.dungeoncrawler.enums.*;
 
+/**
+ * This class represents a MeleeEnemy.
+ * @author Felix
+ *
+ */
 public class MeleeEnemy extends BaseEnemy {
 	private DynamicObjectState curState;
 	
+	/**
+	 * Creates a MeleeEnemy from an EnemyDescription.
+	 * @param game instance of tha game running
+	 * @param position the position in screenspace
+	 * @param enemyDesc the EnemyDescription. 
+	 */
 	public MeleeEnemy(Game game, Vector2 position, EnemyDescription enemyDesc) {
 		super(game, position, enemyDesc);
 		curState = DynamicObjectState.Idle;
@@ -23,6 +34,11 @@ public class MeleeEnemy extends BaseEnemy {
 		setCurrentAnimation(curState);
 	}
 	
+	/**
+	 * Creates a MeleeEnemy from a CheckPointInfo.
+	 * @param game instance of the game running
+	 * @param info the CheckPointInfo
+	 */
 	public MeleeEnemy(Game game, CheckPointInfo info) {
 		super(game, info);
 		
@@ -30,6 +46,9 @@ public class MeleeEnemy extends BaseEnemy {
 		setCurrentAnimation(curState);
 	}
 	
+	/**
+	 * Builds the melee-attack.
+	 */
 	private void buildAttacks() {
 		HashMap<Heading, Animation> simpleAttackAnim = new HashMap<Heading, Animation>();
 		BufferedImage[] iSALeft = new BufferedImage[1];

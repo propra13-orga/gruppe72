@@ -5,12 +5,16 @@ import Utils.Vector2;
 import fart.dungeoncrawler.actor.BaseEnemy;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 
+/**
+ * In this state the player is in the aggroRange of the enemy. It freezes for a small amount of time
+ * and changes than to ChasingState.
+ * @author Felix
+ *
+ */
 public class AlertState extends NPCState {
 	private static final DynamicObjectState DO_STATE = DynamicObjectState.Alerted;
 	private int freezeTime;
 	
-	//In this state the player is in the aggrorange of this object. 
-	//Object heads to the player to attack
 	public AlertState(EnemyStateMachine machine, BaseEnemy owner) {
 		super(machine, owner);
 	}

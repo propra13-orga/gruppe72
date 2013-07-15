@@ -7,6 +7,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * This description is used for some gameobjects. It contains a tecture and a collision rectangle.
+ * @author Erhan
+ *
+ */
 public class BaseDescription {
 	private BufferedImage texture;
 	private Rectangle collisionRect;
@@ -22,10 +27,18 @@ public class BaseDescription {
 		}
 	}
 	
+	/**
+	 * Returns the texture.
+	 * @return
+	 */
 	public BufferedImage getTexture() {
 		return texture;
 	}
 	
+	/**
+	 * Returns the collision rectangle.
+	 * @return
+	 */
 	public Rectangle getCollisionRect() {
 		return collisionRect;
 	}

@@ -5,6 +5,12 @@ import fart.dungeoncrawler.actor.BaseEnemy;
 import fart.dungeoncrawler.enums.AttackType;
 import fart.dungeoncrawler.enums.DynamicObjectState;
 
+/**
+ * This state is activated when the enemy starts attacking. It looks for the attackType and performs
+ * the appropriate attack (melee or spell).
+ * @author Felix
+ *
+ */
 public class AttackingState extends NPCState {
 	private static final DynamicObjectState DO_STATE = DynamicObjectState.Attacking;
 

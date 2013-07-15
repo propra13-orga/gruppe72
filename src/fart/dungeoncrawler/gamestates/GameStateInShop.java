@@ -11,13 +11,19 @@ import fart.dungeoncrawler.StaticObjectManager;
 import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.actor.Actor;
 import fart.dungeoncrawler.actor.DynamicObjectManager;
-import fart.dungeoncrawler.actor.NewPlayer;
+import fart.dungeoncrawler.actor.Player;
 import fart.dungeoncrawler.actor.Stats;
 import fart.dungeoncrawler.enums.GameState;
 import fart.dungeoncrawler.items.Equipment;
 import fart.dungeoncrawler.items.Inventory;
 import fart.dungeoncrawler.items.Shop;
 
+/**
+ * This state is activated when the player visits a shop. GameState is further updated and the shop
+ * is drawn. 
+ * @author Felix
+ *
+ */
 public class GameStateInShop extends BaseGameState {
 	private Shop shop;
 	private Inventory inventory;
@@ -27,7 +33,7 @@ public class GameStateInShop extends BaseGameState {
 	private DynamicObjectManager dManager;
 	private Tilemap map;
 	private Controller controller;
-	private NewPlayer player;
+	private Player player;
 	
 	public static final Font FONT = new Font("Lucida Console", 0x1, 12);
 	public static final Color FONT_COLOR = new Color(0.275f, 0.0f, 0.14f);
@@ -52,8 +58,8 @@ public class GameStateInShop extends BaseGameState {
 		shop.setInventory(inventory);
 		
 		inventory.setDrawTooltip(false);
-		if(actor instanceof NewPlayer)
-			player = (NewPlayer)actor;
+		if(actor instanceof Player)
+			player = (Player)actor;
 	}
 	
 	@Override

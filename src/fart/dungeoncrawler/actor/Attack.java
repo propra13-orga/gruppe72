@@ -10,6 +10,11 @@ import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.enums.Heading;
 import fart.dungeoncrawler.items.Weapon;
 
+/**
+ * Represents a melee-attack. Damage and speed is taken from the actors weapon and stats. 
+ * @author Erhan/Felix
+ *
+ */
 public class Attack {
 	private static final int NO_WEAPON_DURATION = 500;
 	
@@ -21,11 +26,8 @@ public class Attack {
 	private int frameDuration;
 	private float duration;
 	private Actor owner;
-	private int ID;
 	private boolean hasHit = false;
 	private ElementalDamage eleDamage;
-	
-	private static int idCounter = 0;
 	
 	/**
 	 * Represents a MeleeAttack. 
@@ -147,6 +149,10 @@ public class Attack {
 		return ret;
 	}
 	
+	/**
+	 * Activates and initializes the attack. It looks up the elemental damage done by the weapon
+	 * and calculates the duration of the attack based on the attackspeed and the owners agility.
+	 */
 	public void activate() {
 		Weapon weapon = owner.getEquipment().getWeapon();
 		if(weapon != null) {
@@ -161,11 +167,7 @@ public class Attack {
 		frameDuration = DamageCalculator.calcAttackSpeed(owner, frameDuration);
 		
 		duration = 0;
-		ID = idCounter++;
 		hasHit = false;
-		
-		if(idCounter == 10000)
-			idCounter = 0;
 	}
 	
 	/**
@@ -182,22 +184,33 @@ public class Attack {
 		return false;
 	}
 	
+	/**
+	 * Returns the attacking actor.
+	 * @return
+	 */
 	public Actor getOwner() {
 		return owner;
 	}
 	
+	/**
+	 * Sets the hit-flag to true. The attack has already hit a target and will not hit another.
+	 */
 	public void hit() {
 		hasHit = true;
 	}
 	
+	/**
+	 * Returns if the attack has already hit a target. 
+	 * @return
+	 */
 	public boolean hasHit() {
 		return hasHit;
 	}
 	
-	public int getID() {
-		return ID;
-	}
-	
+	/**
+	 * Returns the elemental damage done by this attack. 
+	 * @return
+	 */
 	public ElementalDamage getEleDamage() {
 		return eleDamage;
 	}
