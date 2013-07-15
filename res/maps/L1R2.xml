@@ -132,6 +132,9 @@
 			<actor id="4">
 				<positionX>13</positionX>
 				<positionY>7</positionY>
+				<mapToName>L2R0</mapToName>
+				<mapToX>2</mapToX>
+				<mapToY>7</mapToY>
 			</actor>
 			<actor id="5">
 				<positionX>6</positionX>

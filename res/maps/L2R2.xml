@@ -291,6 +291,9 @@
 			<actor id="4">
 				<positionX>7</positionX>
 				<positionY>2</positionY>
+				<mapToName>platzhalter</mapToName>
+				<mapToX>2</mapToX>
+				<mapToY>2</mapToY>
 			</actor>
 			<actor id="5">
 				<positionX>2</positionX>
