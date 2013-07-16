@@ -91,7 +91,7 @@
                         <object id="0">
                                 <positionX>23</positionX>
                                 <positionY>19</positionY>
-                                <mapToName>/home/timo/workspace/gruppe72/res/maps/L0R1.xml</mapToName>
+                                <mapToName>res/maps/L0R1.xml</mapToName>
                                 <mapToX>1</mapToX>
                                 <mapToY>5</mapToY>
                         </object>
