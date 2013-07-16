@@ -340,8 +340,8 @@ public class MEPanel extends JPanel implements MouseInputListener
 								newObj.addAttribute(new Attribute("id", "0"));
 								newObj.appendChild(posX);
 								newObj.appendChild(posY);
-								// TODO: popup settings-menu
 								Element mapToName = new Element("mapToName");
+								//TODO: CUSTOM MAPTONAME AND POS
 								mapToName.appendChild("res/maps/L0R1.xml");
 								newObj.appendChild(mapToName);
 								

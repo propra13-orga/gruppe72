@@ -24,7 +24,7 @@ public class MapEditor
 	/**
 	 * Creates and initializes the editor. 
 	 */
-	public MapEditor()
+	public MapEditor(boolean isLoneWindow)
 	{
 		JFrame frame = new JFrame();
 		frame.setTitle("Dungeoncrawler MapEditor");
@@ -43,7 +43,12 @@ public class MapEditor
 		frame.pack();
 		
 		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		if(isLoneWindow)
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		else
+			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
 		frame.setResizable(false);
 		
 		frame.setVisible(true);
@@ -95,7 +100,7 @@ public class MapEditor
 		{
 			public void run()
 			{
-				new MapEditor();
+				new MapEditor(true);
 			}
 		});
 	}
