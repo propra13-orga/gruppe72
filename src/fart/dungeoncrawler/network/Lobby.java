@@ -3,6 +3,7 @@ package fart.dungeoncrawler.network;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import fart.dungeoncrawler.Controller;
 import fart.dungeoncrawler.IDrawable;
@@ -22,11 +23,14 @@ public class Lobby implements IDrawable {
 	private StringBuilder text;
 	
 	private ArrayList<ClientInfo> clients;
+	private ArrayList<String> chatMessages;
 	
 	public Lobby(Controller controller, boolean isServer) {
 		clients = new ArrayList<ClientInfo>();
 		this.controller = controller;
 		this.isServer = isServer;
+		
+		chatMessages = new ArrayList<String>();
 		
 		text = new StringBuilder();
 	}
@@ -81,12 +85,12 @@ public class Lobby implements IDrawable {
 			for(int i = KeyEvent.VK_A; i<KeyEvent.VK_Z; i++)
 				if(controller.justPressed(i)) {
 					text.append((char)i);
-					System.out.println(text);
+					//System.out.println(text);
 				}
 			for(int i = KeyEvent.VK_0; i<KeyEvent.VK_9; i++)
 				if(controller.justPressed(i)) {
 					text.append((char)i);
-					System.out.println(text);
+					//System.out.println(text);
 				}
 			
 			if(controller.justPressed(KeyEvent.VK_SPACE)) //leerzeile
@@ -116,7 +120,7 @@ public class Lobby implements IDrawable {
 	}
 	
 	public void MessageReceived(LobbyChatMessage message) {
-		System.out.println(message.text);
+		chatMessages.add(message.text);
 	}
 	
 
@@ -140,6 +144,10 @@ public class Lobby implements IDrawable {
 		//TODO: Nachricht welche angezeigt wird
 		if(isWriting) {
 			graphics.drawString(text.toString(), 32, 32  * 14);
+		}
+		int j = chatMessages.size()-7>0?chatMessages.size()-7:0;
+		for(int i = j;i<chatMessages.size();i++){
+			graphics.drawString(chatMessages.get(i), 32, 32 * (15+i-j));
 		}
 	}
 }

@@ -13,7 +13,6 @@ import Utils.Vector2;
 import fart.dungeoncrawler.enums.GameState;
 import fart.dungeoncrawler.gamestates.GameStateInLobby;
 import fart.dungeoncrawler.items.IconController;
-import fart.dungeoncrawler.mapeditor.MapEditor;
 import fart.dungeoncrawler.network.Client;
 import fart.dungeoncrawler.network.Lobby;
 import fart.dungeoncrawler.network.Server;
@@ -137,7 +136,7 @@ public class Menu implements IDrawable, IUpdateable{
 			} else if (index == 2) {
 				waitingForIP();
 			} else if (index == 3) {
-				new MapEditor(false);
+				
 			} else if (index == 4) {
 				System.exit(0);
 			}
