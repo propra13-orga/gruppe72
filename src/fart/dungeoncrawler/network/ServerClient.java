@@ -23,10 +23,8 @@ public class ServerClient extends Thread {
 		ready = false;
 		
 		try {
-			System.out.println("[Trying to get IO-streams...]");
 			input = new ObjectInputStream(socket.getInputStream());
 			output = new ObjectOutputStream(socket.getOutputStream());
-			System.out.println("[IOStreams running.]");
 			
 			ID = IDCounter;
 			

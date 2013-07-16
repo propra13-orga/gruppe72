@@ -11,6 +11,7 @@ import fart.dungeoncrawler.IDrawable;
 import fart.dungeoncrawler.IUpdateable;
 import fart.dungeoncrawler.Tilemap;
 import fart.dungeoncrawler.enums.ElementType;
+import fart.dungeoncrawler.network.NetworkManager;
 
 /**
  * Players have an instance of the spellmanager that handles all spells and drawing the icons to
@@ -80,8 +81,13 @@ public class SpellManager implements IDrawable, IUpdateable {
 		currentShield.activate();
 		shieldCooldown = SHIELD_COOLDOWN;
 		
-		if(owner instanceof Player)
-			((Player)owner).renewHealthMana();
+		if(owner instanceof Player) {
+			Player p = (Player)owner;
+			p.renewHealthMana();
+			if(owner.isInNetwork)
+				NetworkManager.sendShieldMessage(p);
+		}
+		
 	}
 	
 	/**
@@ -207,5 +213,4 @@ public class SpellManager implements IDrawable, IUpdateable {
 	public ElementalShield getCurrentShield() {
 		return currentShield;
 	}
-
 }

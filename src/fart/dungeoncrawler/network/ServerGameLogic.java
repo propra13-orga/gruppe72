@@ -2,8 +2,7 @@ package fart.dungeoncrawler.network;
 
 import fart.dungeoncrawler.*;
 import fart.dungeoncrawler.actor.*;
-import fart.dungeoncrawler.enums.DynamicObjectState;
-import fart.dungeoncrawler.enums.GameState;
+import fart.dungeoncrawler.enums.*;
 import fart.dungeoncrawler.network.messages.game.*;
 
 public class ServerGameLogic extends Thread {
@@ -54,6 +53,9 @@ public class ServerGameLogic extends Thread {
 		} else if(bm.type == GameMessage.GAME_STATS_UPDATE) {
 			GameStatsUpdateMessage msg = (GameStatsUpdateMessage)bm;
 			handleStatsUpdate(msg);
+		} else if(bm.type == GameMessage.GAME_SHIELD_MESSAGE) {
+			GameShieldMessage msg = (GameShieldMessage)bm;
+			handleShield(msg);
 		}
 	}
 	
@@ -85,6 +87,13 @@ public class ServerGameLogic extends Thread {
 	private void handleStatsUpdate(GameStatsUpdateMessage msg) {
 		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.setStats(msg.newStats);
+		
+		server.broadcastMessage(msg);
+	}
+	
+	private void handleShield(GameShieldMessage msg) {
+		Player a = (Player)dManager.getActorByID(msg.ID);
+		a.getSpellManager().activateShield(ElementType.values()[msg.shieldID]);
 		
 		server.broadcastMessage(msg);
 	}

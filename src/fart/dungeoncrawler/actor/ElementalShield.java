@@ -46,7 +46,7 @@ public class ElementalShield {
 		ElementalShield result = new ElementalShield(owner, 
 													ElementType.Fire, 
 													new Rectangle(-4, -4, Tilemap.TILE_SIZE + 8, Tilemap.TILE_SIZE + 8), 
-													owner.getLevel().getLevel() * 0.025f,
+													owner.getLevel().getLevel() * 0.05f,
 													stats);
 		
 		return result;

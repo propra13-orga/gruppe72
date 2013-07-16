@@ -49,6 +49,10 @@ public class NetworkManager {
 		sendMessage(new GameStatsUpdateMessage(a));
 	}
 	
+	public static void sendShieldMessage(Player p) {
+		sendMessage(new GameShieldMessage(p));
+	}
+	
 	private static void sendMessage(GameMessage msg) {
 		instance.client.sendMessage(msg);
 	}
@@ -66,6 +70,8 @@ public class NetworkManager {
 			handlePlayerKilledMessage((GamePlayerKilledMessage)bm);
 		else if(bm.type == GameMessage.GAME_STATS_UPDATE)
 			handleStatsUpdate((GameStatsUpdateMessage)bm);
+		else if(bm.type == GameMessage.GAME_SHIELD_MESSAGE)
+			handleShieldMessage((GameShieldMessage)bm);
 	}
 	
 	private void handleStatsUpdate(GameStatsUpdateMessage msg) {
@@ -112,4 +118,11 @@ public class NetworkManager {
 		int exp = Level.getMobExperienceForLevel(a.getLevel().getLevel()) * 2;
 		b.getLevel().addExperince(exp);
 	}
+	
+	private void handleShieldMessage(GameShieldMessage msg) {
+		Player a = (Player)dManager.getActorByID(msg.ID);
+		a.getSpellManager().activateShield(ElementType.values()[msg.shieldID]);
+	}
+
+
 }

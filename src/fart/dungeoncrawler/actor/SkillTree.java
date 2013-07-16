@@ -7,18 +7,14 @@ import java.util.ArrayList;
 
 import fart.dungeoncrawler.CollisionDetector;
 import fart.dungeoncrawler.Controller;
-import fart.dungeoncrawler.IDrawable;
-import fart.dungeoncrawler.IUpdateable;
 
-public class SkillTree implements IDrawable, IUpdateable {
+public class SkillTree {
 	private Actor owner;
 	private CollisionDetector collision;
 	
 	private ArrayList<Skill> fireSkills;
 	private ArrayList<Skill> waterSkills;
 	private ArrayList<Skill> earthSkills;
-	
-	private static final Color BG_COLOR = Color.LIGHT_GRAY;
 	
 	public SkillTree(Actor owner, Controller controller, CollisionDetector collision) {
 		this.owner = owner;
@@ -87,35 +83,6 @@ public class SkillTree implements IDrawable, IUpdateable {
 	public ArrayList<Skill> getFireSkills() { return fireSkills; }
 	public ArrayList<Skill> getWaterSkills() { return waterSkills; }
 	public ArrayList<Skill> getEarthSkills() { return earthSkills; }
-	
-	@Override
-	public void update(float elapsed) {
-		
-	}
-
-	@Override
-	public void draw(Graphics2D graphics) {
-		graphics.setColor(BG_COLOR);
-		graphics.fillRect(32 * 8, 32 * 5, 32 * 16, 32 * 10);
-		
-		for(int i = 0; i < fireSkills.size(); i++) {
-			Skill s = fireSkills.get(i);
-			
-			graphics.drawImage(s.spell.icon, 32 * 11 + i * 32 * 3, 32 * 7, null);
-		}
-		
-		for(int i = 0; i < waterSkills.size(); i++) {
-			Skill s = waterSkills.get(i);
-			
-			graphics.drawImage(s.spell.icon, 32 * 11 + i * 32 * 3, (int)(32 * 9.5f), null);
-		}
-		
-		for(int i = 0; i < earthSkills.size(); i++) {
-			Skill s = earthSkills.get(i);
-			
-			graphics.drawImage(s.spell.icon, 32 * 11 + i * 32 * 3, 32 * 12, null);
-		}
-	}
 	
 	class Skill {
 		private Spell spell;

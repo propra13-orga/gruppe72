@@ -128,6 +128,14 @@ public class Player extends Actor implements IUpdateable {
 		this.isInNetwork = isInNetwork;
 	}
 	
+	/**
+	 * Returns the spellmanager.
+	 * @return
+	 */
+	public SpellManager getSpellManager() {
+		return spellManager;
+	}
+	
 	@Override
 	public void levelUp() {
 		health.fillHealth();
@@ -142,6 +150,7 @@ public class Player extends Actor implements IUpdateable {
 	public void renewHealthMana() {
 		health.setMaxHealh(stats.getStamina() * Stats.HEALTH_PER_STAM);
 		mana.setMaxMana(stats.getWill() * Stats.MANA_PER_WILL);
+		spellManager.addShields();
 	}
 	
 	/**
@@ -551,16 +560,10 @@ public class Player extends Actor implements IUpdateable {
 			statusbar.draw(graphics);
 		}
 		
-		if(controller.isPressed(KeyEvent.VK_P))
-			skillTree.draw(graphics);
 		if(isInNetwork && controllerActive) {
 			if(controller.isPressed(KeyEvent.VK_T))
 				DeathMatchStatistics.getInstance().draw(graphics);
 		}
-		/*if(!isInNetwork) {
-			if(controllerActive && controller.isPressed(KeyEvent.VK_T))
-				questLog.draw(graphics);
-		}*/
 	}
 
 	@Override

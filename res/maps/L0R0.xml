@@ -110,6 +110,9 @@
                         <actor id="4">
                                 <positionX>6</positionX>
                                 <positionY>1</positionY>
+				<mapTo>res/maps/L1R0.xml</mapTo>
+				<toX>13</toX>
+				<toY>13</toY>
                         </actor>
                         <actor id="5">
                                 <positionX>7</positionX>
