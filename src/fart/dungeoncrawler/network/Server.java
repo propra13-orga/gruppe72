@@ -5,10 +5,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import fart.dungeoncrawler.network.messages.BaseMessage;
 import fart.dungeoncrawler.network.messages.game.GameMessage;
 import fart.dungeoncrawler.network.messages.lobby.*;
 
+/**
+ * The host creates the server-class. It is responsible for managing all the network traffic,
+ * synchronizing players and handling the gamelogic (like damage-calculation).
+ * @author Felix
+ *
+ */
 public class Server {
 	public static final int PORT = 3333;
 	public static final int MAX_PLAYERS = 4;
@@ -20,17 +25,18 @@ public class Server {
 	private ArrayList<ServerClient> clients;
 	private ConnectionAccepter accepter;
 	
-	private boolean isInLobby;
-	private boolean isInGame;
 	private ServerGameLogic gameLogic;
 	
+	/**
+	 * 
+	 */
 	private Server() {
 		clients = new ArrayList<ServerClient>();
 		isOnline = true;
 		
 		try {
 			socket = new ServerSocket(PORT);
-			isInLobby = true;
+			//isInLobby = true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -41,15 +47,27 @@ public class Server {
 		}
 	}
 	
+	/**
+	 * Used from outside of the server to determine if a player is hosting the game or specifying if 
+	 * a part of the logic should be calculated. 
+	 * @return
+	 */
 	public static boolean isOnline() {
 		return isOnline;
 	}
 	
+	/**
+	 * Creates the (singleton-)instance
+	 */
 	public static void createInstance() {
 		if(instance == null)
 			instance = new Server();
 	}
 	
+	/**
+	 * Returns the (singleton-)instance
+	 * @return instance
+	 */
 	public static Server getInstance() {
 		if(instance == null)
 			createInstance();
@@ -57,18 +75,18 @@ public class Server {
 		return instance;
 	}
 	
-	public boolean isInLobby() {
-		return isInLobby;
-	}
-	
-	public boolean isInGame() {
-		return isInGame;
-	}
-	
+	/**
+	 * Gets the server-socket
+	 * @return
+	 */
 	public ServerSocket getSocket() {
 		return socket;
 	}
 	
+	/**
+	 * Adds a client to the list of all clients.
+	 * @param client
+	 */
 	public void addClient(ServerClient client) {
 		clients.add(client);
 		
@@ -106,6 +124,10 @@ public class Server {
 		return true;
 	}
 	
+	/**
+	 * Processes all lobby-messages.
+	 * @param bm
+	 */
 	public void processMessage(LobbyMessage bm) {
 		//CLIENT CHANGED HIS READY-STATE - INFORM ALL CLIENTS
 		if(bm.messageType == LobbyMessage.LOBBY_CLIENT_READY) {
@@ -141,32 +163,32 @@ public class Server {
 		}
 	}
 	
+	/**
+	 * Sends an incoming game-message to the ServerGameLogic, where it is processed.
+	 * @param msg
+	 */
 	public void processMessage(GameMessage msg) {
 		gameLogic.processGameMessage(msg);
 	}
 	
+	/**
+	 * Starts a new game
+	 */
 	private void startNewGame() {
 		ServerClient[] c = new ServerClient[clients.size()];
 		clients.toArray(c);
 		gameLogic = new ServerGameLogic(this, c);
 		gameLogic.startNewGame();
-		isInLobby = false;
-		isInGame = true;
+		/*isInLobby = false;
+		isInGame = true;*/
 		
 		gameLogic.start();
 	}
 	
-	public void broadcastMessage(BaseMessage message) {
-		for(ServerClient c : clients) {
-			try {
-				c.getOutput().writeObject(message);
-				c.getOutput().flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
+	/**
+	 * Broadcasts a LobbyMessage to all clients.
+	 * @param message
+	 */
 	public void broadcastMessage(LobbyMessage message) {
 		for(ServerClient c : clients) {
 			try {
@@ -178,6 +200,10 @@ public class Server {
 		}
 	}
 	
+	/**
+	 * Broadcasts a GameMessage to all clients. 
+	 * @param message
+	 */
 	public void broadcastMessage(GameMessage message) {
 		for(ServerClient c : clients) {
 			try {
@@ -213,10 +239,9 @@ public class Server {
 			}
 		}
 		
-		public void connectionLost() {
-			numConnections -= 1;
-		}
-		
+		/**
+		 * Listens for incoming connections. 
+		 */
 		public void run() {
 			System.out.println("[Waiting for incoming connections...]");
 			while(keepAccepting) {
@@ -228,11 +253,9 @@ public class Server {
 						if(c.isAccepted()) {
 							System.out.println("[Added new client to the list.]");
 							c.start();
-							//c.run();
 							
 							LobbyJoinedMessage ljm = new LobbyJoinedMessage(new ClientInfo(c));
 							broadcastMessage(ljm);
-							//broadcastJoined(c);
 							server.addClient(c);
 						} else {
 							c = null;

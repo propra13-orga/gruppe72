@@ -21,7 +21,7 @@ import fart.dungeoncrawler.Tilemap;
 import nu.xom.*;
 
 /**
- * 
+ * This is the main editor panel which handles userinput and saving/loading of maps. 
  * @author Timo
  *
  */
@@ -60,6 +60,9 @@ public class MEPanel extends JPanel implements MouseInputListener
 		init();
 	}
 	
+	/**
+	 * Initializes a new map.
+	 */
 	public void init()
 	{
 		mapToInfoList = new HashMap<Point, MapToInfo>();
@@ -84,6 +87,9 @@ public class MEPanel extends JPanel implements MouseInputListener
 		repaint();
 	}
 	
+	/**
+	 * Draws everything inside the panel.
+	 */
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -119,6 +125,11 @@ public class MEPanel extends JPanel implements MouseInputListener
 		g2d.drawRect((int)highlight.getX()-1, (int)highlight.getY()-1, me.TILE_SIZE, me.TILE_SIZE);
 	}
 	
+	/**
+	 * Saves the current map to disc in XML-format.
+	 * @param outputFile name of the output file
+	 * @param mapName name of the map
+	 */
 	public void saveMap(String outputFile, String mapName)
 	{
 		// Descriptions
@@ -504,6 +515,10 @@ public class MEPanel extends JPanel implements MouseInputListener
 		}
 	}
 	
+	/**
+	 * Loads a map in the editor.
+	 * @param inputFile path to the file that should be loaded
+	 */
 	public void loadMap(String inputFile)
 	{
 		File source = new File(inputFile);

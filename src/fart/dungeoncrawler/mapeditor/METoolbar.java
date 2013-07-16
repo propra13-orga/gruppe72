@@ -8,6 +8,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * This is the toolbar in which all objects can be chosen to be put on the map. 
+ * @author Timo
+ *
+ */
 @SuppressWarnings("serial")
 public class METoolbar extends JPanel
 {
@@ -41,6 +46,9 @@ public class METoolbar extends JPanel
 		init();
 	}
 	
+	/**
+	 * Initializes the toolbar and adds all textures to the ImageManager.
+	 */
 	public void init()
 	{
 		// Add Objects to ImageManager
@@ -142,21 +150,35 @@ public class METoolbar extends JPanel
 		}
 	}
 	
+	/**
+	 * Returns the width of the toolbar.
+	 */
 	public int getWidth()
 	{
 		return this.width;
 	}
 	
+	/**
+	 * Returns the height of the toolbar. 
+	 */
 	public int getHeight()
 	{
 		return this.height;
 	}
 
+	/**
+	 * Returns the ID of the current selection.
+	 * @return
+	 */
 	public String getCurrentID()
 	{
 		return toolpages.get(curPage).getCurrentID();
 	}
 	
+	/**
+	 * Changes to a new category.
+	 * @param pageNr ID of the category to show
+	 */
 	public void changeView(int pageNr)
 	{
 		if((pageNr >= 0) && (pageNr < toolpages.size()))

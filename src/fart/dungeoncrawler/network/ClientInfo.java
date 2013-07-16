@@ -2,6 +2,12 @@ package fart.dungeoncrawler.network;
 
 import java.io.Serializable;
 
+/**
+ * ClientInfo stores all data that is important for the other clients. A list with one ClientInfo per client
+ * is sent to every joining player and permanently updated.
+ * @author Felix
+ *
+ */
 public class ClientInfo implements Serializable {
 	private static final long serialVersionUID = -1394412798338935906L;
 	
@@ -9,12 +15,20 @@ public class ClientInfo implements Serializable {
 	public byte ID;
 	public boolean ready;
 	
+	/**
+	 * Creates a ClientInfo from a given ServerClient.
+	 * @param client serverClient
+	 */
 	public ClientInfo(ServerClient client)  {
 		name = client.getClientname();
 		ID = client.getID();
 		ready = client.isReady();
 	}
 	
+	/**
+	 * Creates a ClientInfo from a given Client.
+	 * @param client client
+	 */
 	public ClientInfo(Client client)  {
 		name = client.getClientname();
 		ID = client.getID();

@@ -7,17 +7,31 @@ import java.util.ArrayList;
 
 import fart.dungeoncrawler.Game;
 import fart.dungeoncrawler.enums.GameState;
-import fart.dungeoncrawler.network.messages.BaseMessage;
 import fart.dungeoncrawler.network.messages.JoinClientMessage;
 import fart.dungeoncrawler.network.messages.JoinServerMessage;
 import fart.dungeoncrawler.network.messages.game.*;
 import fart.dungeoncrawler.network.messages.lobby.*;
 
-public class Client extends Thread{
+/**
+ * The Client-class is used in networkgames to connect to the server. It is responsible for
+ * establishing the connection and sending and receiving data to/from the server. Receiving
+ * data runs in its own Thread. 
+ * @author Felix
+ *
+ */
+public class Client extends Thread {
 	private byte ID;
+	/**
+	 * Gets the client ID. 
+	 * @return unique ID
+	 */
 	public byte getID() { return ID; }
 	
 	private String name;
+	/**
+	 * Gets the client name entered before connecting to the server.
+	 * @return client name
+	 */
 	public String getClientname() { return name; }
 	
 	private Socket server;
@@ -29,10 +43,18 @@ public class Client extends Thread{
 	private boolean ready;
 	private Game game;
 	
+	/**
+	 * 
+	 * @param lobby Lobby to join before the game starts
+	 * @param game An instance of the game
+	 * @param ip Server-IP
+	 * @param name name of the client
+	 */
 	public Client(Lobby lobby, Game game, String ip, String name) {
 		this.lobby = lobby;
 		ready = false;
 		this.game = game;
+		this.name = name;
 		
 		try {
 			InetAddress adr = InetAddress.getByName(ip);
@@ -69,6 +91,12 @@ public class Client extends Thread{
 		}
 	}
 	
+	/**
+	 * 
+	 * @param name client name
+	 * @param lobby The lobby to join before the game is started
+	 * @param game An instance of the game
+	 */
 	public Client(String name, Lobby lobby, Game game) {
 		this.name = name;
 		this.lobby = lobby;
@@ -109,22 +137,41 @@ public class Client extends Thread{
 		}
 	}
 	
+	/**
+	 * Gets a list of all clients currently connected to the server
+	 * @return list of all clients
+	 */
 	public ArrayList<ClientInfo> getAllClients() {
 		return allClients;
 	}
 	
+	/**
+	 * Gets the "ready-state". Game can only be started if all players are ready.
+	 * @return ready
+	 */
 	public boolean isReady() {
 		return ready;
 	}
 	
+	/**
+	 * Flips the "ready-state"
+	 */
 	public void changeReady() {
 		ready = !ready;
 	}
 	
+	/**
+	 * Sets the "ready-state".
+	 * @param ready new state
+	 */
 	public void setReady(boolean ready) {
 		this.ready = ready;
 	}
 	
+	/**
+	 * Sends a lobby-message to the server. 
+	 * @param msg message to send
+	 */
 	public void sendMessage(LobbyMessage msg) {
 		try {
 			output.writeObject(msg);
@@ -134,15 +181,10 @@ public class Client extends Thread{
 		}
 	}
 	
-	public void sendMessage(BaseMessage msg) {
-		try {
-			output.writeObject(msg);
-			output.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
+	/**
+	 * Sends a game-message to the server.
+	 * @param msg message to send
+	 */
 	public void sendMessage(GameMessage msg) {
 		try {
 			output.writeObject(msg);
@@ -152,6 +194,9 @@ public class Client extends Thread{
 		}
 	}
 	
+	/**
+	 * Receives all incoming messages in a loop. 
+	 */
 	public void run() {
 		while(accepted) {
 			try {
@@ -170,6 +215,10 @@ public class Client extends Thread{
 		}
 	}
 	
+	/**
+	 * Received lobby messages are handled in this function. 
+	 * @param bm lobby-message
+	 */
 	private void processMessage(LobbyMessage bm) {
 		int type = bm.messageType;
 		
@@ -217,13 +266,5 @@ public class Client extends Thread{
 			
 			game.setGameState(GameState.InGame);
 		}
-	}
-
-	public ObjectOutputStream getOutputStream() {
-		return output;
-	}
-
-	public ObjectInputStream getInputStream() {
-		return input;
 	}
 }

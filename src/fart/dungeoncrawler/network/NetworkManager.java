@@ -5,8 +5,8 @@ import fart.dungeoncrawler.enums.*;
 import fart.dungeoncrawler.network.messages.game.*;
 
 /**
- * A Singleton-class. Clients use this manager to handle all incoming messages and send
- * messages to the server. 
+ * Clients use this manager to handle all incoming game-messages and send
+ * game-messages to the server. Singleton-class. 
  * @author Felix
  *
  */
@@ -23,40 +23,82 @@ public class NetworkManager {
 		DeathMatchStatistics.createInstance(client.getAllClients());
 	}
 	
+	/**
+	 * Creates and initializes a new instance of the NetworkManager. 
+	 * @param client
+	 * @param dManager
+	 */
 	public static void createInstance(Client client, DynamicObjectManager dManager) {
 		instance = new NetworkManager(client, dManager);
 	}
 	
+	/**
+	 * Returns the (singleton-)instance.
+	 * @return instance
+	 */
 	public static NetworkManager getInstance() {
 		return instance;
 	}
 	
-	public static void sendPositionMessage(Actor a) {
-		GamePositionMessage msg = new GamePositionMessage(a);
+	/**
+	 * Creates and sends a GamePositionMessage to the server. 
+	 * @param actor
+	 */
+	public static void sendPositionMessage(Actor actor) {
+		GamePositionMessage msg = new GamePositionMessage(actor);
 		sendMessage(msg);
 	}
 	
-	public static void sendSpellMessage(Player p, int spellIndex) {
-		GameSpellMessage msg = new GameSpellMessage(p, spellIndex);
+	/**
+	 * Creates and sends a GameSpellMessage to the server. As soon as a player casts a spell
+	 * the server is notified.
+	 * @param player
+	 * @param spellIndex
+	 */
+	public static void sendSpellMessage(Player player, int spellIndex) {
+		GameSpellMessage msg = new GameSpellMessage(player, spellIndex);
 		sendMessage(msg);
 	}
 	
-	public static void sendAttackMessage(Player a) {
-		sendMessage(new GameAttackMessage(a));
+	/**
+	 * Creates and sends a GameAttackMessage to the server. As soon as a player attacks the
+	 * server is notified
+	 * @param player
+	 */
+	public static void sendAttackMessage(Player player) {
+		sendMessage(new GameAttackMessage(player));
 	}
 	
-	public static void sendStatsMessage(Player a) {
-		sendMessage(new GameStatsUpdateMessage(a));
+	/**
+	 * Creates and sends a GameStatsUpdateMessage to the server after the stats of the player
+	 * have changed.
+	 * @param player
+	 */
+	public static void sendStatsMessage(Player player) {
+		sendMessage(new GameStatsUpdateMessage(player));
 	}
 	
+	/**
+	 * Creates and sends a message indicating that a player has activated a shield. 
+	 * @param p
+	 */
 	public static void sendShieldMessage(Player p) {
 		sendMessage(new GameShieldMessage(p));
 	}
 	
+	/**
+	 * Sends a GameMessage to the server. Private because it is only used inside this class. To send a
+	 * GameMessage use a specific function like sendPositionMessage()
+	 * @param msg the message to send
+	 */
 	private static void sendMessage(GameMessage msg) {
 		instance.client.sendMessage(msg);
 	}
 	
+	/**
+	 * All incoming GameMessages are passed here to get processed. 
+	 * @param bm game-message to process
+	 */
 	public void processMessage(GameMessage bm) {
 		if(bm.type == GameMessage.GAME_POSITION_MESSAGE)
 			handleGamePositionMessage((GamePositionMessage)bm);
@@ -74,16 +116,28 @@ public class NetworkManager {
 			handleShieldMessage((GameShieldMessage)bm);
 	}
 	
+	/**
+	 * Handles a StatsUpdate
+	 * @param msg
+	 */
 	private void handleStatsUpdate(GameStatsUpdateMessage msg) {
 		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.setStats(msg.newStats);
 	}
 
+	/**
+	 * Handles an AttackMessage
+	 * @param msg
+	 */
 	private void handleAttackMessage(GameAttackMessage msg) {
 		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.receivedAttackMsg();
 	}
 
+	/**
+	 * Handles a PositionUpdate
+	 * @param msg
+	 */
 	private void handleGamePositionMessage(GamePositionMessage msg) {
 		Actor a = dManager.getActorByID(msg.ID);
 		a.setScreenPosition(msg.position);
@@ -94,11 +148,19 @@ public class NetworkManager {
 		}
 	}
 	
+	/**
+	 * Handles a SpellMessage
+	 * @param msg
+	 */
 	private void handleSpellMessage(GameSpellMessage msg) {
 		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.spellAttack(msg.spellIndex);
 	}
 	
+	/**
+	 * Handles a HitMessage. 
+	 * @param msg
+	 */
 	private void handleHitMessage(GameHitMessage msg) {
 		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.getHealth().setHealth(msg.health);
@@ -107,6 +169,10 @@ public class NetworkManager {
 			dManager.removeProjectileInNetwork(a);
 	}
 	
+	/**
+	 * Handles a PlayerKilledMessage. 
+	 * @param msg
+	 */
 	private void handlePlayerKilledMessage(GamePlayerKilledMessage msg) {
 		//Terminate the killed player
 		Player a = (Player)dManager.getActorByID(msg.deadID);
@@ -119,10 +185,12 @@ public class NetworkManager {
 		b.getLevel().addExperince(exp);
 	}
 	
+	/**
+	 * Handles a ShieldMessage and activates the players shield. 
+	 * @param msg
+	 */
 	private void handleShieldMessage(GameShieldMessage msg) {
 		Player a = (Player)dManager.getActorByID(msg.ID);
 		a.getSpellManager().activateShield(ElementType.values()[msg.shieldID]);
 	}
-
-
 }

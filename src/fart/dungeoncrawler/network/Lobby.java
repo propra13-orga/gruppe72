@@ -3,7 +3,6 @@ package fart.dungeoncrawler.network;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import fart.dungeoncrawler.Controller;
 import fart.dungeoncrawler.IDrawable;
@@ -12,6 +11,12 @@ import fart.dungeoncrawler.network.messages.lobby.LobbyChatMessage;
 import fart.dungeoncrawler.network.messages.lobby.LobbyClientReadyMessage;
 import fart.dungeoncrawler.network.messages.lobby.LobbyStartGameRequest;
 
+/**
+ * All players currently connected to the server meet in the lobby before the game starts.
+ * Only the host can start the game when all clients are ready.
+ * @author Felix
+ *
+ */
 public class Lobby implements IDrawable {
 	public static final String LOBBY_SAYS = "** LOBBY ** - ";
 	
@@ -25,6 +30,11 @@ public class Lobby implements IDrawable {
 	private ArrayList<ClientInfo> clients;
 	private ArrayList<String> chatMessages;
 	
+	/**
+	 * Creates a lobby instance.
+	 * @param controller keyboard
+	 * @param isServer 
+	 */
 	public Lobby(Controller controller, boolean isServer) {
 		clients = new ArrayList<ClientInfo>();
 		this.controller = controller;
@@ -35,23 +45,42 @@ public class Lobby implements IDrawable {
 		text = new StringBuilder();
 	}
 	
+	/**
+	 * Returns the client on this machine.
+	 * @return client
+	 */
 	public Client getSelfClient() {
 		return self;
 	}
 	
+	/**
+	 * Sets the client on this machine.
+	 * @param client
+	 */
 	public void setSelfClient(Client c) { 
 		self = c; 
 		selfInfo = new ClientInfo(c);
 	}
 	
+	/**
+	 * Adds a new client to the list.
+	 * @param client the new client
+	 */
 	public void addOther(ClientInfo client) {
 		clients.add(client);
 	}
 	
+	/**
+	 * Returns the number of all clients connected to the lobby.
+	 * @return number of clients
+	 */
 	public int getNumPlayers() {
 		return clients.size();
 	}
 	
+	/**
+	 * Flips the state of the ready-flag and sends a message to the server.
+	 */
 	public void changeReady() {
 		self.changeReady();
 		selfInfo.ready = self.isReady();
@@ -60,6 +89,12 @@ public class Lobby implements IDrawable {
 		self.sendMessage(lcr);
 	}
 	
+	/**
+	 * Sets the ready-flag for a specific client. This function is called after receiving a message
+	 * from the server that indicates a change in a clients ready-flag.
+	 * @param clientID ID of the client that changed his flag
+	 * @param ready ready-flag
+	 */
 	public void setClientReady(byte clientID, boolean ready) {
 		for(int i = 0; i < clients.size(); i++) {
 			if(clients.get(i).ID == clientID) {
@@ -67,6 +102,10 @@ public class Lobby implements IDrawable {
 			}
 		}
 	}
+	
+	/**
+	 * Handles controller-input.
+	 */
 	public void update() {
 		if(!isWriting) {
 			if(controller.justPressed(KeyEvent.VK_R)) {
@@ -102,7 +141,6 @@ public class Lobby implements IDrawable {
 			if(controller.justPressed(KeyEvent.VK_UNDERSCORE)) //unterstrich
 				  text.append("_");
 			
-			//TODO: Zahlen, Sonderzeichen,
 			if(controller.justPressed(KeyEvent.VK_ENTER))
 				ChatMessage();
 			
@@ -111,6 +149,9 @@ public class Lobby implements IDrawable {
 		}
 	}
 	
+	/**
+	 * Sends a chat-message to the server which broadcasts this message.
+	 */
 	private void ChatMessage() {
 		isWriting = false;
 		StringBuilder message = new StringBuilder();
@@ -119,6 +160,10 @@ public class Lobby implements IDrawable {
 		self.sendMessage(p);
 	}
 	
+	/**
+	 * Handles an incoming chat-message
+	 * @param message
+	 */
 	public void MessageReceived(LobbyChatMessage message) {
 		chatMessages.add(message.text);
 	}
@@ -141,7 +186,6 @@ public class Lobby implements IDrawable {
 			graphics.drawString(ready, 32 * 6, 32 + i * 16);
 		}
 		
-		//TODO: Nachricht welche angezeigt wird
 		if(isWriting) {
 			graphics.drawString(text.toString(), 32, 32  * 14);
 		}

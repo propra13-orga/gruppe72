@@ -2,6 +2,12 @@ package fart.dungeoncrawler.network.messages.lobby;
 
 import java.io.Serializable;
 
+/**
+ * This is the abstract base class for all messages that are sent while being in the lobby. It only contains
+ * a flag that indicates the type of the message.
+ * @author Felix
+ *
+ */
 public class LobbyMessage implements Serializable {
 	private static final long serialVersionUID = -8166545479098011185L;
 	
@@ -15,6 +21,10 @@ public class LobbyMessage implements Serializable {
 	
 	public byte messageType;
 	
+	/**
+	 * Creates a message and applies the messageType
+	 * @param messageType
+	 */
 	public LobbyMessage(byte messageType) {
 		this.messageType = messageType;
 	}

@@ -9,6 +9,11 @@ import Utils.Vector2;
 
 import fart.dungeoncrawler.IDrawable;
 
+/**
+ * A class for storing and drawing the kill/death-statistics in a DeathMatch-game. 
+ * @author Felix
+ *
+ */
 public class DeathMatchStatistics implements IDrawable {
 	private static DeathMatchStatistics instance;
 	
@@ -21,6 +26,10 @@ public class DeathMatchStatistics implements IDrawable {
 	private Integer[] kills;
 	private Integer[] deaths;
 	
+	/**
+	 * A private constructor that initializes the statistics. Singleton - use getInstance()
+	 * @param infos
+	 */
 	private DeathMatchStatistics(ArrayList<ClientInfo> infos) {
 		this.infos = new ClientInfo[infos.size()];
 		infos.toArray(this.infos);
@@ -33,14 +42,27 @@ public class DeathMatchStatistics implements IDrawable {
 		}
 	}
 	
+	/**
+	 * Creates a new instance of the statistics. 
+	 * @param infos ClientInfos from all clients. 
+	 */
 	public static void createInstance(ArrayList<ClientInfo> infos) {
 		instance = new DeathMatchStatistics(infos);
 	}
 	
+	/**
+	 * Returns the (singleton-)instance.
+	 * @return instance
+	 */
 	public static DeathMatchStatistics getInstance() {
 		return instance;
 	}
 	
+	/**
+	 * Updates the statistics after a kill.
+	 * @param killerID clientID of the killer
+	 * @param deadID clientID of the killed
+	 */
 	public void killed(int killerID, int deadID) {
 		kills[killerID] += 1;
 		deaths[deadID] += 1;

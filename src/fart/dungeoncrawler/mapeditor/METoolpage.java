@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * This class represents one category of the toolbar.
+ * @author Timo
+ *
+ */
 @SuppressWarnings("serial")
 public class METoolpage extends JPanel implements MouseListener
 {
@@ -22,6 +27,11 @@ public class METoolpage extends JPanel implements MouseListener
 	private int curSelection;
 	private Point highlight;
 	
+	/**
+	 * Creates an empty toolpage. 
+	 * @param mapeditor instance of the editor
+	 * @param toolbar instance of the toolbar
+	 */
 	public METoolpage(MapEditor mapeditor, METoolbar toolbar)
 	{
 		super();
@@ -45,6 +55,9 @@ public class METoolpage extends JPanel implements MouseListener
 		init();
 	}
 	
+	/**
+	 * Initializes an empty page. 
+	 */
 	public void init()
 	{
 		tools = new ArrayList<JLabel>();
@@ -52,6 +65,10 @@ public class METoolpage extends JPanel implements MouseListener
 		highlight = new Point(0,0);
 	}
 	
+	/**
+	 * Adds a tool to the list of all tools. 
+	 * @param tool
+	 */
 	public void addTool(JLabel tool)
 	{
 		tool.setLocation(toolbar.getWidth()/2-me.TILE_SIZE/2, (me.TILE_SIZE+16)*tools.size()+16);
@@ -73,11 +90,19 @@ public class METoolpage extends JPanel implements MouseListener
 		g2d.drawRect((int)highlight.getX()-2, (int)highlight.getY()-2, me.TILE_SIZE+3, me.TILE_SIZE+3);
 	}
 	
+	/**
+	 * Returns the ID of the current selection.
+	 * @return
+	 */
 	public String getCurrentID()
 	{
 		return tools.get(curSelection).getName();
 	}
 	
+	/**
+	 * Sets the current selection.
+	 * @param select index of the selected tool
+	 */
 	public void setCurrentSelection(int select)
 	{
 		curSelection = select;

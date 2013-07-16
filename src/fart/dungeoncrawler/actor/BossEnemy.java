@@ -5,18 +5,30 @@ import java.awt.Graphics2D;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.Random;
 
 import Utils.Vector2;
 import fart.dungeoncrawler.*;
 import fart.dungeoncrawler.enums.*;
 
+/**
+ * The class represents a boss enemy. Bosses can attack and cast spells.
+ * @author Timo
+ *
+ */
 public class BossEnemy extends BaseEnemy {
 	private DynamicObjectState curState;
 	
 	private String mapToName;
 	private Vector2 mapToPos;
 	
+	/**
+	 * Creates the boss from the description. 
+	 * @param game instance of the game
+	 * @param position position in screenspace
+	 * @param enemyDesc enemydescription
+	 * @param mapToName path to the map to teleport to after death
+	 * @param mapToPos tileposition to teleport to
+	 */
 	public BossEnemy(Game game, Vector2 position, EnemyDescription enemyDesc,
 						String mapToName, Vector2 mapToPos) {
 		super(game, position, enemyDesc);
@@ -31,6 +43,11 @@ public class BossEnemy extends BaseEnemy {
 		setCurrentAnimation(curState);
 	}
 	
+	/**
+	 * Creates the boss from a CheckPointInfo
+	 * @param game instance of the game
+	 * @param info the CheckPointInfo
+	 */
 	public BossEnemy(Game game, CheckPointInfo info) {
 		super(game, info);
 		
@@ -39,6 +56,9 @@ public class BossEnemy extends BaseEnemy {
 		setCurrentAnimation(curState);
 	}
 	
+	/**
+	 * Creates the attacks.
+	 */
 	private void buildAttacks() {
 		HashMap<Heading, Animation> simpleAttackAnim = new HashMap<Heading, Animation>();
 		BufferedImage[] iSALeft = new BufferedImage[1];
@@ -76,6 +96,9 @@ public class BossEnemy extends BaseEnemy {
 		simpleAttack = new Attack(15, simpleAttackAnim, /*atRects, */frameDur, this);
 	}
 	
+	/**
+	 * Creates the spells.
+	 */
 	private void buildSpell() {
 		spTex = new BufferedImage(32, 32, ColorSpace.TYPE_RGB);
 		Graphics2D g2d = (Graphics2D)spTex.getGraphics();
