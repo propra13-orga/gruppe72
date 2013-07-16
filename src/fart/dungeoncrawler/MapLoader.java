@@ -26,6 +26,7 @@ import nu.xom.*;
  * 		  5	SHOP NPC
  * 		  6 TALKING NPC
  * 		  7 CHECKPOINT
+ * 		  8 QUEST NPC
  * 
  * 		 ID	ITEM
  * 		------------------

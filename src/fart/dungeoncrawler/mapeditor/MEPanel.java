@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
@@ -33,6 +34,8 @@ public class MEPanel extends JPanel implements MouseInputListener
 	private char walls[][];
 	private int objects[][];
 	private Point highlight = new Point(0,0);
+	
+	private HashMap<Point, MapToInfo> mapToInfoList;
 	
 	public MEPanel(MapEditor mapeditor, ImageManager imgmgr)
 	{
@@ -59,6 +62,8 @@ public class MEPanel extends JPanel implements MouseInputListener
 	
 	public void init()
 	{
+		mapToInfoList = new HashMap<Point, MapToInfo>();
+		
 		walls = new char[me.WIDTH][me.HEIGHT];
 		objects = new int[me.WIDTH][me.HEIGHT];
 		
@@ -256,10 +261,25 @@ public class MEPanel extends JPanel implements MouseInputListener
 		description.appendChild(desc_element);
 		desc_list.add(description);
 				
-		// NPCshop Description
+		// NPCtalking Description
 		description = new Element("actor");
 		description.addAttribute(new Attribute("name", "npctalking"));
 		description.addAttribute(new Attribute("id", "6"));
+		desc_spritesheet = new Element("spritesheet");
+		desc_spritesheet.appendChild("res/shop.png");
+		description.appendChild(desc_spritesheet);
+		desc_level = new Element("level");
+		desc_level.appendChild("1");
+		description.appendChild(desc_level);
+		desc_element = new Element("element");
+		desc_element.appendChild("0");
+		description.appendChild(desc_element);
+		desc_list.add(description);
+		
+		// NPCquest Description
+		description = new Element("actor");
+		description.addAttribute(new Attribute("name", "npcquest"));
+		description.addAttribute(new Attribute("id", "8"));
 		desc_spritesheet = new Element("spritesheet");
 		desc_spritesheet.appendChild("res/shop.png");
 		description.appendChild(desc_spritesheet);
@@ -340,17 +360,18 @@ public class MEPanel extends JPanel implements MouseInputListener
 								newObj.addAttribute(new Attribute("id", "0"));
 								newObj.appendChild(posX);
 								newObj.appendChild(posY);
+								
+								MapToInfo mapToInfo = mapToInfoList.get(new Point(i,j));
 								Element mapToName = new Element("mapToName");
-								//TODO: CUSTOM MAPTONAME AND POS
-								mapToName.appendChild("res/maps/L0R1.xml");
+								mapToName.appendChild(mapToInfo.getMapToName());
 								newObj.appendChild(mapToName);
 								
 								Element mapToX = new Element("mapToX");
-								mapToX.appendChild("1");
+								mapToX.appendChild(mapToInfo.getMapToX());
 								newObj.appendChild(mapToX);
 								
 								Element mapToY = new Element("mapToY");
-								mapToY.appendChild("1");
+								mapToY.appendChild(mapToInfo.getMapToY());
 								newObj.appendChild(mapToY);
 								
 								elObjects.appendChild(newObj);
@@ -559,19 +580,13 @@ public class MEPanel extends JPanel implements MouseInputListener
 				int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
 				objects[posX][posY] = Integer.parseInt(tmp2.getAttribute(0).getValue());
 				
-				// Load ALL the portals
-				/*if(tmp2.getAttribute(0).getValue().equals("0"))
+				if(objects[posX][posY] == 0)
 				{
-					int posX = Integer.parseInt(tmp2.getChildElements().get(0).getValue());
-					int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
-					String mapToName = tmp2.getChildElements().get(2).getValue();
-					int mapToX = Integer.parseInt(tmp2.getChildElements().get(3).getValue());
-					int mapToY = Integer.parseInt(tmp2.getChildElements().get(4).getValue());
-					
-					Portal portal = new Portal(game, pd.getSpritePath(), mapToName, new Vector2(posX,posY), new Vector2(mapToX,mapToY));
-					sManager.addObject(portal);
-					collision.addTrigger(portal);
-				}*/
+					mapToInfoList.put(new Point(posX, posY),
+										new MapToInfo(tmp2.getChildElements().get(2).getValue(),
+													tmp2.getChildElements().get(3).getValue(),
+													tmp2.getChildElements().get(4).getValue()));
+				}
 			}
 		}
 	}
@@ -600,12 +615,14 @@ public class MEPanel extends JPanel implements MouseInputListener
 			{
 				walls[tileX][tileY] = ' ';
 				objects[tileX][tileY] = -1;
+				mapToInfoList.remove(new Point(tileX, tileY));
 			}
 		}
 		else if(me.getMEToolbar().getCurrentID().equals("wall"))
 		{
 			walls[tileX][tileY] = '#';
 			objects[tileX][tileY] = -1;
+			mapToInfoList.remove(new Point(tileX, tileY));
 		}
 		else
 		{
@@ -616,14 +633,37 @@ public class MEPanel extends JPanel implements MouseInputListener
 				// only overwrite value, if it's not the border of the map
 				if((tileX!=0) && (tileX!=me.WIDTH-1) && (tileY!=0) && (tileY!=me.HEIGHT-1))
 				{
-					objects[tileX][tileY] = getID;
-					walls[tileX][tileY] = ' ';
+					// if object is a portal, get mapTo information
+					if(getID == 0)
+					{
+						MEObjectSettings st = new MEObjectSettings();
+						if(!st.wasCancelled() && st.getMapToInfo().isInformationValid())
+						{
+							mapToInfoList.remove(new Point(tileX, tileY));
+							objects[tileX][tileY] = getID;
+							walls[tileX][tileY] = ' ';
+							mapToInfoList.put(new Point(tileX, tileY), st.getMapToInfo());
+						}
+					}
+					else
+					{
+						objects[tileX][tileY] = getID;
+						walls[tileX][tileY] = ' ';
+						mapToInfoList.remove(new Point(tileX, tileY));
+					}
 				}
 				// except for portals, they are allowed everywhere
 				else if(getID == 0)
 				{
-					objects[tileX][tileY] = getID;
-					walls[tileX][tileY] = ' ';
+					// get mapTo information
+					MEObjectSettings st = new MEObjectSettings();
+					if(!st.wasCancelled() && st.getMapToInfo().isInformationValid())
+					{
+						mapToInfoList.remove(new Point(tileX, tileY));
+						objects[tileX][tileY] = getID;
+						walls[tileX][tileY] = ' ';
+						mapToInfoList.put(new Point(tileX, tileY), st.getMapToInfo());
+					}
 				}
 			}
 			catch(NumberFormatException ex) { }
