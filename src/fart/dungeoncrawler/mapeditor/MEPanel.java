@@ -414,6 +414,19 @@ public class MEPanel extends JPanel implements MouseInputListener
 								newObj.appendChild(posX);
 								newObj.appendChild(posY);
 								
+								MapToInfo mapToInfo = mapToInfoList.get(new Point(i,j));
+								Element mapToName = new Element("mapToName");
+								mapToName.appendChild(mapToInfo.getMapToName());
+								newObj.appendChild(mapToName);
+								
+								Element mapToX = new Element("mapToX");
+								mapToX.appendChild(mapToInfo.getMapToX());
+								newObj.appendChild(mapToX);
+								
+								Element mapToY = new Element("mapToY");
+								mapToY.appendChild(mapToInfo.getMapToY());
+								newObj.appendChild(mapToY);
+								
 								elActors.appendChild(newObj);
 							}
 							
@@ -580,7 +593,7 @@ public class MEPanel extends JPanel implements MouseInputListener
 				int posY = Integer.parseInt(tmp2.getChildElements().get(1).getValue());
 				objects[posX][posY] = Integer.parseInt(tmp2.getAttribute(0).getValue());
 				
-				if(objects[posX][posY] == 0)
+				if((objects[posX][posY] == 0) || (objects[posX][posY] == 4))
 				{
 					mapToInfoList.put(new Point(posX, posY),
 										new MapToInfo(tmp2.getChildElements().get(2).getValue(),
@@ -634,7 +647,7 @@ public class MEPanel extends JPanel implements MouseInputListener
 				if((tileX!=0) && (tileX!=me.WIDTH-1) && (tileY!=0) && (tileY!=me.HEIGHT-1))
 				{
 					// if object is a portal, get mapTo information
-					if(getID == 0)
+					if((getID == 0) || (getID == 4))
 					{
 						MEObjectSettings st = new MEObjectSettings();
 						if(!st.wasCancelled() && st.getMapToInfo().isInformationValid())

@@ -88,6 +88,7 @@ public class MEMenuBar extends JMenuBar implements ActionListener
 		
 		if(action.equals("newmap"))
 		{
+			setMapName("NewMap");
 			me.getMEPanel().init();
 		}
 		else if(action.equals("load"))

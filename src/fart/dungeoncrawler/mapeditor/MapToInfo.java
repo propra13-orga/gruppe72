@@ -44,7 +44,7 @@ public class MapToInfo
 			int coord = Integer.parseInt(mapToX);
 			
 			this.mapToX = mapToX;
-			if((coord >= 0) && (coord <= 32))
+			if((coord > 0) && (coord < 31))
 				validX = true;
 			else
 				validX = false;
@@ -62,7 +62,7 @@ public class MapToInfo
 			int coord = Integer.parseInt(mapToY);
 			
 			this.mapToY = mapToY;
-			if((coord >= 0) && (coord <= 32))
+			if((coord > 0) && (coord < 19))
 				validY = true;
 			else
 				validY = false;

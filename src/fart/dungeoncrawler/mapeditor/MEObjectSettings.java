@@ -6,9 +6,11 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 @SuppressWarnings("serial")
 public class MEObjectSettings extends JDialog implements ActionListener
@@ -16,6 +18,7 @@ public class MEObjectSettings extends JDialog implements ActionListener
 	private boolean cancelled;
 	private MapToInfo mapToInfo;
 	private JTextField tx_name, tx_posX, tx_posY;
+	private JFileChooser fc;
 	
 	public MEObjectSettings()
 	{
@@ -28,6 +31,8 @@ public class MEObjectSettings extends JDialog implements ActionListener
 	{
 		cancelled = true;
 		mapToInfo = new MapToInfo();
+		fc = new JFileChooser("res/maps/");
+		fc.setFileFilter(new FileNameExtensionFilter("Map files(*.xml)", "xml"));
 		
 		// create MainPanel
 		JPanel mainPanel = new JPanel();
@@ -43,9 +48,16 @@ public class MEObjectSettings extends JDialog implements ActionListener
 		int textFieldX = (int)(lb_name.getLocation().getX()+lb_name.getSize().getWidth())+10;
 		
 		tx_name = new JTextField();
-		tx_name.setSize(100, (int)tx_name.getPreferredSize().getHeight());
+		tx_name.setSize(80, (int)tx_name.getPreferredSize().getHeight());
 		tx_name.setLocation(textFieldX, 10);
 		mainPanel.add(tx_name);
+		
+		JButton btn_filechooser = new JButton("...");
+		btn_filechooser.setName("filechooser");
+		btn_filechooser.setSize(20,(int)tx_name.getPreferredSize().getHeight());
+		btn_filechooser.setLocation(textFieldX+80, 10);
+		btn_filechooser.addActionListener(this);
+		mainPanel.add(btn_filechooser);
 		
 		// add mapToX input option
 		JLabel lb_posX = new JLabel("mapToX:");
@@ -122,9 +134,11 @@ public class MEObjectSettings extends JDialog implements ActionListener
 			cancelled = true;
 			this.dispose();
 		}
-		else if(name.equals("search"))
+		else if(name.equals("filechooser"))
 		{
-			
+			int returnVal = fc.showOpenDialog(this);
+			if(returnVal == JFileChooser.APPROVE_OPTION)
+				tx_name.setText(fc.getSelectedFile().getPath());
 		}
 	}
 

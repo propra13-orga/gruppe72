@@ -1,171 +1,160 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0"?>
 <map>
-        <name>MapEditorSave</name>
-        <width>32</width>
-        <height>20</height>
-        <tiles xml:space="preserve">
-		################################
-		#                              #
-		#              #               #
-		#                              #
-		#              #               #
-		#              #               #
-		#                              #
-		#              #               #
-		#                              #
-		#              #               #
-		#                              #
-		#              #               #
-		#              #               #
-		#              ##              #
-		#                              #
-		#                              #
-		#                              #
-		#                              #
-		#                              #
-		################################
+	<name>L0R0</name>
+	<width>15</width>
+	<height>15</height>
+	<tiles>
+		###############
+		#             #
+		#             #
+		#             #
+		#   ##   ##  ##
+		#   ## # ##    
+		#      #      #
+		#    #####    #
+		#      #      #
+		#   ## # ######
+		#   ##   ######
+		#        ######
+		#        ######
+		#        ######
+		###############
 	</tiles>
-        <descriptions>
-                <object name="portal" id="0">
-                        <spritesheet>res/tp.png</spritesheet>
-                        <colWidth>32</colWidth>
-                        <colHeight>32</colHeight>
-                        <passable>1</passable>
-                </object>
-                <object name="goal" id="1">
-                        <spritesheet>res/goal.png</spritesheet>
-                        <colWidth>32</colWidth>
-                        <colHeight>32</colHeight>
-                        <passable>1</passable>
-                </object>
-                <object name="fire" id="2">
-                        <spritesheet>res/trap.png</spritesheet>
-                        <colWeight>32</colWeight>
-                        <colHeight>32</colHeight>
-                        <damage>1</damage>
-                </object>
-                <actor name="meleenemy" id="3">
-                        <spritesheet>res/enemy1.png</spritesheet>
-                        <isRanged>0</isRanged>
-                        <aggroRange>96</aggroRange>
-                        <attackRange>16</attackRange>
-                        <type>3</type>
-                        <level>1</level>
-                        <element>1</element>
-                </actor>
-                <actor name="bossenemy" id="4">
-                        <spritesheet>res/enemy1.png</spritesheet>
-                        <isRanged>0</isRanged>
-                        <aggroRange>96</aggroRange>
-                        <attackRange>32</attackRange>
-                        <type>3</type>
-                        <level>2</level>
-                        <element>1</element>
-                </actor>
-                <actor name="npcshop" id="5">
-                        <spritesheet>res/shop.png</spritesheet>
-                        <level>1</level>
-                        <element>0</element>
-                </actor>
-                <actor name="npctalking" id="6">
-                        <spritesheet>res/shop.png</spritesheet>
-                        <level>1</level>
-                        <element>0</element>
-                </actor>
-                <actor name="npcquest" id="8">
-                        <spritesheet>res/shop.png</spritesheet>
-                        <level>1</level>
-                        <element>0</element>
-                </actor>
-        </descriptions>
-        <gameobjects>
-                <objects>
-                        <object id="0">
-                                <positionX>1</positionX>
-                                <positionY>1</positionY>
-                                <mapToName>res/maps/L0R1.xml</mapToName>
-                                <mapToX>1</mapToX>
-                                <mapToY>1</mapToY>
-                        </object>
-                        <object id="1">
-                                <positionX>2</positionX>
-                                <positionY>1</positionY>
-                        </object>
-                        <object id="7">
-                                <positionX>4</positionX>
-                                <positionY>1</positionY>
-                        </object>
-                </objects>
-                <traps>
-                        <trap id="2">
-                                <positionX>3</positionX>
-                                <positionY>1</positionY>
-                        </trap>
-                </traps>
-                <actors>
-                        <actor id="3">
-                                <positionX>5</positionX>
-                                <positionY>1</positionY>
-                        </actor>
-                        <actor id="4">
-                                <positionX>6</positionX>
-                                <positionY>1</positionY>
-				<mapTo>res/maps/L1R0.xml</mapTo>
-				<toX>13</toX>
-				<toY>13</toY>
-                        </actor>
-                        <actor id="5">
-                                <positionX>7</positionX>
-                                <positionY>1</positionY>
-                        </actor>
-                        <actor id="6">
-                                <positionX>8</positionX>
-                                <positionY>1</positionY>
-                        </actor>
-                        <actor id="8">
-                                <positionX>3</positionX>
-                                <positionY>17</positionY>
-                                <level>0</level>
-                                <level>1</level>
-                        </actor>
-                </actors>
-                <items>
-                        <item id="100">
-                                <positionX>9</positionX>
-                                <positionY>1</positionY>
-                        </item>
-                        <item id="101">
-                                <positionX>10</positionX>
-                                <positionY>1</positionY>
-                        </item>
-                        <item id="102">
-                                <positionX>11</positionX>
-                                <positionY>1</positionY>
-                        </item>
-                        <item id="103">
-                                <positionX>12</positionX>
-                                <positionY>1</positionY>
-                        </item>
-                        <item id="104">
-                                <positionX>13</positionX>
-                                <positionY>1</positionY>
-                        </item>
-                        <item id="105">
-                                <positionX>14</positionX>
-                                <positionY>1</positionY>
-                        </item>
-                        <item id="106">
-                                <positionX>15</positionX>
-                                <positionY>1</positionY>
-                        </item>
-                        <item id="107">
-                                <positionX>16</positionX>
-                                <positionY>1</positionY>
-                        </item>
-                        <item id="108">
-                                <positionX>17</positionX>
-                                <positionY>1</positionY>
-                        </item>
-                </items>
-        </gameobjects>
+	<descriptions>
+		<object name="portal" id="0">
+			<spritesheet>res/tp.png</spritesheet>
+			<colWidth>32</colWidth>
+			<colHeight>32</colHeight>
+			<passable>1</passable>
+		</object>
+		<object name="goal" id="1">
+			<spritesheet>res/goal.png</spritesheet>
+			<colWidth>32</colWidth>
+			<colHeight>32</colHeight>
+			<passable>1</passable>
+		</object>
+		<trap name="fire" id="2">
+			<spritesheet>res/trap.png</spritesheet>
+			<colWidth>32</colWidth>
+			<colHeight>32</colHeight>
+			<damage>1</damage>
+		</trap>
+		<actor name="meleeenemy" id="3">
+			<spritesheet>res/player.png</spritesheet>
+			<isRanged>0</isRanged>
+			<aggroRange>96</aggroRange>
+			<attackRange>16</attackRange>
+			<type>3</type>
+			<maxHealth>1</maxHealth>
+			<maxMana>1</maxMana>
+		</actor>
+		<actor name="bossenemy" id="4">
+			<spritesheet>res/player.png</spritesheet>
+			<isRanged>0</isRanged>
+			<aggroRange>96</aggroRange>
+			<attackRange>32</attackRange>
+			<type>3</type>
+			<maxHealth>2</maxHealth>
+			<maxMana>1</maxMana>
+		</actor>
+		<actor name="npcshop" id="5">
+			<spritesheet>res/shop.png</spritesheet>
+			<maxHealth>1</maxHealth>
+			<maxMana>0</maxMana>
+		</actor>
+		<actor name="npctalking" id="6">
+			<spritesheet>res/shop.png</spritesheet>
+			<maxHealth>1</maxHealth>
+			<maxMana>0</maxMana>
+		</actor>
+	</descriptions>
+	<gameobjects>
+		<objects>
+			<object id="0">
+				<positionX>14</positionX>
+				<positionY>5</positionY>
+				<mapToName>res/maps/L0R1.xml</mapToName>
+				<mapToX>1</mapToX>
+				<mapToY>10</mapToY>
+			</object>
+			<object id="0">
+				<positionX>1</positionX>
+				<positionY>3</positionY>
+				<mapToName>res/maps/LXRX.xml</mapToName>
+				<mapToX>2</mapToX>
+				<mapToY>2</mapToY>
+			</object>
+			<object id="7">
+				<positionX>3</positionX>
+				<positionY>13</positionY>
+			</object>
+		</objects>
+		<traps>
+			<trap id="2">
+				<positionX>1</positionX>
+				<positionY>1</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>2</positionX>
+				<positionY>1</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>3</positionX>
+				<positionY>1</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>1</positionX>
+				<positionY>2</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>2</positionX>
+				<positionY>2</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>1</positionX>
+				<positionY>3</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>12</positionX>
+				<positionY>4</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>6</positionX>
+				<positionY>5</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>1</positionX>
+				<positionY>10</positionY>
+			</trap>
+			<trap id="2">
+				<positionX>8</positionX>
+				<positionY>10</positionY>
+			</trap>
+		</traps>
+		<actors>
+			<actor id="3">
+				<positionX>7</positionX>
+				<positionY>13</positionY>
+			</actor>
+			<actor id="3">
+				<positionX>13</positionX>
+				<positionY>1</positionY>
+			</actor>
+			<actor id="5">
+				<positionX>6</positionX>
+				<positionY>1</positionY>
+			</actor>
+			<actor id="6">
+				<positionX>5</positionX>
+				<positionY>13</positionY>
+			</actor>
+		</actors>
+		<items>
+			<item id="107">
+				<positionX>4</positionX>
+				<positionY>1</positionY>
+			</item>
+		</items>
+	</gameobjects>
 </map>
+

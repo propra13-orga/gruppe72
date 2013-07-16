@@ -21,6 +21,8 @@ public class MapEditor
 	private MEPanel mepanel;
 	private METoolbar metoolbar;
 	
+	private boolean loneWindow;
+	
 	/**
 	 * Creates and initializes the editor. 
 	 */
@@ -48,6 +50,7 @@ public class MapEditor
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		else
 			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.loneWindow = isLoneWindow;
 		
 		frame.setResizable(false);
 		
@@ -88,6 +91,11 @@ public class MapEditor
 	public METoolbar getMEToolbar()
 	{
 		return metoolbar;
+	}
+	
+	public boolean isLoneWindow()
+	{
+		return loneWindow;
 	}
 	
 	/**
