@@ -23,13 +23,17 @@ public class QuestCollection {
 	private void createQuests() {
 		quests = new ArrayList<Quest>();
 		
-		QuestObjKill q1o1 = new QuestObjKill(1, "MapEditorSave");
+		QuestObjKill q1o1 = new QuestObjKill(1, "FirstChallenge");
 		Quest q1 = new Quest("Warm Up", 60, 10, q1o1);
 		quests.add(q1);
 		
 		QuestObjCollect q2o1 = new QuestObjCollect(1, 7);
-		Quest q2 = new Quest("First Weapon", 30, 0, q2o1);
+		Quest q2 = new Quest("First Weapon", 30, 30, q2o1);
 		quests.add(q2);
+		
+		QuestObjKill q3o1 = new QuestObjKill(4, "SecMap");
+		Quest q3 = new Quest("Kill some more!", 120, 0, q3o1);
+		quests.add(q3);
 		
 		//QuestObjKill q3o1 = new QuestObjKill(5, "MapEditorSave");
 	}

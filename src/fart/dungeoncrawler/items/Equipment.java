@@ -70,6 +70,24 @@ public class Equipment implements IDrawable {
 	public Weapon getWeapon() {
 		return (Weapon)items.get(EquipSlot.Weapon);
 	}
+	
+	/**
+	 * Returns if the item with the given index is currently equipped. 
+	 * @param id
+	 * @return
+	 */
+	public boolean containsItem(int id) {
+		for(int i = 0; i < EquipSlot.values().length; i++) {
+			BaseItem item = items.get(EquipSlot.values()[i]);
+			if(item == null)
+				continue;
+			
+			if(item.getIndex() == id)
+				return true;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public void draw(Graphics2D graphics) {

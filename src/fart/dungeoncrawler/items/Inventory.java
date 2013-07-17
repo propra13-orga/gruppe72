@@ -105,6 +105,23 @@ public class Inventory implements IDrawable, IUpdateable {
 		
 		return false;
 	}
+	
+	/**
+	 * Returns if the item with the given ID is already in the inventory. 
+	 * @param id
+	 * @return
+	 */
+	public boolean containsItem(int id) {
+		for(int i = 0; i < items.length; i++) {
+			if(items[i] == null)
+				continue;
+			
+			if(items[i].getIndex() == id)
+				return true;
+		}
+		
+		return false;
+	}
 
 	@Override
 	public void update(float elapsed) {

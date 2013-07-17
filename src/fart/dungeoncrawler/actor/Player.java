@@ -64,7 +64,7 @@ public class Player extends Actor implements IUpdateable {
 		
 		controller = game.getController();
 		statsMenu = new StatsMenu(stats, controller, this);
-		questLog = new QuestLog();
+		questLog = new QuestLog(this);
 		statusbar = new StatusBar(this, game);
 		inventory.setGold(25);
 		

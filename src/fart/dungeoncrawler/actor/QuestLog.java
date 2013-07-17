@@ -24,12 +24,14 @@ public class QuestLog implements IDrawable {
 	
 	private ArrayList<Quest> quests;
 	private boolean containsNew;
+	private Player owner;
 	
 	/**
 	 * Creates a new QuestLog.
 	 */
-	public QuestLog() {
+	public QuestLog(Player p) {
 		quests = new ArrayList<Quest>();
+		owner = p;
 	}
 	
 	/**
@@ -56,6 +58,7 @@ public class QuestLog implements IDrawable {
 		quests.add(quest);
 		quest.setQuestLog(this);
 		containsNew = true;
+		quest.checkItems();
 	}
 	
 	/**
@@ -122,6 +125,10 @@ public class QuestLog implements IDrawable {
 	public void itemCollected(int index) {
 		for(int i = 0; i < quests.size(); i++)
 			quests.get(i).itemCollected(index);
+	}
+	
+	public Player getOwner() {
+		return owner;
 	}
 
 	@Override

@@ -131,6 +131,19 @@ public class Quest{
 		collectObjective.collected(index);
 	}
 	
+	public void checkItems() {
+		QuestObjCollect collectObjective = getCollectObjective();
+		if(collectObjective == null)
+			return;
+		
+		int id = collectObjective.getItem().getIndex();
+		if(qLog.getOwner().getInventory().containsItem(id)) {
+			itemCollected(id);
+		} else if (qLog.getOwner().getEquipment().containsItem(id)) {
+			itemCollected(id);
+		}
+	}
+	
 	/**
 	 * Checks if the quest is done. If so the player gets his rewards and the quest is deleted from
 	 * the log.

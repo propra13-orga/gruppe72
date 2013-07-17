@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<map>
+        <name>SecMap</name>
+        <width>32</width>
+        <height>20</height>
+        <tiles xml:space="preserve">
+		####################### ########
+		###################     ########
+		##      ##        #     ########
+		##      ##        #        #####
+		##      ##        #        #####
+		####  ####        #        #####
+		#                 #        #####
+		#                 #        #####
+		#           ########  ##       #
+		#           #          #       #
+		#           #          #       #
+		#           #  #       #       #
+		#           #  #       #       #
+		####   ###  ####  ########     #
+		####     #        #     #      #
+		####     #        #     #      #
+		###      #        #  #  #  #####
+		###      #           #     #####
+		###      #           #     #####
+		### ############################
+	</tiles>
+        <descriptions>
+                <object name="portal" id="0">
+                        <spritesheet>res/tp.png</spritesheet>
+                        <colWidth>32</colWidth>
+                        <colHeight>32</colHeight>
+                        <passable>1</passable>
+                </object>
+                <object name="goal" id="1">
+                        <spritesheet>res/goal.png</spritesheet>
+                        <colWidth>32</colWidth>
+                        <colHeight>32</colHeight>
+                        <passable>1</passable>
+                </object>
+                <object name="fire" id="2">
+                        <spritesheet>res/trap.png</spritesheet>
+                        <colWeight>32</colWeight>
+                        <colHeight>32</colHeight>
+                        <damage>1</damage>
+                </object>
+                <actor name="meleenemy" id="3">
+                        <spritesheet>res/enemy1.png</spritesheet>
+                        <isRanged>0</isRanged>
+                        <aggroRange>96</aggroRange>
+                        <attackRange>16</attackRange>
+                        <type>3</type>
+                        <level>1</level>
+                        <element>1</element>
+                </actor>
+                <actor name="bossenemy" id="4">
+                        <spritesheet>res/enemy1.png</spritesheet>
+                        <isRanged>0</isRanged>
+                        <aggroRange>96</aggroRange>
+                        <attackRange>32</attackRange>
+                        <type>3</type>
+                        <level>2</level>
+                        <element>1</element>
+                </actor>
+                <actor name="npcshop" id="5">
+                        <spritesheet>res/shop.png</spritesheet>
+                        <level>1</level>
+                        <element>0</element>
+                </actor>
+                <actor name="npctalking" id="6">
+                        <spritesheet>res/shop.png</spritesheet>
+                        <level>1</level>
+                        <element>0</element>
+                </actor>
+                <actor name="npcquest" id="8">
+                        <spritesheet>res/shop.png</spritesheet>
+                        <level>1</level>
+                        <element>0</element>
+                </actor>
+        </descriptions>
+        <gameobjects>
+                <objects>
+                        <object id="0">
+                                <positionX>23</positionX>
+                                <positionY>0</positionY>
+                                <mapToName>res/maps/L0R0.xml</mapToName>
+                                <mapToX>23</mapToX>
+                                <mapToY>18</mapToY>
+                        </object>
+                        <object id="1">
+                                <positionX>7</positionX>
+                                <positionY>2</positionY>
+                        </object>
+                        <actor id="8">
+                                <positionX>19</positionX>
+                                <positionY>4</positionY>
+                                <quest>1</quest>
+                        </actor>
+                        <actor id="8">
+                                <positionX>23</positionX>
+                                <positionY>14</positionY>
+                                <quest>2</quest>
+                        </actor>
+                        <object id="0">
+                                <positionX>3</positionX>
+                                <positionY>19</positionY>
+                                <mapToName>res/maps/L0R2.xml</mapToName>
+                                <mapToX>3</mapToX>
+                                <mapToY>1</mapToY>
+                        </object>
+                </objects>
+                <traps>
+                        <trap id="2">
+                                <positionX>19</positionX>
+                                <positionY>1</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>20</positionX>
+                                <positionY>1</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>2</positionX>
+                                <positionY>2</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>3</positionX>
+                                <positionY>2</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>4</positionX>
+                                <positionY>2</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>10</positionX>
+                                <positionY>2</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>11</positionX>
+                                <positionY>2</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>12</positionX>
+                                <positionY>2</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>13</positionX>
+                                <positionY>2</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>16</positionX>
+                                <positionY>2</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>17</positionX>
+                                <positionY>2</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>19</positionX>
+                                <positionY>2</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>2</positionX>
+                                <positionY>3</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>3</positionX>
+                                <positionY>3</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>10</positionX>
+                                <positionY>3</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>11</positionX>
+                                <positionY>3</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>12</positionX>
+                                <positionY>3</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>13</positionX>
+                                <positionY>3</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>16</positionX>
+                                <positionY>3</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>17</positionX>
+                                <positionY>3</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>25</positionX>
+                                <positionY>3</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>26</positionX>
+                                <positionY>3</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>2</positionX>
+                                <positionY>4</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>10</positionX>
+                                <positionY>4</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>11</positionX>
+                                <positionY>4</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>12</positionX>
+                                <positionY>4</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>13</positionX>
+                                <positionY>4</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>16</positionX>
+                                <positionY>4</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>17</positionX>
+                                <positionY>4</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>25</positionX>
+                                <positionY>4</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>26</positionX>
+                                <positionY>4</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>16</positionX>
+                                <positionY>5</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>17</positionX>
+                                <positionY>5</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>25</positionX>
+                                <positionY>5</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>26</positionX>
+                                <positionY>5</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>1</positionX>
+                                <positionY>6</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>2</positionX>
+                                <positionY>6</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>3</positionX>
+                                <positionY>6</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>17</positionX>
+                                <positionY>6</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>25</positionX>
+                                <positionY>6</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>26</positionX>
+                                <positionY>6</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>1</positionX>
+                                <positionY>7</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>2</positionX>
+                                <positionY>7</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>3</positionX>
+                                <positionY>7</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>17</positionX>
+                                <positionY>7</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>19</positionX>
+                                <positionY>7</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>1</positionX>
+                                <positionY>8</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>2</positionX>
+                                <positionY>8</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>1</positionX>
+                                <positionY>9</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>2</positionX>
+                                <positionY>9</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>1</positionX>
+                                <positionY>10</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>24</positionX>
+                                <positionY>10</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>25</positionX>
+                                <positionY>10</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>26</positionX>
+                                <positionY>10</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>1</positionX>
+                                <positionY>11</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>14</positionX>
+                                <positionY>11</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>24</positionX>
+                                <positionY>11</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>25</positionX>
+                                <positionY>11</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>13</positionX>
+                                <positionY>12</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>14</positionX>
+                                <positionY>12</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>24</positionX>
+                                <positionY>12</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>25</positionX>
+                                <positionY>12</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>30</positionX>
+                                <positionY>13</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>14</positionX>
+                                <positionY>14</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>15</positionX>
+                                <positionY>14</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>29</positionX>
+                                <positionY>14</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>30</positionX>
+                                <positionY>14</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>8</positionX>
+                                <positionY>15</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>10</positionX>
+                                <positionY>15</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>28</positionX>
+                                <positionY>15</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>29</positionX>
+                                <positionY>15</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>30</positionX>
+                                <positionY>15</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>8</positionX>
+                                <positionY>16</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>10</positionX>
+                                <positionY>16</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>11</positionX>
+                                <positionY>16</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>7</positionX>
+                                <positionY>17</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>8</positionX>
+                                <positionY>17</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>10</positionX>
+                                <positionY>17</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>11</positionX>
+                                <positionY>17</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>12</positionX>
+                                <positionY>17</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>5</positionX>
+                                <positionY>18</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>6</positionX>
+                                <positionY>18</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>7</positionX>
+                                <positionY>18</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>8</positionX>
+                                <positionY>18</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>10</positionX>
+                                <positionY>18</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>11</positionX>
+                                <positionY>18</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>12</positionX>
+                                <positionY>18</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>13</positionX>
+                                <positionY>18</positionY>
+                        </trap>
+                        <trap id="2">
+                                <positionX>20</positionX>
+                                <positionY>18</positionY>
+                        </trap>
+                </traps>
+                <actors>
+                        <actor id="3">
+                                <positionX>13</positionX>
+                                <positionY>6</positionY>
+                        </actor>
+                        <actor id="3">
+                                <positionX>5</positionX>
+                                <positionY>7</positionY>
+                        </actor>
+                        <actor id="6">
+                                <positionX>30</positionX>
+                                <positionY>8</positionY>
+                        </actor>
+                        <actor id="3">
+                                <positionX>19</positionX>
+                                <positionY>11</positionY>
+                        </actor>
+                        <actor id="3">
+                                <positionX>21</positionX>
+                                <positionY>11</positionY>
+                        </actor>
+                        <actor id="3">
+                                <positionX>29</positionX>
+                                <positionY>11</positionY>
+                        </actor>
+                        <actor id="3">
+                                <positionX>5</positionX>
+                                <positionY>14</positionY>
+                        </actor>
+                        <actor id="3">
+                                <positionX>15</positionX>
+                                <positionY>18</positionY>
+                        </actor>
+                </actors>
+                <items>
+                        <item id="100">
+                                <positionX>6</positionX>
+                                <positionY>2</positionY>
+                        </item>
+                        <item id="101">
+                                <positionX>13</positionX>
+                                <positionY>11</positionY>
+                        </item>
+                        <item id="107">
+                                <positionX>1</positionX>
+                                <positionY>12</positionY>
+                        </item>
+                </items>
+        </gameobjects>
+</map>

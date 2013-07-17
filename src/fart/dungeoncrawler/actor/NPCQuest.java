@@ -35,7 +35,9 @@ public class NPCQuest extends NPCTrigger {
 
 		quests = new ArrayList<Quest>();
 		for(int i = 0; i < questIDs.size(); i++) {
-			quests.add(QuestCollection.getQuestByID(questIDs.get(i)));
+			int q = questIDs.get(i);
+			Quest toAdd = QuestCollection.getQuestByID(q);
+			quests.add(toAdd);
 		}
 		
 		actQuest = 0;
@@ -48,7 +50,7 @@ public class NPCQuest extends NPCTrigger {
 		
 		if(actor instanceof Player) {
 			Player player = (Player)actor;
-			Quest quest = QuestCollection.getQuestByID(actQuest);
+			Quest quest = quests.get(actQuest);
 			
 			QuestLog log = player.getQuestLog();
 			

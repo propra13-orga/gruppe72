@@ -87,15 +87,14 @@
                         <actor id="8">
                                 <positionX>6</positionX>
                                 <positionY>6</positionY>
-                                <quest>0</quest>
-                                <quest>1</quest>
+				<quest>0</quest>
                         </actor>
                         <object id="0">
                                 <positionX>23</positionX>
                                 <positionY>19</positionY>
-                                <mapToName>res/maps/L0R1.xml</mapToName>
-                                <mapToX>1</mapToX>
-                                <mapToY>5</mapToY>
+                                <mapToName>res/maps/test.xml</mapToName>
+                                <mapToX>23</mapToX>
+                                <mapToY>1</mapToY>
                         </object>
                 </objects>
                 <traps>
