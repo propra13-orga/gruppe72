@@ -87,6 +87,8 @@
                         <actor id="8">
                                 <positionX>6</positionX>
                                 <positionY>6</positionY>
+                                <quest>0</quest>
+                                <quest>1</quest>
                         </actor>
                         <object id="0">
                                 <positionX>23</positionX>

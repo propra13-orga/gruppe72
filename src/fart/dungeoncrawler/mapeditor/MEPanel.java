@@ -478,6 +478,14 @@ public class MEPanel extends JPanel implements MouseInputListener
 								newObj.appendChild(posX);
 								newObj.appendChild(posY);
 								
+								Element newQuest = new Element("quest");
+								newQuest.appendChild("0");
+								newObj.appendChild(newQuest);
+								
+								newQuest = new Element("quest");
+								newQuest.appendChild("1");
+								newObj.appendChild(newQuest);
+								
 								elObjects.appendChild(newObj);
 							}
 							
